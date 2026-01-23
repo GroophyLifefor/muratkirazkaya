@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Application Questions - Dentology</title>
+  <meta name="description" content="Application questions for full-stack engineer position" />
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body>
+  <div class="flex flex-col max-w-3xl mx-auto my-10 border p-6 gap-6">
+
+    <div>
+      <h1 class="text-3xl font-bold mb-2">Application Questions</h1>
+    </div>
+
+    <div>
+      <h2 class="text-lg font-semibold">
+        To see my simple CV, you can click the button below.
+      </h2>
+      <a href="/" target="_blank" class="text-blue-600 hover:underline font-semibold">
+        Back to homepage
+      </a>
+    </div>
+
+    <!-- Question 1: Professional Experience -->
+    <div class="space-y-2">
+      <h2 class="text-lg font-semibold">
+        How many years of professional experience do you have as a full-stack engineer, and which tech stacks have you
+        worked with?
+      </h2>
+      <p class="text-sm text-gray-600 mb-2">
+        e.g. React, Next.js, TypeScript, Prisma, PostgreSQL, Node.js, etc.
+      </p>
+      <div class="w-full p-3 border rounded-md bg-gray-50">
+        <p class="text-sm whitespace-pre-line">
+          Short Answer: 1.5 years of professional experience as a full-stack engineer.
+
+          I've been coding since 2019, so that's about 6 years of development experience overall. In terms of
+          professional full-time work, I've been doing that for around 1.5 years now at Valentura, where I'm currently
+          working in Tech Operations.
+
+          My journey started with a few internships - I did a couple months at Insider, then Collective Idea, and a
+          month at Peaker Soft. After that, I spent 7 months interning at Valentura before they offered me a full-time
+          position, which I've been in for about a year.
+
+          On the backend side, I've worked with quite a bit. I started with C++ when I was building private servers for
+          Growtopia, then moved into C# for a few years from 2021 to 2023 where I built a lot of different projects.
+          More recently, I've been working with TypeScript and Deno - I actually built an abstraction layer called Yelix
+          on top of Hono using Deno, and I've used Hono for some recent work. I'm comfortable with Node.js and designing
+          RESTful APIs.
+
+          For frontend, React is probably what I use most. I built Fika Mate with it, worked on the Astro Hackathon
+          platform, and did some work on ItsMoneo. I've also used Next.js for the Astro Hackathon project and ItsMoneo.
+          JavaScript and ES6+ are my daily tools, and I really like working with TailwindCSS for styling.
+
+          I've worked with MongoDB, Supabase, and Firebase for databases. On the infrastructure side, I've used Docker
+          and Docker Compose, and I've deployed things on Deno Deploy. I've also built some real-time systems and done
+          performance optimization work, plus I've implemented multi-language support for a few projects.
+
+          At the time, I'm not anymore using a deployment platform like Deno Deploy, but I'm using a self-hosted
+          solution with Coolify and Hetzner.
+
+          So yeah, I'd say I'm a full-stack developer who's comfortable working across the entire stack, from setting up
+          infrastructure to building the frontend.
+        </p>
+      </div>
+    </div>
+
+    <!-- Question 2: Personal/Side Projects -->
+    <div class="space-y-2">
+      <h2 class="text-lg font-semibold">
+        Have you worked on any personal or side projects outside of your main roles?
+      </h2>
+      <p class="text-sm text-gray-600 mb-2">
+        If so, tell us about one and include any GitHub links, demos, or case studies.
+      </p>
+      <div class="w-full p-3 border rounded-md bg-gray-50">
+        <p class="text-sm whitespace-pre-line">
+          Short Answer: Yes, proud of are Yelix and AAD.
+
+          Yeah, I've worked on a bunch of side projects. Two that I'm particularly proud of are Yelix and AAD.
+
+          Yelix is probably the one I'm most excited about. It's an abstraction layer I built on top of Hono using
+          TypeScript and Deno. The idea was to enhance the API development experience while keeping full compatibility
+          with Hono's core features. So it doesn't replace Hono - it extends it with things like automatic OpenAPI
+          documentation generation, an enhanced middleware system with execution time tracking, seamless Zod integration
+          for request validation, built-in Scalar UI support for beautiful API docs, better logging with
+          request/response tracking, and improved TypeScript type safety. It's been a really fun project to work on, and
+          it actually won some recognition - got a silver medal in the Karadeniz region competition and then a gold
+          medal nationwide in Turkey's 1Fikir1Türkiye competition. You can check it out on GitHub at
+          github.com/yelix-org/yelix.
+
+          The other project I want to mention is AAD, which is a Chrome extension I built for customizing GitHub's
+          interface. I got frustrated with how GitHub's homepage worked, especially on my ultra-wide monitor, so I
+          decided to build something that would make it way more customizable and productive. It lets you set up 16
+          different containers, supports GitHub's dark-dimmed theme, and gives you way more API requests if you use a
+          personal access token - like 5000 per hour instead of the default 60. It has this focus mode where you can
+          open issues and repos in modals and comment right there, plus drag and drop to reorder everything however you
+          want. The coolest part is that it's actually being used by multiple companies in production, which feels
+          pretty awesome. It's available on the Chrome Web Store, and I made sure to keep it privacy-first - metrics are
+          optional and it only logs exceptions if you give permission.
+
+          Both of these projects taught me a lot about building things that people actually use, not just building for
+          the sake of it. Yelix helped me understand abstraction layer design, API documentation, and how to extend
+          existing frameworks while maintaining compatibility, while AAD taught me about building stable extensions that
+          work across GitHub's UI changes and respecting user privacy from the ground up.
+
+          I'm also pretty active in open-source. I'm a member of the Express.js Performance Working Group, and I'm
+          working towards joining the Express.js triage team as soon as possible. I've been contributing quite a bit to
+          Express.js, focusing on performance improvements and tooling. It's been really rewarding to work on something
+          that so many developers rely on.
+        </p>
+      </div>
+    </div>
+
+    <!-- Question 3: Start Date -->
+    <div class="space-y-2">
+      <h2 class="text-lg font-semibold">
+        If you were offered the role today and accepted, how soon could you start?
+      </h2>
+      <p class="text-sm text-gray-600 mb-2">
+        Please list number of weeks or specific date
+      </p>
+      <div class="w-full p-3 border rounded-md bg-gray-50">
+        <p class="text-sm whitespace-pre-line">
+          0 weeks and 0 days after the offer is accepted. (immediately)
+        </p>
+      </div>
+    </div>
+
+    <!-- Video Task Section -->
+    <div class="border-t pt-6 space-y-4">
+      <div>
+        <h2 class="text-2xl font-bold mb-2">Video Task</h2>
+        <p class="text-sm text-gray-700 mb-4">
+          We ask for a short video because communication is a core part of being a successful full-stack product
+          engineer. Beyond writing great code, this role involves explaining ideas, collaborating with others, and
+          thinking out loud about problems. This video helps us understand how you communicate and reason, it does not
+          need to be polished or perfect.
+        </p>
+      </div>
+
+      <div class="bg-blue-50 border border-blue-200 rounded-md p-4 mb-4">
+        <p class="text-sm font-semibold text-blue-900 mb-2">Please record a short video (2–3 minutes) covering:</p>
+        <ul class="list-disc list-inside text-sm text-blue-800 space-y-1 ml-2">
+          <li>A brief introduction of yourself</li>
+          <li>Why this role interests you</li>
+          <li>A demo or explanation of something you've built that you are passionate about (a product feature, personal
+            project, or work you're proud of)</li>
+        </ul>
+        <p class="text-sm text-blue-800 mt-3">
+          You can use a simple tool like <a href="https://loom.com" target="_blank"
+            class="text-blue-600 hover:underline font-semibold">loom.com</a>. Paste the shareable link below.
+        </p>
+      </div>
+
+      <div class="space-y-2">
+        <h2 class="text-lg font-semibold">
+          Video Link
+        </h2>
+        <div class="w-full p-3 border rounded-md bg-gray-50">
+          <p class="text-sm">
+            <a href="https://www.veed.io/view/c30e1ec1-d41c-48ac-b796-a267a8594da0?source=editor&panel=share"
+              target="_blank" class="text-blue-600 hover:underline font-semibold">
+              https://www.veed.io/view/c30e1ec1-d41c-48ac-b796-a267a8594da0?source=editor&panel=share
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>
