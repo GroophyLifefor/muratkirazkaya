@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UNIDES Haritasi | Il, Universite ve Etkinlik Gorsellestirmesi</title>
+    <meta
+      name="description"
+      content="UNIDES etkinliklerini il, universite ve etkinlik hiyerarsisinde kesfedin. Treemap ve Sunburst modlariyla interaktif veri gorsellestirmesi."
+    />
+    <meta
+      name="keywords"
+      content="UNIDES, UNIDES haritasi, universite etkinlikleri, treemap, sunburst, echarts, Murat Kirazkaya"
+    />
+    <meta name="author" content="Murat Kirazkaya" />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="theme-color" content="#5470c6" />
+
+    <link rel="canonical" href="https://muratkirazkaya.com/unides.html" />
+
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:title"
+      content="UNIDES Haritasi | Il, Universite ve Etkinlik Gorsellestirmesi"
+    />
+    <meta
+      property="og:description"
+      content="UNIDES verisini Treemap ve Sunburst olarak inceleyin: GLOBAL > il > universite > etkinlik."
+    />
+    <meta property="og:url" content="https://muratkirazkaya.com/unides.html" />
+    <meta
+      property="og:image"
+      content="https://muratkirazkaya.com/img/pp.jpeg"
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="UNIDES Haritasi | Il, Universite ve Etkinlik Gorsellestirmesi"
+    />
+    <meta
+      name="twitter:description"
+      content="UNIDES verisini il ve universite bazinda interaktif olarak kesfedin."
+    />
+    <meta
+      name="twitter:image"
+      content="https://muratkirazkaya.com/img/pp.jpeg"
+    />
+
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "UNIDES Haritasi",
+        "url": "https://muratkirazkaya.com/unides.html",
+        "description": "UNIDES etkinliklerini il, universite ve etkinlik hiyerarsisinde gosteren interaktif veri gorsellestirmesi.",
+        "inLanguage": "tr-TR",
+        "author": {
+          "@type": "Person",
+          "name": "Murat Kirazkaya"
+        }
+      }
+    </script>
+
+    <style>
+      :root {
+        --bg: #f4f6fb;
+        --text: #1b2235;
+        --btn: #d9e2ff;
+        --btn-active: #5470c6;
+        --btn-active-text: #ffffff;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      .toolbar {
+        display: flex;
+        gap: 8px;
+        padding: 12px 16px;
+        align-items: center;
+      }
+
+      .mode-btn {
+        border: 0;
+        border-radius: 8px;
+        padding: 8px 14px;
+        background: var(--btn);
+        color: var(--text);
+        cursor: pointer;
+        font-weight: 600;
+      }
+
+      .mode-btn.active {
+        background: var(--btn-active);
+        color: var(--btn-active-text);
+      }
+
+      #chart {
+        width: calc(100dvw - 24px);
+        height: calc(100dvh - 72px);
+        margin: 0 12px 12px;
+        border-radius: 12px;
+        background: #ffffff;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="toolbar">
+      <a href="/" style="text-decoration: none; color: var(--btn-active); font-weight: bold; font-size: 14px;">Ana Sayfa'ya Dön</a>
+      <button id="treemapBtn" class="mode-btn active">Treemap</button>
+      <button id="sunburstBtn" class="mode-btn">Sunburst</button>
+    </div>
+
+      <div
+        id="chart"
+        role="img"
+        aria-label="UNIDES verisinin il ve universite bazli interaktif haritasi"
+      ></div>
+      <noscript>Bu gorsellestirme JavaScript gerektirir.</noscript>
+ 
+
+    <script src="unides.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@6.0.0/dist/echarts.min.js"></script>
+
+    <script>
+      const chart = echarts.init(document.getElementById('chart'));
+      const treemapBtn = document.getElementById('treemapBtn');
+      const sunburstBtn = document.getElementById('sunburstBtn');
+
+      const cityColors = [
+        '#5470c6',
+        '#91cc75',
+        '#fac858',
+        '#ee6666',
+        '#73c0de',
+        '#3ba272',
+        '#fc8452',
+        '#9a60b4',
+        '#ea7ccc',
+        '#d4ec59',
+        '#5fb4e3',
+        '#f96c5d',
+        '#8dc1a9',
+        '#ffb980',
+        '#d87c7c',
+      ];
+
+      const groupedData = unidesData.reduce((acc, project) => {
+        const city = (project.city || 'UNKNOWN').trim();
+        const university = (
+          project.universityName || 'UNKNOWN UNIVERSITY'
+        ).trim();
+
+        if (!acc[city]) {
+          acc[city] = {};
+        }
+        if (!acc[city][university]) {
+          acc[city][university] = [];
+        }
+
+        acc[city][university].push(project);
+        return acc;
+      }, {});
+
+      const cityNames = Object.keys(groupedData).sort((a, b) =>
+        a.localeCompare(b),
+      );
+      const globalNode = {
+        name: 'Tüm Üniversiteler',
+        children: cityNames.map((city, cityIndex) => {
+          const universities = Object.keys(groupedData[city]).sort((a, b) =>
+            a.localeCompare(b),
+          );
+
+          return {
+            name: city,
+            itemStyle: {
+              color: cityColors[cityIndex % cityColors.length],
+            },
+            children: universities.map((university) => ({
+              name: university,
+              children: groupedData[city][university].map((project) => ({
+                name: project.projectName,
+                value: 1,
+                id: project.id,
+                city,
+                university,
+                community: project.communityName,
+                type: project.type,
+              })),
+            })),
+          };
+        }),
+      };
+
+      const tooltipFormatter = function (info) {
+        const data = info.data || {};
+        const path = (info.treePathInfo || [])
+          .slice(1)
+          .map((node) => node.name)
+          .join(' > ');
+
+        if (!data.children) {
+          return `<b>${data.name}</b><br/>Path: ${path}<br/>Il: ${data.city}<br/>Universite: ${data.university}<br/>Topluluk: ${data.community}<br/>Tur: ${data.type}`;
+        }
+        if (data.children) {
+          return `<b>${data.name}</b><br/>Path: ${path || 'GLOBAL'}<br/>Alt dugum sayisi: ${data.children.length}`;
+        }
+        return `<b>${data.name}</b>`;
+      };
+
+      // Configure treemap
+      const treemapOption = {
+        title: {
+          text: 'Murat Kirazkaya tarafından geliştirildi.',
+          subtext: 'ÜNIDES Haritası',
+          left: 'leafDepth',
+          top: 10,
+          textStyle: {
+            fontSize: 20,
+          },
+        },
+        tooltip: {
+          formatter: tooltipFormatter,
+        },
+        series: [
+          {
+            name: 'İl Seçimi',
+            type: 'treemap',
+            visibleMin: 1,
+            data: [globalNode],
+            leafDepth: 2,
+            top: 50,
+            left: 10,
+            right: 10,
+            bottom: 10,
+            breadcrumb: {
+              show: true,
+            },
+            label: {
+              show: true,
+              formatter: '{b}',
+              fontSize: 14,
+            },
+            upperLabel: {
+              show: true,
+              height: 30,
+              fontSize: 18,
+              fontWeight: 'bold',
+              color: '#fff',
+              backgroundColor: 'rgba(0,0,0,0.3)',
+            },
+            itemStyle: {
+              borderColor: '#fff',
+              borderWidth: 3,
+            },
+            levels: [
+              {
+                itemStyle: {
+                  borderColor: '#333',
+                  borderWidth: 6,
+                  gapWidth: 6,
+                },
+                label: {
+                  fontSize: 18,
+                  fontWeight: 'bold',
+                  color: '#fff',
+                  backgroundColor: 'rgba(0,0,0,0.5)',
+                  padding: 8,
+                  borderRadius: 4,
+                },
+              },
+              {
+                colorSaturation: [0.3, 0.6],
+                itemStyle: {
+                  borderColorSaturation: 0.7,
+                  gapWidth: 2,
+                  borderWidth: 2,
+                  borderColor: '#fff',
+                },
+                label: {
+                  fontSize: 12,
+                },
+              },
+              {
+                colorSaturation: [0.3, 0.5],
+                itemStyle: {
+                  borderColorSaturation: 0.6,
+                  gapWidth: 1,
+                },
+              },
+              {
+                colorSaturation: [0.3, 0.5],
+              },
+            ],
+          },
+        ],
+      };
+
+      const sunburstOption = {
+        title: {
+          text: 'Murat Kirazkaya tarafından geliştirildi.',
+          subtext: 'ÜNIDES Haritası',
+          left: 'center',
+          top: 10,
+          textStyle: {
+            fontSize: 20,
+          },
+        },
+        tooltip: {
+          formatter: tooltipFormatter,
+        },
+        series: [
+          {
+            type: 'sunburst',
+            data: [globalNode],
+            radius: ['12%', '92%'],
+            sort: null,
+            emphasis: {
+              focus: 'ancestor',
+            },
+            label: {
+              rotate: 'radial',
+              minAngle: 3,
+            },
+            levels: [
+              {},
+              {
+                r0: '15%',
+                r: '45%',
+                label: {
+                  rotate: 0,
+                },
+              },
+              {
+                r0: '45%',
+                r: '70%',
+              },
+              {
+                r0: '70%',
+                r: '90%',
+                label: {
+                  position: 'outside',
+                  padding: 3,
+                  silent: false,
+                },
+              },
+            ],
+          },
+        ],
+      };
+
+      function setChartMode(mode) {
+        const isTreemap = mode === 'treemap';
+        treemapBtn.classList.toggle('active', isTreemap);
+        sunburstBtn.classList.toggle('active', !isTreemap);
+        chart.setOption(isTreemap ? treemapOption : sunburstOption, true);
+      }
+
+      treemapBtn.addEventListener('click', () => setChartMode('treemap'));
+      sunburstBtn.addEventListener('click', () => setChartMode('sunburst'));
+
+      setChartMode('treemap');
+
+      window.addEventListener('resize', () => {
+        chart.resize();
+      });
+    </script>
+  </body>
+</html>
