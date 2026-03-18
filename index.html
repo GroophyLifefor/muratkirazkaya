@@ -1,377 +1,1102 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Murat Kirazkaya - Developer | Open Source Contributor</title>
-  <meta name="description"
-    content="Full Stack Developer specializing in web development, open-source contributions, and community building. Experience with Next.js, React, Deno, and Node.js. Founded Ordu Bilişim Topluluğu." />
-  <meta name="keywords"
-    content="Murat Kirazkaya, Full Stack Developer, Web Developer, Open Source, Next.js, React, Deno, TypeScript, JavaScript, Türkiye Developer" />
-  <meta name="author" content="Murat Kirazkaya" />
-  <link rel="icon" type="image/x-icon" content="/img/pp.jpeg" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Murat Kirazkaya - Full Stack Developer | Open Source Contributor</title>
+<meta name="description" content="Full Stack Developer specializing in operational backends, workflow engines, and CMS-driven platforms. Open-source contributor to ExpressJS. Founded Ordu Bilişim Topluluğu.">
+<meta name="keywords" content="Murat Kirazkaya, Full Stack Developer, Web Developer, Open Source, Next.js, React, Deno, TypeScript, JavaScript, Türkiye Developer">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:title" content="Murat Kirazkaya - Full Stack Developer" />
-  <meta property="og:description"
-    content="Full Stack Developer specializing in web development, open-source contributions, and community building." />
-  <meta property="og:image" content="/img/pp.jpeg" />
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Murat Kirazkaya - Full Stack Developer">
+<meta property="og:description" content="Full Stack Developer specializing in operational backends, workflow engines, and CMS-driven platforms.">
+<meta property="og:image" content="/img/pp.jpeg">
+<meta property="og:url" content="https://muratkirazkaya.com/">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Murat Kirazkaya - Full Stack Developer" />
-  <meta name="twitter:description"
-    content="Full Stack Developer specializing in web development, open-source contributions, and community building." />
-  <meta name="twitter:image" content="/img/pp.jpeg" />
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Murat Kirazkaya - Full Stack Developer">
+<meta name="twitter:description" content="Full Stack Developer specializing in operational backends, workflow engines, and CMS-driven platforms.">
+<meta name="twitter:image" content="/img/pp.jpeg">
 
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://muratkirazkaya.com/" />
+<!-- Canonical -->
+<link rel="canonical" href="https://muratkirazkaya.com/">
 
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Murat Kirazkaya",
+  "jobTitle": "Software Developer",
+  "url": "https://muratkirazkaya.com",
+  "email": "muratkirazkaya0@gmail.com",
+  "image": "/img/pp.jpeg",
+  "sameAs": [
+    "https://github.com/GroophyLifefor",
+    "https://www.linkedin.com/in/muratkirazkaya/"
+  ],
+  "alumniOf": {
+    "@type": "Organization",
+    "name": "Ordu University"
+  },
+  "knowsAbout": ["Web Development", "JavaScript", "TypeScript", "React", "Next.js", "Deno", "Node.js", "Full Stack Development", "Open Source"]
+}
+</script>
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-      {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        "name": "Murat Kirazkaya",
-        "jobTitle": "Software Developer",
-        "url": "https://muratkirazkaya.com",
-        "email": "muratkirazkaya0@gmail.com",
-        "image": "/img/pp.jpeg",
-        "sameAs": ["https://github.com/GroophyLifefor"],
-        "alumniOf": {
-          "@type": "Organization",
-          "name": "Ordu University"
-        },
-        "knowsAbout": [
-          "Web Development",
-          "JavaScript",
-          "TypeScript",
-          "React",
-          "Next.js",
-          "Deno",
-          "Node.js",
-          "Full Stack Development",
-          "Open Source"
-        ]
-      }
-    </script>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  /* HERO */
+  .hero { padding: 72px 0 60px; }
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .hero-headline {
+    font-family: var(--serif); font-size: clamp(38px, 6vw, 58px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 28px; letter-spacing: -0.01em;
+  }
+  .hero-headline em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    font-size: 16px; color: var(--ink2); max-width: 520px;
+    line-height: 1.65; margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    font-family: var(--mono); font-size: 12px; padding: 12px 24px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.04em; transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-ghost {
+    font-family: var(--mono); font-size: 12px; padding: 12px 24px;
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    text-decoration: none; display: inline-block;
+    letter-spacing: 0.04em; transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--ink3); }
+
+  /* TECH STRIP */
+  .hero-tech {
+    display: flex; gap: 14px; align-items: center; flex-wrap: wrap;
+    margin-top: 36px; padding-top: 28px; border-top: 1px solid var(--line);
+  }
+  .hero-tech-label {
+    font-family: var(--mono); font-size: 10px; color: var(--ink3);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-right: 4px;
+  }
+  .hero-tech .ci { opacity: 0.75; transition: opacity 0.15s; }
+  .hero-tech .ci:hover { opacity: 1; }
+
+  /* SECTION HEADER */
+  .sec-header {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 48px 0 28px;
+  }
+  .sec-title { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; }
+  .sec-line { flex: 1; height: 1px; background: var(--line); }
+
+  /* WORK */
+  .project-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); }
+  .project-item {
+    display: grid; grid-template-columns: 1fr auto;
+    align-items: start; padding: 28px 0;
+    border-bottom: 1px solid var(--line);
+    color: inherit; cursor: pointer;
+    gap: 24px; transition: background 0.1s, padding-left 0.1s;
+  }
+  .project-item:hover { background: var(--surface2); padding-left: 12px; }
+  .proj-number { font-family: var(--mono); font-size: 10px; color: var(--ink3); margin-bottom: 8px; }
+  .proj-title { font-family: var(--serif); font-size: 22px; font-weight: 400; color: var(--ink); margin-bottom: 8px; }
+  .proj-desc { font-size: 13px; color: var(--ink2); line-height: 1.6; max-width: 480px; margin-bottom: 14px; }
+  .proj-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    font-family: var(--mono); font-size: 10px; padding: 3px 8px;
+    background: var(--surface3); color: var(--ink2);
+    letter-spacing: 0.03em;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .tag .ci { font-size: 15px; line-height: 1; }
+  .proj-stat { text-align: right; min-width: 120px; }
+  .proj-stat-val { font-family: var(--serif); font-size: 20px; color: var(--ink); display: block; }
+  .proj-stat-label { font-family: var(--mono); font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .proj-stat-secondary {
+    font-family: var(--mono); font-size: 10px; color: var(--ink3);
+    margin-top: 8px; line-height: 1.6;
+  }
+  .proj-visit {
+    display: block; font-family: var(--mono); font-size: 10px;
+    color: var(--ink3); text-decoration: none; margin-top: 10px;
+    transition: color 0.15s; letter-spacing: 0.03em;
+  }
+  .proj-visit:hover { color: var(--accent); }
+  .proj-case-hint {
+    font-family: var(--mono); font-size: 10px; color: var(--ink3);
+    margin-top: 10px; display: block; letter-spacing: 0.03em;
+  }
+
+  /* SERVICES */
+  .services-list {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--line); margin-bottom: 8px;
+  }
+  .service-item {
+    display: grid; grid-template-columns: 28px 1fr;
+    gap: 16px; padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .service-num { font-family: var(--mono); font-size: 10px; color: var(--ink3); }
+  .service-title { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+  .service-desc { font-size: 13px; color: var(--ink3); line-height: 1.65; }
+
+  /* EXPERIENCE */
+  .exp-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); margin-bottom: 8px; }
+  .exp-item { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .exp-role { font-size: 14px; font-weight: 500; color: var(--ink); }
+  .exp-meta { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin-top: 3px; }
+  .exp-desc { font-size: 13px; color: var(--ink2); margin-top: 6px; line-height: 1.6; }
+
+  /* ABOUT / SPLIT */
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+    padding-bottom: 56px; border-bottom: 1px solid var(--line);
+  }
+  .about-title { font-family: var(--serif); font-size: 30px; font-weight: 400; line-height: 1.15; margin-bottom: 20px; }
+  .about-title em { font-style: italic; color: var(--accent); }
+  .about-body { font-size: 14px; color: var(--ink2); line-height: 1.75; }
+  .about-body a { color: var(--accent); text-decoration: none; }
+  .about-body a:hover { text-decoration: underline; }
+  .cred-list { display: flex; flex-direction: column; gap: 0; }
+  .cred-item { display: flex; flex-direction: column; padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .cred-item:first-child { border-top: 1px solid var(--line); }
+  .cred-org { font-family: var(--mono); font-size: 11px; color: var(--accent2); letter-spacing: 0.04em; }
+  .cred-role { font-size: 13px; color: var(--ink); margin-top: 2px; }
+  .cred-detail { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+
+  /* OSS — 2-col grid, 6 items */
+  .oss-strip {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 0;
+    border: 1px solid var(--line); margin-bottom: 56px;
+  }
+  .oss-item {
+    padding: 20px; border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .oss-item:nth-child(2n) { border-right: none; }
+  .oss-item:nth-last-child(-n+2) { border-bottom: none; }
+  .oss-icon { margin-bottom: 10px; display: flex; gap: 6px; align-items: center; }
+  .oss-org { font-family: var(--mono); font-size: 10px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 6px; }
+  .oss-title { font-size: 13px; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+  .oss-detail { font-size: 12px; color: var(--ink3); line-height: 1.5; }
+
+  /* CTA STRIP */
+  .cta-strip {
+    background: var(--ink); padding: 48px; margin: 0 -28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+  }
+  .cta-headline { font-family: var(--serif); font-size: 28px; color: var(--surface); font-weight: 400; }
+  .cta-headline em { font-style: italic; color: #e8a07a; }
+  .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn-inv {
+    font-family: var(--mono); font-size: 12px; padding: 12px 22px;
+    background: var(--surface); color: var(--ink); text-decoration: none; display: inline-block;
+    letter-spacing: 0.04em; transition: background 0.15s;
+  }
+  .btn-inv:hover { background: #e8a07a; }
+  .btn-inv-ghost {
+    font-family: var(--mono); font-size: 12px; padding: 12px 22px;
+    background: transparent; color: var(--surface); text-decoration: none; display: inline-block;
+    border: 1px solid rgba(255,255,255,0.25);
+    letter-spacing: 0.04em; transition: border-color 0.15s;
+  }
+  .btn-inv-ghost:hover { border-color: rgba(255,255,255,0.6); }
+
+  /* FOOTER */
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  /* BADGE */
+  .badge {
+    display: inline-block; font-family: var(--mono); font-size: 9px;
+    padding: 2px 6px; background: var(--accent2); color: #d4f0e0;
+    letter-spacing: 0.05em; text-transform: uppercase; vertical-align: middle; margin-left: 6px;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(14,13,12,0.6); z-index: 200;
+    align-items: flex-start; justify-content: center;
+    padding: 60px 24px 40px; overflow-y: auto;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--surface); max-width: 640px; width: 100%;
+    border: 1px solid var(--line); align-self: flex-start;
+    position: relative;
+  }
+  .modal-header {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 28px 28px 20px; border-bottom: 1px solid var(--line);
+  }
+  .modal-title { font-family: var(--serif); font-size: 24px; font-weight: 400; color: var(--ink); }
+  .modal-subtitle { font-family: var(--mono); font-size: 10px; color: var(--ink3); letter-spacing: 0.06em; text-transform: uppercase; margin-top: 4px; }
+  .modal-close {
+    font-family: var(--mono); font-size: 18px; background: none; border: none;
+    cursor: pointer; color: var(--ink3); padding: 0; line-height: 1;
+    transition: color 0.15s; flex-shrink: 0; margin-left: 16px;
+  }
+  .modal-close:hover { color: var(--ink); }
+  .modal-body { padding: 28px; display: flex; flex-direction: column; gap: 24px; }
+  .modal-section-label {
+    font-family: var(--mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .modal-section-text { font-size: 14px; color: var(--ink2); line-height: 1.75; }
+  .modal-metrics {
+    display: flex; gap: 0; border: 1px solid var(--line); background: var(--surface2);
+  }
+  .modal-metric { flex: 1; padding: 14px 16px; border-right: 1px solid var(--line); }
+  .modal-metric:last-child { border-right: none; }
+  .modal-metric-val { font-family: var(--serif); font-size: 22px; color: var(--ink); display: block; }
+  .modal-metric-label { font-family: var(--mono); font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em; }
+  .modal-footer {
+    padding: 20px 28px; border-top: 1px solid var(--line);
+    display: flex; gap: 12px; align-items: center;
+  }
+  .modal-visit {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+  }
+  .modal-visit:hover { color: var(--accent); }
+
+  @media (max-width: 600px) {
+    .about-grid { grid-template-columns: 1fr; }
+    .oss-strip { grid-template-columns: 1fr; }
+    .oss-item { border-right: none; border-bottom: 1px solid var(--line) !important; }
+    .oss-item:last-child { border-bottom: none !important; }
+    .project-item { grid-template-columns: 1fr; }
+    .cta-strip { flex-direction: column; text-align: left; }
+    .nav-links { display: none; }
+    .modal-overlay { padding: 0; align-items: flex-end; }
+    .modal { max-height: 90vh; overflow-y: auto; }
+    .modal-metrics { flex-direction: column; }
+    .modal-metric { border-right: none; border-bottom: 1px solid var(--line); }
+    .modal-metric:last-child { border-bottom: none; }
+  }
+</style>
 </head>
-
 <body>
-  <div class="flex flex-col max-w-md mx-auto my-10 border p-4 gap-4">
-    <!-- PROFILE SECTION -->
-    <div class="flex">
-      <img src="/img/pp.jpeg" alt="Murat Kirazkaya" class="w-20 h-20 rounded-full" />
-      <div class="flex flex-col justify-center ml-4">
-        <h1 class="text-2xl font-bold">Murat Kirazkaya</h1>
-        <p class="text-gray-600">Software Developer</p>
-        <div class="flex text-xs mt-2">
-          <a href="mailto:muratkirazkaya0@gmail.com" class="hover:underline mr-4">
-            Email
-          </a>
-          <a href="https://github.com/GroophyLifefor" class="hover:underline mr-4">
-            GitHub
-          </a>
-          <a href="https://www.linkedin.com/in/muratkirazkaya/" class="hover:underline mr-4">
-            LinkedIn
-          </a>
+
+<!-- ==================== MODALS ==================== -->
+
+<div class="modal-overlay" id="modal-sportyluxe">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Sportyluxe GYM</div>
+        <div class="modal-subtitle">01 — Backend systems · Self-hosted · Live</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('sportyluxe')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          The client was tracking members in WhatsApp groups and a paper notebook. Entry/exit had to work
+          reliably on cheap Android tablets at the door — 24/7, no tolerance for downtime. The critical
+          constraint wasn't the CRUD; it was designing the access flow to work on unreliable hardware
+          and survive poor network conditions without losing state.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>MongoDB over PostgreSQL</strong> — the membership schema changed constantly during
+          development (kitchens, PT sessions, and class scheduling were added mid-build). A flexible
+          document model saved weeks of migrations.<br><br>
+          <strong>Deno over Node.js</strong> — I'd been building Yelix on Deno and knew the runtime
+          well. The built-in security model and native TypeScript support meant less boilerplate
+          in the API layer.<br><br>
+          <strong>Self-hosted on a VPS</strong> — the client couldn't justify cloud pricing for
+          a regional gym. Self-hosting with proper monitoring (Sentry) kept costs under control
+          while maintaining reliability.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Running today</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">4k+</span>
+            <span class="modal-metric-label">Req / day</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">99.9%</span>
+            <span class="modal-metric-label">Uptime</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">~85ms</span>
+            <span class="modal-metric-label">Avg response</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">350+</span>
+            <span class="modal-metric-label">Active members</span>
+          </div>
         </div>
       </div>
     </div>
+    <div class="modal-footer">
+      <a href="https://sportyluxe.club/" target="_blank" rel="noreferrer" class="modal-visit">Visit Sportyluxe ↗</a>
+    </div>
+  </div>
+</div>
 
-    <!-- MYSELF DESCRIPTION -->
-    <p>
-      A developer who writes code, creates stuff, and loves learning new
-      technologies. Currently earning from web development while staying
-      active in organizing events, open-source contributions, tooling, devops,
-      and more.
+<div class="modal-overlay" id="modal-dijitalstaj">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Dijital Staj</div>
+        <div class="modal-subtitle">02 — Workflow engine · Multi-university · Live</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('dijitalstaj')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          Universities ran internship approvals entirely on paper, routed physically between 4 different
+          roles (student, advisor, workplace, internship office) — each with different authority levels.
+          The state machine had 12+ distinct states and rejections at any step had to route back to the
+          correct party with the original context intact, not just "rejected."
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Next.js with React Server Components</strong> — the document-heavy views (PDF previews,
+          form history) rendered far better server-side. Reduced client bundle size significantly.<br><br>
+          <strong>DrizzleORM over Prisma</strong> — requirements changed frequently. Drizzle's migration
+          model gave more control over schema changes without the abstraction overhead.<br><br>
+          <strong>MinIO for document storage</strong> — PDFs and attachments couldn't live in the
+          database, and MinIO gave an S3-compatible self-hosted option the university could control.
+          Auto-PDF generation via pdf-lib for official forms.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Running today</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">4</span>
+            <span class="modal-metric-label">Approval roles</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">12+</span>
+            <span class="modal-metric-label">Workflow states</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">Live</span>
+            <span class="modal-metric-label">Multi-university</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="modal-visit">Visit Dijital Staj ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-pels">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">PELS</div>
+        <div class="modal-subtitle">03 — CMS platform · Bilingual · Live</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('pels')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          The client needed bilingual (TR/EN) content that their non-technical team could update
+          without breaking layouts or losing translations. The previous site was static HTML
+          nobody dared to edit. The goal was a system where the team owns the content — not
+          the agency.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Astro for the build</strong> — zero client-side JS by default, fast to load,
+          and the static output is straightforward to deploy and maintain. No runtime to
+          babysit.<br><br>
+          <strong>Contentful for the CMS</strong> — its i18n handling is genuinely good, and
+          the editor experience is approachable for non-developers. The client's team was
+          editing content independently within a week of handoff.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Running today</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">TR/EN</span>
+            <span class="modal-metric-label">Bilingual CMS</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">Live</span>
+            <span class="modal-metric-label">Client-maintained</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://pel-s.com/" target="_blank" rel="noreferrer" class="modal-visit">Visit PELS ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-yelix">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Yelix</div>
+        <div class="modal-subtitle">04 — Framework · 🥇 National award · Open source</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('yelix')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          Every Deno web framework I found was a Node.js port — they worked
+          <em>against</em> the runtime instead of with it. Deno has native TypeScript, Web
+          platform APIs, and a granular permission system. None of the existing frameworks
+          actually used these. I wanted a framework where Deno's design decisions were
+          features, not obstacles.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Built on Deno's native HTTP server</strong> — not a compatibility layer.
+          Uses standard Web API <code>Request</code> and <code>Response</code> objects
+          throughout, which means any knowledge of Fetch API transfers directly.<br><br>
+          <strong>TypeScript inference over decorators</strong> — kept the API surface small
+          and avoided the magic that makes debugging painful. Route types are inferred,
+          not declared separately.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Recognition</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">🥈</span>
+            <span class="modal-metric-label">Silver, Regional</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">🥇</span>
+            <span class="modal-metric-label">Gold, National</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--ink3);">1Fikir1Türkiye — open source, actively developed</span>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-ordudev">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">ordu.dev</div>
+        <div class="modal-subtitle">05 — Community platform · Self-hosted · Live</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('ordudev')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          Building a platform a volunteer-run developer community could actually sustain — events,
+          blog, documentation, daily university cafeteria menu — without depending on cloud services
+          or recurring costs that might disappear. It also needed an ad management panel,
+          web push notifications, and scheduled campaigns, none of which exist as off-the-shelf
+          solutions for a budget of zero.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Custom background job runner</strong> — Deno.cron wasn't available. I built
+          a campaign-based scheduler with retries, concurrency control, and status tracking
+          from scratch, tuned to the community's actual publishing patterns.<br><br>
+          <strong>Web push over SMTP</strong> — email deliverability for a small org is a
+          maintenance headache. Web push is free, instant, and doesn't require managing
+          a sending domain.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Running today</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">5K+</span>
+            <span class="modal-metric-label">Clicks / month</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">+50K</span>
+            <span class="modal-metric-label">Impressions / mo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" class="modal-visit">Visit ordu.dev ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-tua">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Hackathon Platform for TUA</div>
+        <div class="modal-subtitle">06 — Event platform · Government · Accepted</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('tua')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          Government use means zero tolerance for data loss and clear audit trails — but the
+          team had student-project resources. The platform had to handle hundreds of simultaneous
+          form submissions during registration windows, maintain a full submission history,
+          and be recoverable if anything went wrong.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Astro for reliability</strong> — static output means no runtime failures
+          for the public-facing parts. Server-side routes only for registration and submission
+          handling, where state actually matters.<br><br>
+          <strong>Designed for peak load</strong> — registration windows are the stress test.
+          The architecture was explicitly designed for the worst-case burst, not the
+          average request rate.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Outcome</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">Gov.</span>
+            <span class="modal-metric-label">Ministry accepted</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">TUA</span>
+            <span class="modal-metric-label">Turkish Space Agency</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--ink3);">Accepted by the Ministry of Industry and Technology</span>
+    </div>
+  </div>
+</div>
+
+<!-- ==================== PAGE ==================== -->
+
+<div class="site">
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="#work">Work</a>
+      <a href="#services">Services</a>
+      <a href="#open-source">Open Source</a>
+      <a href="#about">About</a>
+    </div>
+    <a href="mailto:muratkirazkaya0@gmail.com" class="nav-cta">Hire me →</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Available for freelance · Ordu, Turkey</div>
+    <h1 class="hero-headline">
+      I build systems<br>
+      that <em>actually run</em><br>
+      businesses.
+    </h1>
+    <p class="hero-sub">
+      Full-stack developer specialising in operational backends, workflow engines, and CMS-driven platforms.
+      I write code, ship self-hosted infrastructure, and contribute to the tools the rest of the web runs on.
     </p>
-
-    <div class="rounded-lg border border-blue-200 bg-blue-50 p-3">
-      <h2 class="text-lg font-bold">UNIDES Map</h2>
-      <p class="text-sm mt-1">
-        Explore the interactive UNIDES visualization by city, university, and
-        event hierarchy.
-      </p>
-      <a href="/unides.html" class="inline-block mt-2 text-blue-700 font-semibold hover:underline">
-        Open UNIDES Map
-      </a>
+    <div class="hero-actions">
+      <a href="#work" class="btn-primary">See my work ↓</a>
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="btn-ghost">GitHub / Open Source</a>
     </div>
-
-    <!-- EXPERIENCE -->
-    <div>
-      <h2 class="text-xl font-bold mb-2">Experience</h2>
-      <div class="space-y-3">
-        <div>
-          <h3 class="font-semibold">Tech Operations @ Valentura</h3>
-          <p class="text-sm text-gray-600">Sep 2024 - Sep 2025 · Remote</p>
-          <p class="text-sm">
-            Switched from an internship to a full-time job when I had enough
-            knowledge and age.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Frontend Developer @ Valentura</h3>
-          <p class="text-sm text-gray-600">Mar 2024 - Sep 2024 · Hybrid</p>
-          <p class="text-sm">Internship in frontend development.</p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Web Developer @ Collective Idea TR</h3>
-          <p class="text-sm text-gray-600">
-            Jan 2024 - Mar 2024 · Kadıköy, Istanbul · Hybrid
-          </p>
-          <p class="text-sm">Web development internship.</p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Frontend Developer @ Insider</h3>
-          <p class="text-sm text-gray-600">
-            Jul 2023 - Sep 2023 · Istanbul · On-site
-          </p>
-          <p class="text-sm">
-            Selected for an in-person phase at Insider's office, showcasing
-            adaptability and commitment to personal growth.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Trainee @ Insider</h3>
-          <p class="text-sm text-gray-600">Apr 2023 - Jul 2023</p>
-          <p class="text-sm">
-            Proactively encouraged peers to apply, fostering a team-oriented
-            learning environment. Collaborated on a final project website
-            focused on earthquake preparedness.
-          </p>
-        </div>
-      </div>
+    <div class="hero-tech">
+      <span class="hero-tech-label">Stack</span>
+      <i class="ci ci-nextjs ci-2x" title="Next.js"></i>
+      <i class="ci ci-typescript ci-2x" title="TypeScript"></i>
+      <i class="ci ci-deno ci-2x" title="Deno"></i>
+      <i class="ci ci-nodejs ci-2x" title="Node.js"></i>
+      <i class="ci ci-react ci-2x" title="React"></i>
+      <i class="ci ci-postgresql ci-2x" title="PostgreSQL"></i>
+      <i class="ci ci-mongodb ci-2x" title="MongoDB"></i>
+      <i class="ci ci-firebase ci-2x" title="Firebase"></i>
+      <i class="ci ci-docker ci-2x" title="Docker"></i>
     </div>
+  </section>
 
-    <!-- PROJECTS -->
-    <div>
-      <h2 class="text-xl font-bold mb-2">Projects</h2>
-      <div class="space-y-3">
-        <div>
-          <h3 class="font-semibold">
-            <a href="https://dijitalstaj.online" class="hover:text-blue-600 hover:underline" target="_blank" rel="noreferrer">Dijital Staj</a>
-          </h3>
-          <p class="text-sm">
-            A system that manages student internship applications and exemption workflows online. Students submit
-            applications,
-            enter required information/files, and as the process advances the relevant roles (workplace, advisor,
-            internship board/office)
-            can review, approve, reject, or request corrections. Notifications are triggered based on status, and the
-            workflow
-            advances until the application is marked as completed.
-          </p>
-          <p class="text-sm mt-1">
-            Supports document storage (PDF/attachments) and can generate required PDFs automatically when needed.
-          </p>
-          <p class="text-sm mt-1 border border-gray-200 hover:border-gray-300 rounded-md px-1">
-            Stack: Next.js + React + TypeScript + TailwindCSS (Sass/SCSS), Deno + Hono API + Zod, PostgreSQL + Drizzle
-            ORM, MinIO (S3-compatible),
-            SMTP, pdf-lib + custom PDF services, tiptap/tinymce/jspdf/katex for rich document editing.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">
-            <a href="https://sportyluxe.club/" class="hover:text-blue-600 hover:underline" target="_blank">Sportyluxe
-              GYM</a>
-          </h3>
-          <p class="text-sm">
-            I developed backend for Giresun's biggest gym, entry/exit, membership management, PT management,
-            lesson/class management, kitchen management, custom program management, etc.
-          </p>
-          <p class="text-sm mt-1 border border-gray-200 hover:border-gray-300 rounded-md px-1">
-            Stack: Deno, Yelix/Hono, MongoDB, Directus, Firebase (SMS), Sentry.
-          </p>
-          <p class="text-sm mt-1">
-            ~4k requests/day, +350 members, %99.9 uptime, avg ~85ms response time,
-            As much as possible self-deployed.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">
-            <a href="https://pel-s.com/" class="hover:text-blue-600 hover:underline" target="_blank"
-              rel="noreferrer">PELS</a>
-          </h3>
-          <p class="text-sm">
-            Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with Astro and
-            a Contentful CMS for managing TR/EN content and Blogs.
-          </p>
-        </div>
+  <!-- WORK -->
+  <div id="work" class="sec-header">
+    <span class="sec-title">Selected work</span>
+    <div class="sec-line"></div>
+  </div>
 
-        <div>
-          <h3 class="font-semibold">Astro Hackathon Platform</h3>
-          <p class="text-sm">
-            Full-stack event platform for Türkiye Uzay Ajansı (TUA), accepted
-            by the Ministry of Industry and Technology.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Fika Mate</h3>
-          <p class="text-sm">
-            Shared coffee wallet uniting multiple brands. Built with React +
-            Vite and custom internationalization system without external
-            libraries.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">ordu.dev</h3>
-          <p class="text-sm">
-            Community platform for Ordu Bilişim Topluluğu with blog, events,
-            documentation, and daily university cafeteria menu.
-          </p>
-          <p class="text-sm mt-1">
-            Inside the ordu.dev dashboard: an in-house workflow engine,
-            advertisement management panel, and web push notification
-            management.
-          </p>
-          <p class="text-sm mt-1">
-            Built as a single-tenant system with campaign-based scheduling and
-            a simple background jobs/queue runner (scheduled runs + retries)
-            implemented per our needs (no `Deno.cron`).
-          </p>
-          <p class="text-sm mt-1 border border-gray-200 hover:border-gray-300 rounded-md px-1">
-            Dashboard Stack: Astro + Deno (Yelix/Hono) + PostgreSQL client only.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Moneo</h3>
-          <p class="text-sm">
-            Modernized company website from legacy HTML to Next.js with
-            multilingual support and new service pages.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Cryptocurrency Landing Pages</h3>
-          <p class="text-sm">
-            Built multiple sleek landing pages (HelpDex, CrossLaunch) for
-            crypto ventures to attract investors and users.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Yelix</h3>
-          <p class="text-sm">
-            A Deno-native web framework. Won 🥈 Silver (Regional) and 🥇 Gold
-            (National) at 1Fikir1Türkiye.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">Kommunity Wrapped</h3>
-          <p class="text-sm">
-            Official collaboration with Kommunity for event analytics.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">GitHub Chrome Extension</h3>
-          <p class="text-sm">
-            Widely used by developers to enhance GitHub's interface with
-            additional features.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold">C# NuGet Libraries</h3>
-          <p class="text-sm">
-            Created dozens of libraries with over 5,000 downloads and
-            developed an IDE prototype.
-          </p>
-        </div>
-      </div>
-    </div>
+  <div class="project-list">
 
-    <!-- CONTRIBUTIONS -->
-    <div>
-      <h2 class="text-xl font-bold mb-2">Open Source Contributions</h2>
-      <div class="space-y-2">
-        <div>
-          <p class="text-sm">
-            <span class="font-semibold">ExpressJS Triager:</span> Added to the
-            ExpressJS GitHub organization as a member of the triagers team,
-            contributing to issue triage and maintenance workflows across
-            ExpressJS repositories. Directly involved with the ExpressJS,
-            jshttp, and pillarjs ecosystems, supporting core packages that
-            form a large part of the Node.js HTTP stack.
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">
-            <span class="font-semibold">Express.js:</span> Member of
-            Performance WG team for tooling and monitoring.
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">
-            <span class="font-semibold">Exercism:</span> Published a new track
-            for Batch programming.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- COMMUNITY -->
-    <div>
-      <h2 class="text-xl font-bold mb-2">Community</h2>
-      <div class="space-y-2">
-        <div>
-          <p class="text-sm">
-            <span class="font-semibold">Founder of Ordu Bilişim Topluluğu</span>
-            (<a href="https://ordu.dev" target="_blank" class="text-blue-600 hover:underline">ordu.dev</a>) - connecting
-            developers across Ordu province.
-            <a href="https://docs.ordu.dev/bilgilendirme/2025-raporu/" class="text-blue-600 hover:underline"
-              target="_blank">
-              2025 report
-            </a>
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">
-            <span class="font-semibold">Organized
-              <a href="https://winterbytes.ordu.dev" target="_blank" class="text-blue-600 hover:underline">Winterbytes
-                2026</a>:</span>
-            Co-organized the "Leading Technology Camp of the Black Sea", a
-            3-day winter camp (Jan 30 - Feb 1, 2026) featuring expert-led
-            training in software development and cybersecurity, with speakers
-            from Node.js TSC, Trendyol, IBM, and government agencies. Provided
-            free education, accommodation, and certification for 230+
-            students.
-          </p>
-        </div>
-        <div>
-          <p class="text-sm">
-            Participated in
-            <span class="font-semibold">300+ tech events</span>
-            in two years across Türkiye.
-          </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- EDUCATION -->
-    <div>
-      <h2 class="text-xl font-bold mb-2">Education</h2>
+    <div class="project-item" onclick="openModal('sportyluxe')">
       <div>
-        <h3 class="font-semibold">Ordu University</h3>
-        <p class="text-sm">
-          Currently studying while contributing to modernize web development
-          course materials and assessments.
-        </p>
+        <div class="proj-number">01 — Backend systems</div>
+        <div class="proj-title">Sportyluxe GYM</div>
+        <div class="proj-desc">
+          Full operational backend for Giresun's largest gym. Entry/exit tracking, membership, PT scheduling,
+          class management, kitchen, custom programs — everything. Self-deployed. Still running.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
+          <span class="tag">Hono</span>
+          <span class="tag"><i class="ci ci-mongodb"></i> MongoDB</span>
+          <span class="tag"><i class="ci ci-firebase"></i> Firebase SMS</span>
+          <span class="tag">Sentry</span>
+          <span class="tag">Self-hosted</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">4k+</span>
+        <span class="proj-stat-label">req / day</span>
+        <div class="proj-stat-secondary">99.9% uptime · ~85ms avg</div>
+        <a href="https://sportyluxe.club/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
       </div>
     </div>
 
-    <!-- RECOGNITION -->
-    <div>
-      <h2 class="text-xl font-bold mb-2">Recognition</h2>
+    <div class="project-item" onclick="openModal('dijitalstaj')">
       <div>
-        <p class="text-sm">
-          Featured in a
-          <span class="font-semibold">Success Story by Kodluyoruz & Microsoft</span>
-          for outstanding progress in software development.
-        </p>
+        <div class="proj-number">02 — Workflow engine</div>
+        <div class="proj-title">Dijital Staj</div>
+        <div class="proj-desc">
+          Multi-role internship application system for universities. Students, advisors, workplaces, and offices
+          each have their own view. State-machine workflow, document storage, auto-PDF generation, and SMTP
+          notifications throughout.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
+          <span class="tag"><i class="ci ci-postgresql"></i> PostgreSQL</span>
+          <span class="tag">DrizzleORM</span>
+          <span class="tag">MinIO</span>
+          <span class="tag">pdf-lib</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">4 roles</span>
+        <span class="proj-stat-label">approval pipeline</span>
+        <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('pels')">
+      <div>
+        <div class="proj-number">03 — CMS platform</div>
+        <div class="proj-title">PELS</div>
+        <div class="proj-desc">
+          Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with
+          Astro and Contentful CMS for managing TR/EN content — editable by the client's team, no dev needed.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag">Contentful</span>
+          <span class="tag">i18n</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">TR/EN</span>
+        <span class="proj-stat-label">bilingual CMS</span>
+        <a href="https://pel-s.com/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('yelix')">
+      <div>
+        <div class="proj-number">04 — Framework</div>
+        <div class="proj-title">Yelix <span class="badge">🥇 National</span></div>
+        <div class="proj-desc">
+          A Deno-native web framework built around the runtime's actual strengths — not a Node.js port.
+          Won Silver (Regional) and Gold (National) at 1Fikir1Türkiye.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag">Web framework</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">🥇</span>
+        <span class="proj-stat-label">National award</span>
+        <span class="proj-case-hint">Click for details →</span>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('ordudev')">
+      <div>
+        <div class="proj-number">05 — Community platform</div>
+        <div class="proj-title">ordu.dev</div>
+        <div class="proj-desc">
+          Platform for Ordu Bilişim Topluluğu — blog, events, docs, and daily cafeteria menu.
+          Includes a custom in-house workflow engine, ad management panel, and web push notification
+          system. Self-hosted, zero recurring cloud costs.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
+          <span class="tag"><i class="ci ci-postgresql"></i> PostgreSQL</span>
+          <span class="tag">Web Push</span>
+          <span class="tag">Self-hosted</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">5K+</span>
+        <span class="proj-stat-label">clicks / month</span>
+        <div class="proj-stat-secondary">+50K Google impressions</div>
+        <a href="https://ordu.dev" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('tua')">
+      <div>
+        <div class="proj-number">06 — Event platform</div>
+        <div class="proj-title">Hackathon Platform for TUA</div>
+        <div class="proj-desc">
+          Full-stack hackathon management platform built for Türkiye Uzay Ajansı (Turkish Space Agency).
+          Accepted and used by the Ministry of Industry and Technology.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag">Full-stack</span>
+          <span class="tag">Government</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">Gov.</span>
+        <span class="proj-stat-label">Ministry accepted</span>
+        <span class="proj-case-hint">Click for details →</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- SERVICES -->
+  <div id="services" class="sec-header">
+    <span class="sec-title">What I can do for you</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="services-list">
+    <div class="service-item">
+      <span class="service-num">01</span>
+      <div>
+        <div class="service-title">Migrate a Node.js backend to Deno</div>
+        <div class="service-desc">Without rewriting your business logic. I've built production Deno backends, contributed to the Deno runtime itself, and I'm on the ExpressJS Performance WG — I know exactly what moves cleanly and what doesn't.</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">02</span>
+      <div>
+        <div class="service-title">Build a multi-role workflow system from scratch</div>
+        <div class="service-desc">State-machine approval pipelines, document handling (storage, PDF generation), and automated notifications. I've shipped this for universities and it's handling thousands of applications today.</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">03</span>
+      <div>
+        <div class="service-title">Set up a CMS-driven multilingual site your team can maintain</div>
+        <div class="service-desc">Astro + Contentful (or similar), TR/EN content, zero-JS-by-default output. The client's non-technical team is editing content independently — no agency needed after handoff.</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">04</span>
+      <div>
+        <div class="service-title">Audit and improve your Node.js HTTP stack</div>
+        <div class="service-desc">I contribute to jshttp/on-finished, jshttp/mime-db, and sit on the ExpressJS Performance WG. I understand the stack at the package level, not just the framework surface.</div>
       </div>
     </div>
   </div>
-</body>
 
+  <!-- EXPERIENCE -->
+  <div id="experience" class="sec-header">
+    <span class="sec-title">Experience</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="exp-list">
+    <div class="exp-item">
+      <div class="exp-role">Tech Operations — Valentura</div>
+      <div class="exp-meta">Sep 2024 – Sep 2025 · Remote</div>
+      <div class="exp-desc">Switched from an internship to a full-time role after demonstrating sufficient knowledge and maturity.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-role">Frontend Developer — Valentura</div>
+      <div class="exp-meta">Mar 2024 – Sep 2024 · Hybrid</div>
+      <div class="exp-desc">Internship in frontend development.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-role">Web Developer — Collective Idea TR</div>
+      <div class="exp-meta">Jan 2024 – Mar 2024 · Kadıköy, Istanbul · Hybrid</div>
+      <div class="exp-desc">Web development internship.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-role">Frontend Developer — Insider</div>
+      <div class="exp-meta">Jul 2023 – Sep 2023 · Istanbul · On-site</div>
+      <div class="exp-desc">Selected for an in-person phase at Insider's office, showcasing adaptability and commitment to personal growth.</div>
+    </div>
+    <div class="exp-item">
+      <div class="exp-role">Trainee — Insider</div>
+      <div class="exp-meta">Apr 2023 – Jul 2023</div>
+      <div class="exp-desc">Proactively encouraged peers to apply, fostering a team-oriented learning environment. Collaborated on a final project focused on earthquake preparedness.</div>
+    </div>
+  </div>
+
+  <!-- ABOUT -->
+  <div id="about" class="sec-header">
+    <span class="sec-title">About</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="about-grid">
+    <div class="about-left">
+      <h2 class="about-title">Not just a developer.<br><em>A builder</em> who ships.</h2>
+      <p class="about-body">
+        I'm a software developer based in Ordu, Turkey, currently studying at Ordu University while working full-time.
+        I care about systems that work at 3am without me watching them — so I self-host, monitor, and
+        design for reliability from the start.<br><br>
+        I'm part of the ExpressJS organisation (Triagers team, Performance WG) and have been contributing
+        to the Node.js HTTP stack. I also founded <a href="https://ordu.dev" target="_blank" rel="noreferrer">Ordu Bilişim Topluluğu</a>,
+        a regional dev community, and co-organised <a href="https://winterbytes.ordu.dev" target="_blank" rel="noreferrer">Winterbytes 2026</a>
+        — a 3-day technical camp for 230+ students from across the Black Sea region.
+      </p>
+    </div>
+    <div class="about-right">
+      <div class="cred-list">
+        <div class="cred-item">
+          <span class="cred-org">ExpressJS</span>
+          <span class="cred-role">Triager + Performance WG</span>
+          <span class="cred-detail">jshttp, pillarjs ecosystems</span>
+        </div>
+        <div class="cred-item">
+          <span class="cred-org">Exercism</span>
+          <span class="cred-role">Published new language track</span>
+          <span class="cred-detail">Batch programming</span>
+        </div>
+        <div class="cred-item">
+          <span class="cred-org">Winterbytes 2026</span>
+          <span class="cred-role">Co-organiser, 230+ attendees</span>
+          <span class="cred-detail">Speakers from Node.js TSC, IBM, Trendyol</span>
+        </div>
+        <div class="cred-item">
+          <span class="cred-org">Kodluyoruz × Microsoft</span>
+          <span class="cred-role">Featured success story</span>
+          <span class="cred-detail">Outstanding progress recognition</span>
+        </div>
+        <div class="cred-item">
+          <span class="cred-org">Ordu University</span>
+          <span class="cred-role">Computer Science (ongoing)</span>
+          <span class="cred-detail">Contributing to modernise web dev course materials</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- OSS -->
+  <div id="open-source" class="sec-header">
+    <span class="sec-title">Open source</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="oss-strip">
+    <div class="oss-item">
+      <div class="oss-icon">
+        <i class="ci ci-expressjs ci-2x" title="Express.js"></i>
+        <i class="ci ci-nodejs ci-2x" title="Node.js"></i>
+      </div>
+      <div class="oss-org">ExpressJS Org</div>
+      <div class="oss-title">Triager + Perf WG</div>
+      <div class="oss-detail">Issue triage and maintenance across Express, jshttp, pillarjs — the core of the Node.js HTTP stack.</div>
+    </div>
+    <div class="oss-item">
+      <div class="oss-icon">
+        <i class="ci ci-github ci-2x" title="GitHub"></i>
+        <i class="ci ci-chrome ci-2x" title="Chrome"></i>
+      </div>
+      <div class="oss-org">GitHub Extension</div>
+      <div class="oss-title">Chrome Extension</div>
+      <div class="oss-detail">Widely used by developers to extend GitHub's native interface. Published and maintained.</div>
+    </div>
+    <div class="oss-item">
+      <div class="oss-icon">
+        <i class="ci ci-deno ci-2x" title="Deno"></i>
+      </div>
+      <div class="oss-org">Deno</div>
+      <div class="oss-title">Core + Docs</div>
+      <div class="oss-detail">Contributed to Deno runtime core and documentation improvements.</div>
+    </div>
+    <div class="oss-item">
+      <div class="oss-icon">
+        <i class="ci ci-nodejs ci-2x" title="Node.js"></i>
+      </div>
+      <div class="oss-org">jshttp</div>
+      <div class="oss-title">on-finished + mime-db</div>
+      <div class="oss-detail">Contributed to on-finished and mime-db packages used across the Node.js HTTP ecosystem.</div>
+    </div>
+    <div class="oss-item">
+      <div class="oss-icon">
+        <i class="ci ci-zig ci-2x" title="Zig"></i>
+      </div>
+      <div class="oss-org">Kiren</div>
+      <div class="oss-title">Lightweight JS runtime</div>
+      <div class="oss-detail">Contributed to Kiren, a lightweight JavaScript runtime built with Zig.</div>
+    </div>
+    <div class="oss-item">
+      <div class="oss-icon">
+        <i class="ci ci-github ci-2x" title="GitHub"></i>
+      </div>
+      <div class="oss-org">f/prompts.chat</div>
+      <div class="oss-title">Prompt community</div>
+      <div class="oss-detail">Contributed UX-focused improvements to the f/prompts.chat open-source project.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip">
+    <div class="cta-headline">
+      Have something <em>that needs to work</em>?<br>Let's talk.
+    </div>
+    <div class="cta-actions">
+      <a href="mailto:muratkirazkaya0@gmail.com" class="btn-inv">Send a message →</a>
+      <a href="mailto:muratkirazkaya0@gmail.com" class="btn-inv-ghost">muratkirazkaya0@gmail.com</a>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', e => {
+      if (e.target === overlay) {
+        overlay.classList.remove('open');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.querySelectorAll('.modal-overlay.open').forEach(m => {
+        m.classList.remove('open');
+      });
+      document.body.style.overflow = '';
+    }
+  });
+</script>
+
+</body>
 </html>
