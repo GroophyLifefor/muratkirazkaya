@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Call — Murat Kirazkaya</title>
+<meta name="description" content="Book a 15-minute discovery call with Murat Kirazkaya. Free, no commitment — let's talk about your project.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Book a Call — Murat Kirazkaya">
+<meta property="og:description" content="Book a 15-minute discovery call. Free, no commitment — let's talk about your project.">
+<meta property="og:image" content="/img/pp.jpeg">
+<meta property="og:url" content="https://muratkirazkaya.com/booking.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/booking.html">
+
+<script defer src="https://umami.yelix.cloud/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 1000px; margin: 0 auto; padding: 0 28px; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  /* BACK LINK */
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  /* PAGE HEADER */
+  .page-header { padding: 44px 0 36px; }
+  .page-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 16px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .page-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .page-headline {
+    font-family: var(--serif); font-size: clamp(30px, 5vw, 46px);
+    line-height: 1.1; font-weight: 400; color: var(--ink);
+    margin-bottom: 16px; letter-spacing: -0.01em;
+  }
+  .page-headline em { font-style: italic; color: var(--accent); }
+  .page-sub { font-size: 15px; color: var(--ink2); max-width: 560px; line-height: 1.65; }
+
+  /* QUICK FACTS ROW */
+  .quick-facts {
+    display: flex; gap: 0;
+    border: 1px solid var(--line);
+    margin: 28px 0 40px;
+    flex-wrap: wrap;
+  }
+  .fact {
+    flex: 1; min-width: 140px;
+    padding: 16px 20px;
+    border-right: 1px solid var(--line);
+  }
+  .fact:last-child { border-right: none; }
+  .fact-val {
+    font-family: var(--serif); font-size: 22px; color: var(--ink);
+    display: block; line-height: 1.2;
+  }
+  .fact-label {
+    font-family: var(--mono); font-size: 10px; color: var(--ink3);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-top: 3px;
+  }
+
+  /* CAL EMBED WRAPPER */
+  .cal-wrapper {
+    border: 1px solid var(--line);
+    background: #fff;
+    overflow: hidden;
+    margin-bottom: 56px;
+  }
+  .cal-wrapper-inner {
+    width: 100%;
+    height: 680px;
+    overflow: scroll;
+  }
+
+  /* WHAT TO EXPECT */
+  .expect-section { margin-bottom: 56px; }
+  .sec-header {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 0 0 24px;
+  }
+  .sec-title { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; }
+  .sec-line { flex: 1; height: 1px; background: var(--line); }
+  .expect-list {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--line);
+  }
+  .expect-item {
+    display: grid; grid-template-columns: 28px 1fr;
+    gap: 16px; padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .expect-num { font-family: var(--mono); font-size: 10px; color: var(--ink3); }
+  .expect-title { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 3px; }
+  .expect-desc { font-size: 13px; color: var(--ink3); line-height: 1.65; }
+
+  /* FOOTER */
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    border-top: 1px solid var(--line);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .quick-facts { flex-direction: column; }
+    .fact { border-right: none; border-bottom: 1px solid var(--line); }
+    .fact:last-child { border-bottom: none; }
+    .cal-wrapper-inner { height: 580px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="nav-logo-click">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="mailto:muratkirazkaya0@gmail.com" class="nav-cta" data-umami-event="nav-hire-me-click">Hire me →</a>
+  </nav>
+
+  <a href="/" class="back-link" data-umami-event="booking-back-home-click">← Back to home</a>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-eyebrow">Free discovery call</div>
+    <h1 class="page-headline">
+      Let's talk about<br>
+      <em>your project</em>.
+    </h1>
+    <p class="page-sub">
+      Pick a slot that works for you. 15 minutes — no slides, no sales pitch.
+      Just a direct conversation about your setup and what you need.
+    </p>
+  </div>
+
+  <!-- QUICK FACTS -->
+  <div class="quick-facts">
+    <div class="fact">
+      <span class="fact-val">15 min</span>
+      <span class="fact-label">Duration</span>
+    </div>
+    <div class="fact">
+      <span class="fact-val">Free</span>
+      <span class="fact-label">No commitment</span>
+    </div>
+    <div class="fact">
+      <span class="fact-val">Video</span>
+      <span class="fact-label">Google Meet</span>
+    </div>
+    <div class="fact">
+      <span class="fact-val">Any TZ</span>
+      <span class="fact-label">Shown in your time zone</span>
+    </div>
+  </div>
+
+  <!-- CAL.COM EMBED -->
+  <div class="cal-wrapper">
+    <div style="width:100%;height:100%;overflow:scroll" id="my-cal-inline-15min" class="cal-wrapper-inner"></div>
+  </div>
+
+  <!-- WHAT TO EXPECT -->
+  <div class="expect-section">
+    <div class="sec-header">
+      <span class="sec-title">What happens in the call</span>
+      <div class="sec-line"></div>
+    </div>
+    <div class="expect-list">
+      <div class="expect-item">
+        <span class="expect-num">01</span>
+        <div>
+          <div class="expect-title">You explain what you're building or running</div>
+          <div class="expect-desc">Current stack, current problems, current costs. No preparation needed — just talk through it.</div>
+        </div>
+      </div>
+      <div class="expect-item">
+        <span class="expect-num">02</span>
+        <div>
+          <div class="expect-title">I tell you honestly if I can help</div>
+          <div class="expect-desc">If your project is a good fit, I'll say so. If it isn't, I'll say that too and point you in a useful direction.</div>
+        </div>
+      </div>
+      <div class="expect-item">
+        <span class="expect-num">03</span>
+        <div>
+          <div class="expect-title">We agree on next steps</div>
+          <div class="expect-desc">If we're a match, I'll follow up with a written proposal. No pressure, no artificial urgency.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="footer-github-click">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="footer-linkedin-click">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="footer-ordudev-click">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+<!-- Cal inline embed code begins -->
+<script type="text/javascript">
+  (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; if(typeof namespace === "string"){cal.ns[namespace] = cal.ns[namespace] || api;p(cal.ns[namespace], ar);p(cal, ["initNamespace", namespace]);} else p(cal, ar); return;} p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", "15min", {origin:"https://app.cal.com"});
+
+  Cal.ns["15min"]("inline", {
+    elementOrSelector:"#my-cal-inline-15min",
+    config: {"layout":"week_view","useSlotsViewOnSmallScreen":"true","theme":"light"},
+    calLink: "muratkirazkaya/15min",
+  });
+
+  Cal.ns["15min"]("ui", {"theme":"light","cssVarsPerTheme":{"light":{"cal-brand":"#c94a1e"}},"hideEventTypeDetails":false,"layout":"week_view"});
+
+  Cal.ns["15min"]("on", {
+    action: "bookingSuccessful",
+    callback: function() {
+      if (typeof umami !== "undefined") {
+        umami.track("cal-booking-completed");
+      }
+    }
+  });
+</script>
+<!-- Cal inline embed code ends -->
+
+</body>
+</html>
