@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Hosted Migration Consultant — Murat Kirazkaya</title>
+<meta name="description" content="I'll migrate your cloud deployment to self-hosted infrastructure. Docker, Coolify, Dokploy, Hetzner, Traefik — you own the stack, you own the costs.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Self-Hosted Migration Consultant — Murat Kirazkaya">
+<meta property="og:description" content="Migrate your cloud deployment to self-hosted infrastructure. Cut the bills, own the stack.">
+<meta property="og:image" content="/img/pp.jpeg">
+<meta property="og:url" content="https://muratkirazkaya.com/self-hosted-migration.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/self-hosted-migration.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  /* NAV */
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  /* HERO */
+  .hero { padding: 72px 0 60px; }
+  .hero-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .hero-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .hero-headline {
+    font-family: var(--serif); font-size: clamp(34px, 5.5vw, 54px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 28px; letter-spacing: -0.01em;
+  }
+  .hero-headline em { font-style: italic; color: var(--accent); }
+  .hero-sub {
+    font-size: 16px; color: var(--ink2); max-width: 560px;
+    line-height: 1.65; margin-bottom: 40px;
+  }
+  .hero-actions { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .btn-primary {
+    font-family: var(--mono); font-size: 12px; padding: 12px 24px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.04em; transition: background 0.15s;
+  }
+  .btn-primary:hover { background: var(--accent); }
+  .btn-ghost {
+    font-family: var(--mono); font-size: 12px; padding: 12px 24px;
+    background: transparent; color: var(--ink); border: 1px solid var(--line);
+    text-decoration: none; display: inline-block;
+    letter-spacing: 0.04em; transition: border-color 0.15s, color 0.15s;
+  }
+  .btn-ghost:hover { border-color: var(--ink3); }
+
+  /* SECTION HEADER */
+  .sec-header {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 48px 0 28px;
+  }
+  .sec-title { font-family: var(--mono); font-size: 11px; color: var(--ink3); letter-spacing: 0.1em; text-transform: uppercase; }
+  .sec-line { flex: 1; height: 1px; background: var(--line); }
+
+  /* PROBLEM BAND */
+  .problem-band {
+    background: var(--surface2); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    padding: 32px 36px; margin-bottom: 0;
+  }
+  .problem-label {
+    font-family: var(--mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 12px;
+  }
+  .problem-text { font-size: 15px; color: var(--ink2); line-height: 1.75; max-width: 640px; }
+  .problem-text strong { color: var(--ink); font-weight: 500; }
+
+  /* SERVICES */
+  .services-list {
+    display: flex; flex-direction: column;
+    border-top: 1px solid var(--line); margin-bottom: 8px;
+  }
+  .service-item {
+    display: grid; grid-template-columns: 28px 1fr;
+    gap: 16px; padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: baseline;
+  }
+  .service-num { font-family: var(--mono); font-size: 10px; color: var(--ink3); }
+  .service-title { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+  .service-desc { font-size: 13px; color: var(--ink3); line-height: 1.65; }
+
+  /* PROCESS STEPS */
+  .process-list {
+    display: flex; flex-direction: column; gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .process-step {
+    display: grid; grid-template-columns: 48px 1fr;
+    gap: 20px; padding: 24px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .process-num {
+    font-family: var(--serif); font-size: 32px; color: var(--surface3);
+    font-weight: 400; line-height: 1; padding-top: 2px;
+  }
+  .process-title { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
+  .process-desc { font-size: 13px; color: var(--ink3); line-height: 1.65; }
+
+  /* WHY SELF-HOST — 2-col */
+  .why-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 0; border: 1px solid var(--line); margin-bottom: 0;
+  }
+  .why-item {
+    padding: 24px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
+  .why-item:nth-child(2n) { border-right: none; }
+  .why-item:nth-last-child(-n+2) { border-bottom: none; }
+  .why-num {
+    font-family: var(--mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .why-title { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 6px; }
+  .why-detail { font-size: 13px; color: var(--ink3); line-height: 1.6; }
+
+  /* TOOLS STRIP */
+  .tools-strip {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 0; border: 1px solid var(--line); margin-bottom: 0;
+  }
+  .tool-item {
+    padding: 20px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .tool-item:nth-child(3n) { border-right: none; }
+  .tool-item:nth-last-child(-n+3) { border-bottom: none; }
+  .tool-icon { display: flex; gap: 6px; align-items: center; margin-bottom: 4px; }
+  .tool-name { font-size: 13px; color: var(--ink); font-weight: 500; }
+  .tool-detail { font-size: 12px; color: var(--ink3); line-height: 1.5; }
+
+  /* CTA STRIP */
+  .cta-strip {
+    background: var(--ink); padding: 48px; margin: 0 -28px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+  }
+  .cta-headline { font-family: var(--serif); font-size: 28px; color: var(--surface); font-weight: 400; line-height: 1.2; }
+  .cta-headline em { font-style: italic; color: #e8a07a; }
+  .cta-sub { font-size: 13px; color: rgba(245,242,235,0.55); margin-top: 8px; font-family: var(--mono); letter-spacing: 0.02em; }
+  .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .btn-inv {
+    font-family: var(--mono); font-size: 12px; padding: 12px 22px;
+    background: var(--surface); color: var(--ink); text-decoration: none; display: inline-block;
+    letter-spacing: 0.04em; transition: background 0.15s;
+  }
+  .btn-inv:hover { background: #e8a07a; }
+  .btn-inv-ghost {
+    font-family: var(--mono); font-size: 12px; padding: 12px 22px;
+    background: transparent; color: var(--surface); text-decoration: none; display: inline-block;
+    border: 1px solid rgba(255,255,255,0.25);
+    letter-spacing: 0.04em; transition: border-color 0.15s;
+  }
+  .btn-inv-ghost:hover { border-color: rgba(255,255,255,0.6); }
+
+  /* UPWORK TRUST NOTE */
+  .upwork-trust {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 20px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    letter-spacing: 0.03em;
+  }
+  .cta-upwork-note {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 16px; width: 100%;
+    font-family: var(--mono); font-size: 11px; color: rgba(245,242,235,0.45);
+    letter-spacing: 0.03em;
+  }
+
+  /* BACK LINK */
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  /* FOOTER */
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .why-grid { grid-template-columns: 1fr; }
+    .why-item { border-right: none; border-bottom: 1px solid var(--line) !important; }
+    .why-item:last-child { border-bottom: none !important; }
+    .tools-strip { grid-template-columns: repeat(2, 1fr); }
+    .tool-item { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line) !important; }
+    .tool-item:nth-child(2n) { border-right: none; }
+    .tool-item:nth-last-child(-n+2) { border-bottom: none !important; }
+    .cta-strip { flex-direction: column; text-align: left; }
+    .nav-links { display: none; }
+    .process-step { grid-template-columns: 36px 1fr; gap: 14px; }
+    .problem-band { padding: 24px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <!-- NAV -->
+  <nav>
+    <a href="/" class="nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="https://cal.com/muratkirazkaya" target="_blank" rel="noreferrer" class="nav-cta">Book a call →</a>
+  </nav>
+
+  <a href="/" class="back-link">← Back to home</a>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">Self-Hosted Migration Consultant</div>
+    <h1 class="hero-headline">
+      Stop paying cloud tax.<br>
+      Own your <em>infrastructure</em>.
+    </h1>
+    <p class="hero-sub">
+      Think about it before you get hit with sky-high bills. AWS, GCP, Vercel — the invoices grow
+      quietly until they don't. I'll move your deployment to hardware you control, at a fraction
+      of the cost, with no loss in reliability.
+    </p>
+    <div class="hero-actions">
+      <a href="https://cal.com/muratkirazkaya" target="_blank" rel="noreferrer" class="btn-primary">Book a free discovery call →</a>
+      <a href="mailto:muratkirazkaya0@gmail.com" class="btn-ghost">Send me an email</a>
+    </div>
+    <div class="upwork-trust">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="#14a800" aria-hidden="true"><path d="M18.56 13.16c-1.1 0-2.13-.47-3.07-1.23l.23-1.08c.21-1.14.85-3.06 2.84-3.06 1.49 0 2.7 1.21 2.7 2.7s-1.21 2.67-2.7 2.67zm0-8.14c-2.54 0-4.51 1.65-5.31 4.37-1.22-1.83-2.15-4.04-2.69-5.89H8.56v7.11c0 1.41-1.14 2.55-2.55 2.55S3.46 12.02 3.46 10.61V3.5H1.19v7.11c0 2.92 2.37 5.28 5.28 5.28s5.28-2.36 5.28-5.28V9.42c.53 1.11 1.18 2.23 1.97 3.22l-1.67 7.87h2.43l1.21-5.71c1.06.68 2.28 1.11 3.67 1.11 3.82 0 6.37-2.55 6.37-6.12 0-3.32-2.55-6.03-6.37-6.03z"/></svg>
+      Payments secured via Upwork Direct Contracts
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <div class="problem-band">
+    <div class="problem-label">The real cost of managed cloud</div>
+    <p class="problem-text">
+      You started with a free tier. Then your traffic grew. Then you added a database, a CDN,
+      a serverless function or two. Now you're paying <strong>$300–$2,000/month</strong><i>(and in some cases exceeding $10,000/month with over-billing)</i> for
+      infrastructure you don't own, can't inspect, and can't move without weeks of work.
+      A comparable self-hosted setup on Hetzner often costs <strong>$20–$80/month</strong> —
+      with better performance, full control, and no surprise invoices.
+    </p>
+  </div>
+
+  <!-- WHAT I OFFER -->
+  <div class="sec-header">
+    <span class="sec-title">What I do for you</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="services-list">
+    <div class="service-item">
+      <span class="service-num">01</span>
+      <div>
+        <div class="service-title">Infrastructure audit</div>
+        <div class="service-desc">I map your current cloud spend, services, and dependencies. You get a clear breakdown of what you're paying for, what can move, and what (if anything) should stay managed.</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">02</span>
+      <div>
+        <div class="service-title">Migration architecture & planning</div>
+        <div class="service-desc">I design the target setup: which VPS, which deployment platform (Coolify or Dokploy), how Traefik routes traffic, how SSL is handled, and where your data lives. No hand-waving — a real plan you can follow.</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">03</span>
+      <div>
+        <div class="service-title">End-to-end migration</div>
+        <div class="service-desc">I set up the server, configure Docker Compose, wire up Traefik with automatic HTTPS, deploy your applications, and migrate your data. You keep running during the transition — no downtime window if avoidable.</div>
+      </div>
+    </div>
+    <div class="service-item">
+      <span class="service-num">04</span>
+      <div>
+        <div class="service-title">Monitoring, backups & handoff</div>
+        <div class="service-desc">I configure uptime monitoring, automated backups, and a custom dashboard so your team can see the state of everything at a glance. Then I walk you through it — you own it after I leave.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROCESS -->
+  <div class="sec-header">
+    <span class="sec-title">How it works</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="process-list">
+    <div class="process-step">
+      <div class="process-num">01</div>
+      <div>
+        <div class="process-title">Discovery call — 30 min, free</div>
+        <div class="process-desc">We talk through your current setup, what's running, what you're paying, and what you want to achieve. No commitment. I'll tell you honestly if self-hosting makes sense for your situation.</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">02</div>
+      <div>
+        <div class="process-title">Audit & proposal</div>
+        <div class="process-desc">I review your existing infrastructure and deliver a written migration plan — target architecture, tooling choices, estimated monthly cost after migration, and a timeline.</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">03</div>
+      <div>
+        <div class="process-title">Migration & setup</div>
+        <div class="process-desc">I do the work. Server provisioning, Docker configuration, Traefik routing, SSL, data migration, DNS cutover. You're involved for decisions, not for grunt work.</div>
+      </div>
+    </div>
+    <div class="process-step">
+      <div class="process-num">04</div>
+      <div>
+        <div class="process-title">Handoff & documentation</div>
+        <div class="process-desc">You receive full documentation for every component I've set up, a walkthrough session, and a 2-week support window for questions. Your team can manage this without me after handoff.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY SELF-HOST -->
+  <div class="sec-header">
+    <span class="sec-title">Why self-host</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="why-grid">
+    <div class="why-item">
+      <div class="why-num">Cost</div>
+      <div class="why-title">Predictable, flat-rate billing</div>
+      <div class="why-detail">A Hetzner VPS is a fixed monthly cost. No per-request charges, no egress fees, no surprise bills when traffic spikes. What you see is what you pay.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">Control</div>
+      <div class="why-title">You own the stack, top to bottom</div>
+      <div class="why-detail">No black-box managed services. You can SSH in, inspect anything, change anything. If a provider has an outage, you're not stuck waiting on a status page.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">Privacy</div>
+      <div class="why-title">Your data stays on your hardware</div>
+      <div class="why-detail">No data residency concerns, no sharing with hyperscalers, no compliance headaches from data flowing through third-party managed databases you don't control.</div>
+    </div>
+    <div class="why-item">
+      <div class="why-num">Performance</div>
+      <div class="why-title">Dedicated resources, no noisy neighbours</div>
+      <div class="why-detail">A dedicated VPS doesn't throttle you when a neighbouring tenant spikes. Consistent performance, no cold starts, no function timeouts.</div>
+    </div>
+  </div>
+
+  <!-- TOOLS -->
+  <div class="sec-header">
+    <span class="sec-title">Stack & tooling</span>
+    <div class="sec-line"></div>
+  </div>
+
+  <div class="tools-strip">
+    <div class="tool-item">
+      <div class="tool-icon"><i class="ci ci-docker ci-2x" title="Docker"></i></div>
+      <div class="tool-name">Docker & Compose</div>
+      <div class="tool-detail">Every service containerised. Reproducible, portable, easy to update.</div>
+    </div>
+    <div class="tool-item">
+      <div class="tool-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.75"><rect width="24" height="24" rx="4" fill="#6c47ff"/><text x="12" y="17" text-anchor="middle" fill="white" font-size="11" font-family="sans-serif" font-weight="700">C</text></svg>
+      </div>
+      <div class="tool-name">Coolify</div>
+      <div class="tool-detail">Self-hosted PaaS for deploying apps with a clean UI. Heroku-like DX, your server.</div>
+    </div>
+    <div class="tool-item">
+      <div class="tool-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.75"><rect width="24" height="24" rx="4" fill="#1a1a2e"/><text x="12" y="17" text-anchor="middle" fill="#e94560" font-size="11" font-family="sans-serif" font-weight="700">D</text></svg>
+      </div>
+      <div class="tool-name">Dokploy</div>
+      <div class="tool-detail">Open-source deployment platform. Simple, fast, and battle-tested for small-to-mid workloads.</div>
+    </div>
+    <div class="tool-item">
+      <div class="tool-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.75"><rect width="24" height="24" rx="4" fill="#d50000"/><text x="12" y="17" text-anchor="middle" fill="white" font-size="9" font-family="sans-serif" font-weight="700">HZ</text></svg>
+      </div>
+      <div class="tool-name">Hetzner VPS</div>
+      <div class="tool-detail">Reliable European infra at a fraction of AWS pricing. My default recommendation for most projects.</div>
+    </div>
+    <div class="tool-item">
+      <div class="tool-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.75"><rect width="24" height="24" rx="4" fill="#24a1c1"/><text x="12" y="17" text-anchor="middle" fill="white" font-size="9" font-family="sans-serif" font-weight="700">TF</text></svg>
+      </div>
+      <div class="tool-name">Traefik</div>
+      <div class="tool-detail">Automatic HTTPS via Let's Encrypt, service discovery, and clean reverse proxy routing — all from a single config.</div>
+    </div>
+    <div class="tool-item">
+      <div class="tool-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" style="opacity:0.75"><rect width="24" height="24" rx="4" fill="#1a5c3a"/><text x="12" y="17" text-anchor="middle" fill="#d4f0e0" font-size="8" font-family="sans-serif" font-weight="700">DSH</text></svg>
+      </div>
+      <div class="tool-name">Custom Dashboard</div>
+      <div class="tool-detail">A purpose-built operations view: service health, deployment status, uptime — built for your team.</div>
+    </div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-strip" style="margin-top: 56px;">
+    <div>
+      <div class="cta-headline">
+        Ready to <em>cut the bill</em><br>and own your stack?
+      </div>
+      <div class="cta-sub">Free 15-minute discovery call — no commitment.</div>
+    </div>
+    <div class="cta-actions">
+      <a href="https://cal.com/muratkirazkaya" target="_blank" rel="noreferrer" class="btn-inv">Book a call →</a>
+      <a href="mailto:muratkirazkaya0@gmail.com" class="btn-inv-ghost">muratkirazkaya0@gmail.com</a>
+    </div>
+    <div class="cta-upwork-note">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="#6dbf67" aria-hidden="true"><path d="M18.56 13.16c-1.1 0-2.13-.47-3.07-1.23l.23-1.08c.21-1.14.85-3.06 2.84-3.06 1.49 0 2.7 1.21 2.7 2.7s-1.21 2.67-2.7 2.67zm0-8.14c-2.54 0-4.51 1.65-5.31 4.37-1.22-1.83-2.15-4.04-2.69-5.89H8.56v7.11c0 1.41-1.14 2.55-2.55 2.55S3.46 12.02 3.46 10.61V3.5H1.19v7.11c0 2.92 2.37 5.28 5.28 5.28s5.28-2.36 5.28-5.28V9.42c.53 1.11 1.18 2.23 1.97 3.22l-1.67 7.87h2.43l1.21-5.71c1.06.68 2.28 1.11 3.67 1.11 3.82 0 6.37-2.55 6.37-6.12 0-3.32-2.55-6.03-6.37-6.03z"/></svg>
+      Payments secured via Upwork Direct Contracts
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

@@ -257,6 +257,12 @@
     letter-spacing: 0.04em; transition: border-color 0.15s;
   }
   .btn-inv-ghost:hover { border-color: rgba(255,255,255,0.6); }
+  .cta-upwork-note {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 16px; width: 100%;
+    font-family: var(--mono); font-size: 11px; color: rgba(245,242,235,0.45);
+    letter-spacing: 0.03em;
+  }
 
   /* FOOTER */
   footer {
@@ -327,6 +333,27 @@
     text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
   }
   .modal-visit:hover { color: var(--accent); }
+
+  /* MIGRATION BANNER */
+  .migration-banner {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+    padding: 28px 32px;
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    margin: 0 -28px;
+  }
+  .migration-eyebrow {
+    font-family: var(--mono); font-size: 10px; color: var(--accent);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .migration-title {
+    font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink);
+    margin-bottom: 6px; line-height: 1.15;
+  }
+  .migration-title em { font-style: italic; color: var(--accent); }
+  .migration-sub { font-size: 13px; color: var(--ink3); line-height: 1.5; }
 
   @media (max-width: 600px) {
     .about-grid { grid-template-columns: 1fr; }
@@ -712,6 +739,16 @@
     </div>
   </section>
 
+  <!-- MIGRATION BANNER -->
+  <div class="migration-banner">
+    <div>
+      <div class="migration-eyebrow">New service</div>
+      <div class="migration-title">Migrate your Cloud Deployment<br>to <em>Self-Hosted</em></div>
+      <div class="migration-sub">Think about it before you get hit with sky-high bills.</div>
+    </div>
+    <a href="/self-hosted-migration.html" class="btn-primary" style="flex-shrink:0">See the full service →</a>
+  </div>
+
   <!-- WORK -->
   <div id="work" class="sec-header">
     <span class="sec-title">Selected work</span>
@@ -1047,8 +1084,12 @@
       Have something <em>that needs to work</em>?<br>Let's talk.
     </div>
     <div class="cta-actions">
-      <a href="mailto:muratkirazkaya0@gmail.com" class="btn-inv">Send a message →</a>
+      <a href="https://cal.com/muratkirazkaya" target="_blank" rel="noreferrer" class="btn-inv">Book a call →</a>
       <a href="mailto:muratkirazkaya0@gmail.com" class="btn-inv-ghost">muratkirazkaya0@gmail.com</a>
+    </div>
+    <div class="cta-upwork-note">
+      <svg width="11" height="11" viewBox="0 0 24 24" fill="#6dbf67" aria-hidden="true"><path d="M18.56 13.16c-1.1 0-2.13-.47-3.07-1.23l.23-1.08c.21-1.14.85-3.06 2.84-3.06 1.49 0 2.7 1.21 2.7 2.7s-1.21 2.67-2.7 2.67zm0-8.14c-2.54 0-4.51 1.65-5.31 4.37-1.22-1.83-2.15-4.04-2.69-5.89H8.56v7.11c0 1.41-1.14 2.55-2.55 2.55S3.46 12.02 3.46 10.61V3.5H1.19v7.11c0 2.92 2.37 5.28 5.28 5.28s5.28-2.36 5.28-5.28V9.42c.53 1.11 1.18 2.23 1.97 3.22l-1.67 7.87h2.43l1.21-5.71c1.06.68 2.28 1.11 3.67 1.11 3.82 0 6.37-2.55 6.37-6.12 0-3.32-2.55-6.03-6.37-6.03z"/></svg>
+      Payments secured via Upwork Direct Contracts
     </div>
   </div>
 
