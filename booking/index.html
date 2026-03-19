@@ -18,6 +18,16 @@
 
 <script defer src="https://umami.yelix.cloud/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
 
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'AW-18026929077');
+</script>
+
 <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
 <style>
@@ -287,6 +297,11 @@
     callback: function() {
       if (typeof umami !== "undefined") {
         umami.track("cal-booking-completed");
+      }
+      if (typeof gtag === "function") {
+        gtag('event', 'conversion', {
+          'send_to': 'AW-18026929077'
+        });
       }
     }
   });
