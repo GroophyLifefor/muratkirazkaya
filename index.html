@@ -345,6 +345,63 @@
     text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
   }
   .modal-visit:hover { color: var(--accent); }
+  .modal.wide { max-width: 720px; }
+  .modal-figure {
+    margin: 0;
+    border: 1px solid var(--line);
+    background: var(--surface2);
+    overflow: hidden;
+  }
+  .modal-figure img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .modal-figure-caption {
+    font-family: var(--mono); font-size: 9px; color: var(--ink3);
+    padding: 8px 12px; letter-spacing: 0.04em;
+    border-top: 1px solid var(--line);
+  }
+  .modal-table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--line);
+    margin-top: 8px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .modal-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    font-family: var(--mono);
+    color: var(--ink2);
+  }
+  .modal-table th,
+  .modal-table td {
+    padding: 8px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    white-space: nowrap;
+  }
+  .modal-table tr:last-child td { border-bottom: none; }
+  .modal-table th {
+    color: var(--ink3);
+    font-weight: 500;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--surface2);
+  }
+  .modal-code {
+    font-family: var(--mono);
+    font-size: 11px;
+    line-height: 1.55;
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    padding: 14px 16px;
+    overflow-x: auto;
+    margin-top: 8px;
+    color: var(--ink2);
+  }
 
   /* MIGRATION BANNER */
   .migration-banner {
@@ -387,12 +444,103 @@
 
 <!-- ==================== MODALS ==================== -->
 
+<div class="modal-overlay" id="modal-kumrukuymak">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Kumru Kuymak v1.1 2B</div>
+        <div class="modal-subtitle">01 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('kumrukuymak')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">What it is</div>
+        <p class="modal-section-text">
+          A small fine-tuned adapter on top of <strong>Kara Kumru</strong> (<code style="font-family:var(--mono);font-size:12px;">AlicanKiraz0/Kara-Kumru-v1.0-2B</code>).
+          Trained on a curated subset of an internal benchmark for <strong>tool routing</strong>: deciding when a query needs
+          an external tool versus a direct model reply. Metrics below are <em>after</em> applying the adapter; the base weights stay unchanged.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Benchmark</div>
+        <figure class="modal-figure">
+          <img src="/img/kumru-bench.png" alt="Bar chart comparing Kumru Base, Kara Kumru, and Kumru Kuymak v1.1 on valid JSON, schema-valid JSON, and route accuracy" loading="lazy" decoding="async">
+          <figcaption class="modal-figure-caption">218 examples · valid JSON, schema-valid JSON, route accuracy</figcaption>
+        </figure>
+      </div>
+      <div>
+        <div class="modal-section-label">Results</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>N</th>
+                <th>Valid JSON</th>
+                <th>Schema valid</th>
+                <th>Route acc.</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Kumru Base</td><td>218</td><td>0.8578</td><td>0.8532</td><td>0.4908</td></tr>
+              <tr><td>Kara Kumru</td><td>218</td><td>0.9450</td><td>0.9128</td><td>0.4908</td></tr>
+              <tr><td>Kumru Kuymak v1.1</td><td>218</td><td>1.0000</td><td>1.0000</td><td>0.8532</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">vs Kumru Base</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Model</th>
+                <th>Valid JSON Δ</th>
+                <th>Schema valid Δ</th>
+                <th>Route acc. Δ</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Kara Kumru</td><td>+10.16%</td><td>+6.98%</td><td>+0.00%</td></tr>
+              <tr><td>Kumru Kuymak v1.1</td><td>+16.57%</td><td>+17.20%</td><td>+73.83%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">Task &amp; format</div>
+        <p class="modal-section-text">
+          Binary labels only: <strong>TOOL</strong> if an external tool is required, <strong>DIRECT</strong> if the model can answer without tools.
+          Dataset language: Turkish (mixed domain). Each sample is decision-only — not tool name or arguments.
+        </p>
+        <pre class="modal-code">{
+  "instruction": "User query here",
+  "output": "TOOL"
+}</pre>
+      </div>
+      <div>
+        <div class="modal-section-label">Usage</div>
+        <p class="modal-section-text">
+          Load the base checkpoint, apply this adapter for routing, then handle tool schemas and full fine-tuning elsewhere.
+          Next step: extend the adapter so that after <code style="font-family:var(--mono);font-size:12px;">TOOL</code>, the model also picks <em>which</em> tool to call.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://huggingface.co/muratkirazkaya0/Kumru-Kuymak-v1.1-2B" target="_blank" rel="noreferrer" class="modal-visit" data-umami-event="modal-kumrukuymak-hf-click">Model on Hugging Face ↗</a>
+      <a href="https://huggingface.co/AlicanKiraz0/Kara-Kumru-v1.0-2B" target="_blank" rel="noreferrer" class="modal-visit" data-umami-event="modal-kumrukuymak-base-click">Base model ↗</a>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-sportyluxe">
   <div class="modal">
     <div class="modal-header">
       <div>
         <div class="modal-title">Sportyluxe GYM</div>
-        <div class="modal-subtitle">01 — Backend systems · Self-hosted · Live</div>
+        <div class="modal-subtitle">02 — Backend systems · Self-hosted · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('sportyluxe')">×</button>
     </div>
@@ -453,7 +601,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Dijital Staj</div>
-        <div class="modal-subtitle">02 — Workflow engine · Multi-university · Live</div>
+        <div class="modal-subtitle">03 — Workflow engine · Multi-university · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('dijitalstaj')">×</button>
     </div>
@@ -508,7 +656,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">PELS</div>
-        <div class="modal-subtitle">03 — CMS platform · Bilingual · Live</div>
+        <div class="modal-subtitle">04 — CMS platform · Bilingual · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('pels')">×</button>
     </div>
@@ -558,7 +706,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Yelix</div>
-        <div class="modal-subtitle">04 — Framework · 🥇 National award · Open source</div>
+        <div class="modal-subtitle">05 — Framework · 🥇 National award · Open source</div>
       </div>
       <button class="modal-close" onclick="closeModal('yelix')">×</button>
     </div>
@@ -609,7 +757,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">ordu.dev</div>
-        <div class="modal-subtitle">05 — Community platform · Self-hosted · Live</div>
+        <div class="modal-subtitle">06 — Community platform · Self-hosted · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('ordudev')">×</button>
     </div>
@@ -660,7 +808,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Hackathon Platform for TUA</div>
-        <div class="modal-subtitle">06 — Event platform · Government · Accepted</div>
+        <div class="modal-subtitle">07 — Event platform · Government · Accepted</div>
       </div>
       <button class="modal-close" onclick="closeModal('tua')">×</button>
     </div>
@@ -769,9 +917,34 @@
 
   <div class="project-list">
 
+    <div class="project-item" onclick="openModal('kumrukuymak')">
+      <div>
+        <div class="proj-number">01 — Fine-tuned adapter</div>
+        <div class="proj-title">Kumru Kuymak v1.1 2B</div>
+        <div class="proj-desc">
+          LoRA-style adapter on Kara Kumru for tool-vs-direct routing. Curated TR benchmark subset (218 examples):
+          full valid JSON and schema conformance, with large gains in route accuracy over base and Kara Kumru alone.
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Fine-Tuned</span>
+          <span class="tag">LoRA</span>
+          <span class="tag">Hugging Face</span>
+          <span class="tag">Text generation</span>
+          <span class="tag">Tool routing</span>
+          <span class="tag">Turkish</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">49% → 85.3%</span>
+        <span class="proj-stat-label">route accuracy</span>
+        <div class="proj-stat-secondary">100% valid JSON · 218 ex.</div>
+        <a href="https://huggingface.co/muratkirazkaya0/Kumru-Kuymak-v1.1-2B" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-kumrukuymak-hf-click">Hugging Face ↗</a>
+      </div>
+    </div>Hugging Face
+
     <div class="project-item" onclick="openModal('sportyluxe')">
       <div>
-        <div class="proj-number">01 — Backend systems</div>
+        <div class="proj-number">02 — Backend systems</div>
         <div class="proj-title">Sportyluxe GYM</div>
         <div class="proj-desc">
           Full operational backend for Giresun's largest gym. Entry/exit tracking, membership, PT scheduling,
@@ -796,7 +969,7 @@
 
     <div class="project-item" onclick="openModal('dijitalstaj')">
       <div>
-        <div class="proj-number">02 — Workflow engine</div>
+        <div class="proj-number">03 — Workflow engine</div>
         <div class="proj-title">Dijital Staj</div>
         <div class="proj-desc">
           Multi-role internship application system for universities. Students, advisors, workplaces, and offices
@@ -822,7 +995,7 @@
 
     <div class="project-item" onclick="openModal('pels')">
       <div>
-        <div class="proj-number">03 — CMS platform</div>
+        <div class="proj-number">04 — CMS platform</div>
         <div class="proj-title">PELS</div>
         <div class="proj-desc">
           Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with
@@ -843,7 +1016,7 @@
 
     <div class="project-item" onclick="openModal('yelix')">
       <div>
-        <div class="proj-number">04 — Framework</div>
+        <div class="proj-number">05 — Framework</div>
         <div class="proj-title">Yelix <span class="badge">🥇 National</span></div>
         <div class="proj-desc">
           A Deno-native web framework built around the runtime's actual strengths — not a Node.js port.
@@ -864,7 +1037,7 @@
 
     <div class="project-item" onclick="openModal('ordudev')">
       <div>
-        <div class="proj-number">05 — Community platform</div>
+        <div class="proj-number">06 — Community platform</div>
         <div class="proj-title">ordu.dev</div>
         <div class="proj-desc">
           Platform for Ordu Bilişim Topluluğu — blog, events, docs, and daily cafeteria menu.
@@ -873,6 +1046,7 @@
         </div>
         <div class="proj-tags">
           <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
           <span class="tag"><i class="ci ci-deno"></i> Deno</span>
           <span class="tag"><i class="ci ci-postgresql"></i> PostgreSQL</span>
           <span class="tag">Web Push</span>
@@ -889,14 +1063,17 @@
 
     <div class="project-item" onclick="openModal('tua')">
       <div>
-        <div class="proj-number">06 — Event platform</div>
+        <div class="proj-number">07 — Event platform</div>
         <div class="proj-title">Hackathon Platform for TUA</div>
         <div class="proj-desc">
           Full-stack hackathon management platform built for Türkiye Uzay Ajansı (Turkish Space Agency).
           Accepted and used by the Ministry of Industry and Technology.
         </div>
         <div class="proj-tags">
-          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
+          <span class="tag">Self-hosted</span>
           <span class="tag">Full-stack</span>
           <span class="tag">Government</span>
         </div>
