@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nasıl $10K MRR yapmadan ucuz tech stack kurdum? — Murat Kirazkaya</title>
+<meta name="description" content="Self-hosted deployment, Coolify, ucuz VPS ve AI kullanımı üzerine notlar.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.yelix.cloud/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nasıl $10K MRR yapmadan ucuz tech stack kurdum?">
+<meta property="og:description" content="Self-hosted, Coolify, maliyet ve AI: kişisel tech stack notları.">
+<meta property="og:image" content="/img/pp.jpeg">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .post-hero { padding: 40px 0 36px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-title em { font-style: italic; color: var(--accent); }
+  .post-lead {
+    font-family: var(--serif); font-size: clamp(16px, 2.8vw, 20px);
+    color: var(--ink2); line-height: 1.45; max-width: 640px;
+    padding-left: 18px; border-left: 3px solid var(--accent);
+  }
+
+  .post-main { padding-bottom: 72px; max-width: 640px; }
+
+  .post-main h2 {
+    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 400; color: var(--ink); margin: 48px 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .post-main h2:first-of-type { margin-top: 8px; }
+  .post-main h3 {
+    font-size: 16px; font-weight: 500; color: var(--ink);
+    margin: 32px 0 10px;
+  }
+  .post-main h4 {
+    font-family: var(--mono); font-size: 11px; text-transform: uppercase;
+    letter-spacing: 0.08em; color: var(--accent); margin: 26px 0 10px;
+  }
+  .post-main h5 {
+    font-size: 15px; font-weight: 500; color: var(--ink2); margin: 20px 0 8px;
+  }
+
+  .post-main h5::before { content: '\00a0\00a0\00a0\00a0\21AA\00a0'; }
+
+  .post-main p {
+    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
+  }
+  .post-main p strong { color: var(--ink); font-weight: 500; }
+  .post-main a {
+    color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .post-main a:hover { color: var(--ink); }
+
+  .post-main ul, .post-main ol {
+    margin: 0 0 1.15em 1.2em; color: var(--ink2); font-size: 15px; line-height: 1.7;
+  }
+  .post-main li { margin-bottom: 0.35em; }
+  .post-main li > ul { margin-top: 0.4em; margin-bottom: 0.4em; }
+
+  .post-main blockquote {
+    margin: 1.25em 0 1.5em; padding: 16px 20px;
+    background: var(--surface2); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent2);
+  }
+  .post-main blockquote p {
+    margin-bottom: 0; font-family: var(--serif); font-size: 18px; font-style: italic;
+    color: var(--ink2);
+  }
+
+  .post-main pre {
+    background: var(--surface2); border: 1px solid var(--line);
+    padding: 18px 20px; font-family: var(--mono); font-size: 12px;
+    line-height: 1.55; overflow-x: auto; margin: 1.2em 0; color: var(--ink2);
+  }
+  .post-main code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--surface3); padding: 0.12em 0.35em;
+  }
+  .post-main pre code { background: none; padding: 0; font-size: inherit; }
+
+  .post-main .table-wrap {
+    overflow-x: auto; margin: 1.2em 0; border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .post-main table {
+    width: 100%; border-collapse: collapse; font-size: 13px; min-width: 480px;
+  }
+  .post-main th, .post-main td {
+    border: 1px solid var(--line); padding: 10px 12px; text-align: left; vertical-align: top;
+  }
+  .post-main th {
+    font-family: var(--mono); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 0.06em; color: var(--ink3); background: var(--surface2);
+  }
+  .post-main td { color: var(--ink2); }
+
+  .post-figure { margin: 1.5em 0; }
+  .post-caption {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    margin-bottom: 10px; letter-spacing: 0.03em;
+  }
+  .post-figure img {
+    max-width: 100%; height: auto; display: block; border: 1px solid var(--line);
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="/booking" class="nav-cta" data-umami-event="blog-nav-book">Book a call →</a>
+  </nav>
+
+  <a href="/" class="back-link" data-umami-event="blog-back-home">← Ana sayfa</a>
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog · Türkçe</div>
+    <h1 class="post-title">Nasıl $10K MRR yapmadan ucuz tech stack kurdum?</h1>
+    <p class="post-lead">Sırrı paramın olmamasında!</p>
+  </header>
+
+  <article class="post-main">
+<p>Geçenlerde Serdar Doğruyol abimin LinkedIn'de Steve Hanov'un "How I run multiple $10K MRR companies on a $20/month tech stack" blog yazısını paylaştığını gördüm ve ben de benzer ama farklı şeyler yaptığımı söyledim, bunun üzerine belki makale yazarım dediğimin sonuçlarıyla yüzleşiyorum.</p>
+<p>Öncelikle tech stack'im ucuz mu sorusunun cevabı değişkendir, hatta ürüne göre de değişir. Ama bu belirsizliklerin hiçbirinin önemi yok çünkü inanılmaz ucuz yapamazsam bunu karşılayamam.</p>
+<h2>Düz server kullan ama self hosted deployment platformu ile birlikte</h2>
+<p>Self-hosted deployment artık ciddi bir alternatif olmaktan çıktı, doğrudan tercih edilmesi gereken bir seçenek haline geldi.</p>
+<p>2026’dayız ve hâlâ her projeyi platform bağımlı şekilde deploy etmek zorunda değiliz. Vercel gibi çözümler hızlı başlangıç için iyi olabilir ama ölçek ve maliyet tarafında uzun vadede sorgulanması gerekiyor.</p>
+<p>Aynı kaynaklarla (2 vCPU, 4 GB RAM, 80 GB disk) farklı sağlayıcıların aylık maliyetlerine bakalım:</p>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Aylık Ücret</th>
+<th>Depolama</th>
+<th>Bant genişliği</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hetzner</td>
+<td>$5.6</td>
+<td>80 GB SSD</td>
+<td>20 TB</td>
+</tr>
+<tr>
+<td>DigitalOcean</td>
+<td>$24</td>
+<td>80 GB SSD</td>
+<td>4 TB</td>
+</tr>
+<tr>
+<td>Linode</td>
+<td>$24</td>
+<td>80 GB SSD</td>
+<td>4 TB</td>
+</tr>
+<tr>
+<td>AWS (Lightsail)</td>
+<td>$24</td>
+<td>80 GB SSD</td>
+<td>4 TB</td>
+</tr>
+<tr>
+<td>Azure</td>
+<td>~$25 ila $50</td>
+<td>disk ayrı</td>
+<td>trafik ayrı</td>
+</tr>
+<tr>
+<td>Google Cloud</td>
+<td>~$55 ila $65</td>
+<td>disk ayrı</td>
+<td>trafik ayrı</td>
+</tr>
+</tbody>
+</table></div>
+<p>Özellikle Hetzner tarafında fiyat/performans oranı oldukça agresif. Aylık yaklaşık 250 TL’ye bu seviyede bir kaynak elde edilebiliyor.</p>
+<p>Yani evet, bazı managed platformlar geliştirici deneyimi açısından hâlâ avantajlı. Ama maliyet ve kontrol tarafını öncelikliyorsanız, self-hosted çözümleri görmezden gelinemez.</p>
+<p>Kendi altyapınızı kurmak artık eskisi kadar zor değil. Üstelik kontrol tamamen sizde çünkü artık self-hosted deployment platformları var.</p>
+<h3>Coolify</h3>
+<p>Self-hosted tarafına geçerken en büyük soru genelde şu oluyor: “Her şeyi sıfırdan mı kuracağım?”, “O kadar teknik değilim” falan filan. Ben de sorarım, paran mı var?</p>
+<p>Cevap veremezsen tam burada Coolify devreye giriyor.</p>
+<p>Coolify, kendi sunucun üzerinde çalışan ve sana Vercel benzeri bir deneyim sunan açık kaynak bir deployment platformu. Yani kendi VPS’ini kullanıyorsun ama kullanım deneyimi hâlâ modern ve pratik kalıyor.</p>
+<p>Neler sağlıyor:</p>
+<ul>
+<li>Git tabanlı deployment</li>
+<li>Otomatik build ve deploy süreçleri</li>
+<li>Docker veya Docker Compose tabanlı servis yönetimi</li>
+<li>Veritabanı ve servisleri tek panelden yönetme</li>
+<li>SSL ve domain işlemlerini kolaylaştırma</li>
+</ul>
+<p>Kısacası, düz bir VPS alıp her şeyi manuel kurmak zorunda değilsin. Coolify gibi araçlarla hem maliyeti düşük tutup hem de geliştirici deneyiminden çok fazla ödün vermeden ilerleyebilirsin.</p>
+<p>Ayrıca Hetzner direkt Coolify sunucusu kurmana yardımcı oluyor, diyeceksiniz nasıl oluyor? bildiğin bir sunucu oluştururken işletim sistemi yerine direkt Coolify'ı seçersen sana en uygun seçimleri yapıp içine Coolify kurup teslim ediyor, sana da <code>&lt;ip&gt;:8000</code> adresine gidip keyfine bakman kalıyor. </p>
+<figure class="post-figure">
+<figcaption class="post-caption">Arayüzü</figcaption>
+<img alt="Coolify arayüzü" loading="lazy" src="/img/coolify_screenshot.png" />
+</figure>
+<h3>Dokploy</h3>
+<p>Dokploy, Coolify’e benzer bir yaklaşım sunuyor ama daha sade bir tarafta konumlanıyor.</p>
+<p>Daha az karmaşa, daha hızlı kurulum ve direkt işini görmek isteyenler için mantıklı bir alternatif. Benim hiç deneme fırsatım olmadı.</p>
+<h3>İşleri karmaşıklaştıran her şeyden uzak durun</h3>
+<p>Bunu da bir şarkıyı değiştirerek söyleyeceğim. İngilizce ve hakaret içermektedir.</p>
+<pre><code>I had a cloud project named George
+He was cool but his billing made me really bored
+So I gave him to my mom in finance and she loves him very much
+Because predictable budgets are better than cloud services
+
+Cloud Bills, shut the f*ck up
+Kubernetes, shut the f*ck up
+Serverless, shut the f*ck up
+Everyone needs to shut the f*ck up
+Redis, shut the f*ck up
+Microservice, shut the f*ck up
+GraphQL, shut the f*ck up
+Everyone needs to shut the f*ck up
+Multi region, shut the f*ck up
+Java, shut the f*ck up
+Read replicas, shut the f*ck up
+Everyone needs to shut the f*ck up
+
+~&gt; Sophie Powers - STFU
+</code></pre>
+<p>Çok güzel cover edememiş olabilirim beni yargılamayın ama konunun özü önemli, gerçekten ihtiyacımız yok yok yok yok yok.</p>
+<p>Günlük 10bin organik istek alan bir projem var, büyük bir spor salonunun mobil uygulaması için yazılmış bir backend.</p>
+<p>Hetzner'den en ucuz VPS, içinde bir adet Docker Compose, içinde 2 servis, birisi Deno (JavaScript ve TypeScript çalıştırıcı) uygulaması ve MongoDB, ayrıca MongoDB için ayrılmış volume.</p>
+<ul>
+<li>Tek makinede çalıştığı için gecikme az olur ve servisler birbirine hızlı bağlanır</li>
+<li>Docker Compose sayesinde kurulum ve taşıma kolay olur, aynı sistemi başka VPS’e birebir alabilirsin</li>
+<li>MongoDB volume kullanınca veri kalıcı olur, container silinse bile veri kaybolmaz</li>
+<li>Ayrıca serverless veya managed DB gibi ek katmanlar olmadığı için gereksiz kompleksite ve ek ücret oluşmaz</li>
+</ul>
+<p>Her zaman sade olun, sadelik her şeydir.</p>
+<p>Benim param yok diyordum, ki evet yok, spor salonunun da mı yoktu? Onların parası var, sadece enayi değiller.</p>
+<h2>AI kullanımı</h2>
+<p>Geçenlerde bir arkadaşım Claude'un kaç X modelini kullanıyorsun diye sordu, nasıl yani X dedim. 1X Pro $120, 5X $600 ve 20X $1200 olarak Pro Max Ultra Nova gibi gidiyor. </p>
+<p>Benim KYK kredim aylık 4000 TL, bahsettiği şeyin en ucuzu 5400 TL :'(</p>
+<ul>
+<li>Claude ve ChatGPT'de Free kullanıyorum</li>
+<li>Gemini için öğrencilere 1 yıllık pro vermişti</li>
+<li>Bir de bir süredir Cursor Pro kullanıyorum, ücreti aylık 20$ ama sebebi biraz farklı</li>
+</ul>
+<h3>Cursor</h3>
+<p>Öncelikle baştan söyleyeyim, üyeliğimi iptal etmeyi düşünüyorum çünkü pahalı. Yapay zeka dediğimiz şey pahalı bi' kere. Kullanıyorum çünkü API kullanımın dışında Composer'ı ayrı tutması ve Composer 2'nin performansının yanında fiyatının uygun kalması hoşuma gitti ama hem geçen ay limitlerim çok hızlı doldu hem de bu ay direkt akmasından dolayı artık düşüncelerim değişti. Cursor artık mantıklı gelmiyor. Alternatif arayışım da yok, VSCode'a geri dönüp elimle dayanarak kod yazmayı düşünüyorum. Zaten temel architecture'ı hep ben kuruyordum ve neyi neden yaptığımı biliyorum.</p>
+<h3>Doğru AI kullanımı</h3>
+<h4>Yanlışlar</h4>
+<ul>
+<li>Terminal (1-3070) Fix it ~&gt; Context Filling yapmayın</li>
+<li>Fix it ~&gt; Neyi düzeltecek, bunu anlamak için kendini gereksiz zorlayacak</li>
+<li>Çalışmıyor ~&gt; Evet çalışmıyor, başka soru?</li>
+<li>Bunu optimize et ~&gt; Neyini optimize edeyim paşam?</li>
+<li>Neden hata veriyor ~&gt; Ben sana soruyorum soruya soruyla cevap verme</li>
+<li>Bunu düzelt ve geliştir ~&gt; Oldu paşam yanında ayran ama dönere aynı anda bitecek</li>
+</ul>
+<h4>Token Nedir?</h4>
+<p>Token dediğimiz şey ne harf, ne hece, ne de her zaman tam kelime. Daha çok metnin anlamlı parçalanmış küçük blokları gibi düşünebilirsin.</p>
+<p>Şöyle örnekleyebilirsin:</p>
+<ul>
+<li>“merhaba” bazen tek token olur</li>
+<li>“merha” + “ba” diye iki parçaya da bölünebilir</li>
+<li>“unbelievable” gibi kelimeler “un”, “believ”, “able” diye parçalanabilir</li>
+<li>noktalama işaretleri bile ayrı token olabilir</li>
+</ul>
+<p>Yani sistem kelimeyi değil, dilde tekrar eden en küçük anlamlı parçaları öğrenerek bölüyor.</p>
+<p>VE Her Bir Token PARADIR.</p>
+<h4>Context Filling</h4>
+<h5>Fazla veri vermek</h5>
+<p>Sıklıkla yapılan şeylerden biri elindeki her şeyi vermek ve yapay zekanın gerekli olanı almasını istemek lakin bu çok fazla input token olarak size geri yansımaktadır. Eğer bir hata varsa, tüm Terminali vermenize gerek yok, alakalı kısmı bulmaya çalışın ve ilgili kısmı verin. </p>
+<p>Şimdi canlı bir test yaptım ve loglarım arasından tüm terminali verseydim 3600 Token'a tekabül ediyordu lakin sadece gerekli kısmı aradım, buldum ve 280 Token ile sorunu anladı. Bu sayede input ücretinde %92 ucuzlaştırmış oldum.</p>
+<p>Size token az gelmiş olabilir, unutmayın damlaya damlaya göl olur. 3600 olsun dersiniz, 36000 olsun dersiniz, 360000 olsun dersiniz, 3600000 olsun dersiniz en sonunda işin içinden çıkamazsınız.</p>
+<h5>Sohbeti uzatmak</h5>
+<p>Sizin her mesajınız bir user mesajdır, her cevap bir assistant mesajdır ama biliyorsunuzdur ki bu yapay zekalar aynı sohbet içinde eskiyi unutmuyor. </p>
+<ul>
+<li>Kullanıcı sorusu sorarsınız (10K Token input)</li>
+<li>Yapay Zeka cevabı alırsınız (10K Token output)</li>
+</ul>
+<p>ama sonra tekrar soru sorduğunuzda</p>
+<ul>
+<li>Kullanıcı sorusunu sorar (20K(önceki sohbet) + 10K Token input)</li>
+<li>
+<ul>
+<li>Yanında eski kullanıcı soruları</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Yanında eski yapay zeka cevapları</li>
+</ul>
+</li>
+<li>Yapay Zeka cevabını alırsın (10K token output)</li>
+</ul>
+<p>önceki sohbet input'a dahil oldu.</p>
+<p>tekrar soru sorulursa</p>
+<ul>
+<li>Kullanıcı sorusunu sorar (40K(önceki sohbet) + 10K Token input)</li>
+<li>
+<ul>
+<li>Yanında eski kullanıcı soruları</li>
+</ul>
+</li>
+<li>
+<ul>
+<li>Yanında eski yapay zeka cevapları</li>
+</ul>
+</li>
+<li>Yapay Zeka cevabını alırsın (10K token output)</li>
+</ul>
+<div class="table-wrap"><table>
+<thead>
+<tr>
+<th>Tur</th>
+<th>Prompt (Input)</th>
+<th>Output</th>
+<th>Toplam Input</th>
+<th>Birikimli Context</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>10K</td>
+<td>10K</td>
+<td>10K</td>
+<td>20K</td>
+</tr>
+<tr>
+<td>2</td>
+<td>30K (20K eski + 10K yeni)</td>
+<td>10K</td>
+<td>30K</td>
+<td>50K</td>
+</tr>
+<tr>
+<td>3</td>
+<td>50K (40K eski + 10K yeni)</td>
+<td>10K</td>
+<td>50K</td>
+<td>70K</td>
+</tr>
+<tr>
+<td>4</td>
+<td>70K (60K eski + 10K yeni)</td>
+<td>10K</td>
+<td>70K</td>
+<td>90K</td>
+</tr>
+<tr>
+<td>5</td>
+<td>90K (80K eski + 10K yeni)</td>
+<td>10K</td>
+<td>90K</td>
+<td>110K</td>
+</tr>
+</tbody>
+</table></div>
+<p>Senin sorularının uzunluğu aynı bile kalsa, geçmiş sohbetle fiyat giderek katlanıyor. Çözümler ise birkaç başlıkta ayrılıyor.</p>
+<h4>Nasıl Çözeriz?</h4>
+<h5>Yeni sohbete geçmek</h5>
+<p>Sohbet uzadıkça sadece son mesajın değil, tüm geçmiş konuşma da modele gönderilir. Bu da her yeni mesajda daha fazla token kullanılmasına neden olur.</p>
+<p>Yani eski mesajlar silinmediği sürece her konuşma, önceki tüm konuşmaları da “taşır”. Bu da hem maliyeti artırır hem de gereksiz token tüketimine yol açar.</p>
+<p>Bu yüzden zaman zaman yeni bir sohbet açmak, token kullanımını düşük tutmak için önemlidir.</p>
+<h5>Mesajını düzenle</h5>
+<p>Mesaj düzenlemeyi daha sık kullanmak, geçmişe yönelik düzenleme yapmak</p>
+<p>Şöyle düşün</p>
+<p>Her yeni mesaj attığında sistem şunu yapıyor<br />
+“Tamam, şimdiye kadar konuşulan HER şeyi tekrar okuyayım”</p>
+<p>Sen sadece 1 cümle yazsan bile<br />
+arkada belki 50 mesaj yeniden işleniyor</p>
+<p>Bu da şu demek<br />
+küçük bir ekleme için bile koca bir geçmişi tekrar ödüyorsun</p>
+<p>Ama mesajı düzenlediğinde<br />
+aynı konuşmayı uzatmak yerine direkt metni güncellemiş oluyorsun<br />
+yani yeni bir yük bindirmiyorsun</p>
+<p>Gündelik dille</p>
+<p>Yeni mesaj atmak<br />
+her seferinde baştan roman okutmak gibi</p>
+<p>Mesaj düzenlemek<br />
+sadece bir paragrafı düzeltmek gibi</p>
+<p>O yüzden</p>
+<p>küçük ekleme mi yapacaksın<br />
+bir şeyi yanlış mı yazdın<br />
+detay mı ekleyeceksin</p>
+<p>yeni mesaj atmak yerine düzenle<br />
+hem daha ucuz hem daha temiz hem de model daha iyi anlıyor</p>
+<h5>Root Cause problemi</h5>
+<p>Sürekli “fix it” demek aslında yüzeyle uğraşmak demek</p>
+<p>Modeli bir tamirci gibi çağırıyorsun ama neyin bozuk olduğunu söylemiyorsun<br />
+O da tahmin ederek bir şeyleri düzeltmeye çalışıyor<br />
+çoğu zaman geçici çözümler üretiyor</p>
+<p>Ama sorunun kökünü anlatırsan işler değişir</p>
+<p>Ne yapıyordun<br />
+Ne bekliyordun<br />
+Ne oldu<br />
+Hata nerede başlıyor</p>
+<p>bunları verdiğinde model artık tahmin etmiyor, gerçekten problemi çözüyor</p>
+<p>Gündelik dille</p>
+<p>fix it demek<br />
+arabayı ustaya bırakıp “çalışmıyor” demek gibi</p>
+<p>kök nedeni anlatmak<br />
+“araç çalışıyor ama 3. viteste tekliyor” demek gibi</p>
+<p>İkincisinde çözüm hem daha hızlı gelir hem de kalıcı olur</p>
+<h5>Farklı modellere şans vermek</h5>
+<p>Tek bir modele takılı kalmak her zaman en iyi sonuçları vermez. Farklı modellerin güçlü olduğu alanlar farklıdır. Bazıları kodda daha iyidir, bazıları yazı üretiminde, bazıları ise daha uygun maliyetlidir.</p>
+<p>Mesela Anthropic tarafından geliştirilen Claude genelde güçlüdür ama maliyet tarafı daha yüksek olabilir. Aynı işi daha uygun fiyata yapan başka modeller de bulunabilir.</p>
+<p>Bu yüzden yaklaşım şu olmalı</p>
+<p>Her iş için en pahalı modeli kullanmak yerine<br />
+işe uygun modeli seçmek</p>
+<p>Basit bir özet, kısa içerik ya da deneme için daha ucuz model<br />
+daha kritik ve karmaşık işler için daha güçlü model</p>
+<p>Gündelik dille</p>
+<p>Her yere taksiyle gitmek yerine<br />
+bazen yürümek, bazen toplu taşıma kullanmak gibi</p>
+<p>Hem maliyeti düşürür hem de kaynakları daha verimli kullanmanı sağlar</p>
+<h3>AI kullanacaksan, ön-ödemeli olsun</h3>
+<p>Ucu açık ödemeler elbet bir gün kontrolden çıkmaya mahkumdur. Kullandığın kadar öde modeli en sakıncalı en uzak durmanız gereken ödeme modelidir çünkü bir anlık açıkla patlayabilirsiniz. Kullanmayı bilene mantıklı, ben teknik biriyim, ben doğru yönetiyorum falan filan hikaye seni kurabiye yapıp yerler.</p>
+<p>Gider OpenAI'dan ChatGPT, Anthropic'ten Claude, Google'dan Gemini direkt kullanırsanız bir gün faturanızdaki sıfırlarla gözünüzün büyümesi olasıdır.</p>
+<h4>OpenRouter</h4>
+<p>Ben OpenRouter kullanıyorum, içine örneğin 5 dolar atıyorum. İstediğim modeli kullanıyorum, bu ay kullanmazsan diğer ay paran gidecek durumu da yok. Bakiye yüklediğim kadar kullanıyorum. </p>
+<p>İstediğim zaman model değiştirebiliyor olmak, retry ekleyebilmek, fallback model ekleyebilmek işleri de daha kolaylaştırıyor tabii ki.</p>
+<h3>AI IDEs</h3>
+<p>Birçok AI IDE'ye şans verdim ama genel olarak hepsi hayal kırıklığı. Düz VSCode dışı en iyisi Cursor'du ama o da gerçekten iyi değil. </p>
+<h4>VSCode + Copilot</h4>
+<p>Aslında baya yeterli ve güzeldi ta ki bazı modelleri öğrencilere kapatana kadar, GitHub'dan gelen Pro üyeliğim var ama güzel modelleri kullanmama izin vermiyor. Bu olaydan sonra OpenRouter'ı bağladım Copilot'a ama aynı performansı alamadım.</p>
+<p>Sonra Cursor'a geçtim</p>
+<h4>Cursor</h4>
+<p>Cursor temel felsefesinde kötü değil, architecture'ında kötü, resmen vibe coding yapılmış bir IDE olduğunu hissettiriyor. VSCode açılma süresi 1 saniye ise, Cursor açılma süresi 25 saniye. Uygulamayı kapatırken ayrı yavaş, kod yazarken ayrı problemli, kod önerileri rezalet, tamamen içi boş show uygulaması. Peki neden bu kadar kullanılıyor? Kimsenin bunlarla derti yok ki uygulamaya giren birtakım insanlar Claude modelini bağlayıp aylık $600 harcama derdinde.</p>
+<h4>Windsurf</h4>
+<p>Denedim ve hâlâ deniyorum ama yorum yapma konusunda yeterince kullanıcı deneyimim olmadı. Projelerimde şans vereceğim ama üyelik konusu tartışmalı.</p>
+<h4>AntiGravity</h4>
+<p>Gereksiz.</p>
+<h2>Database</h2>
+<p>“Use SQLite for everything”<br />
+“Use PostgreSQL for everything”<br />
+:D komik değil mi?</p>
+<p>Komik olan şey şu, niye bu kadar takıyorsunuz, yeni bir projede bu kadar önemli değil. Projen milyon dolarlara yüksek ihtimalle ulaşmayacak. Çook çok fazla proje geliştirdim ve en çok istek alan proje aylık 280 bin istek alıyor. </p>
+<p>Ben bir projeye başlarken genelde MongoDB tercih ediyorum, çünkü migrationlar işimi yavaşlatıyorum. Kendim için kurduğum bir pattern var, MongoDB'de işlerimi yaparken unexpected hataları önlüyor ve gayet memnunum. Peki her şey için MongoDB mi kullanayım? :D</p>
+<p>Yelix Cloud: fazla analitik vardı, ClickHouseDB kullandık<br />
+Ordu.dev: PostgreSQL<br />
+Spor salonu: MongoDB</p>
+<p>Her proje için aynı database'i kullanmayın. Hangisi hem projeye daha uygun hem size daha rahatsa onu kullanın ve kafanızda büyütmeyin. Çok para kazandırırsa refactor etmeyi düşünürsünüz.</p>
+<p>Ayrıca Cloud'da DB mümkünse kullanmayın, aynı VPS'in içinde bir tane kurabilirsiniz ve darboğaz olana kadar gidersiniz, yedeklerinizi almayı unutmayın :)</p>
+<h2>Sonuç olarak</h2>
+<p>Eğer yukarıda dediklerimi yapmasaydım aylık ödemem sanırım 400 ile 2000 dolar arası olurdu ki benim için inanılmaz fazla ama dediklerimi yaptığım için Cursor üyeliği dahil 30 dolar gibi bir giderim oluyor.</p>
+<p>Ben Murat Kirazkaya, umarım makalemden keyif almışsınızdır. 19 Yaşındayım ve 8 yıldır yazılımla uğraşıyorum, bir şirkette çalışmıyorum genelde freelance işler yapıyorum ve OpenSource ekosistemine katkıda bulunuyorum. <a href="https://gitista.com/turkey/">Gitista</a> istatistiklerine göre OpenSource'a katkı sıralamasında TR'de 68. Global'de ise ilk 12 bin'e girmişim. Keyifli günler dilerim.</p>
+  </article>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

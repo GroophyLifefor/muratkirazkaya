@@ -424,6 +424,39 @@
   .migration-title em { font-style: italic; color: var(--accent); }
   .migration-sub { font-size: 13px; color: var(--ink3); line-height: 1.5; }
 
+  /* BLOG TEASER */
+  .blog-teaser {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+    text-decoration: none; color: inherit;
+    padding: 26px 30px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent2);
+    margin-top: 20px; margin-bottom: 12px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .blog-teaser:hover {
+    background: var(--surface2);
+    border-color: rgba(14, 13, 12, 0.18);
+  }
+  .blog-teaser-eyebrow {
+    font-family: var(--mono); font-size: 10px; color: var(--accent2);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .blog-teaser-title {
+    font-family: var(--serif); font-size: clamp(22px, 3.5vw, 28px); font-weight: 400;
+    color: var(--ink); margin-bottom: 6px; line-height: 1.18; max-width: 520px;
+  }
+  .blog-teaser-title em { font-style: italic; color: var(--accent2); }
+  .blog-teaser-sub { font-size: 13px; color: var(--ink3); line-height: 1.55; max-width: 520px; }
+  .blog-teaser-arrow {
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    letter-spacing: 0.04em; flex-shrink: 0;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .blog-teaser:hover .blog-teaser-arrow { transform: translateX(4px); color: var(--ink); }
+
   @media (max-width: 600px) {
     .about-grid { grid-template-columns: 1fr; }
     .oss-strip { grid-template-columns: 1fr; }
@@ -432,6 +465,7 @@
     .project-item { grid-template-columns: 1fr; }
     .cta-strip { flex-direction: column; text-align: left; }
     .nav-links { display: none; }
+    .blog-teaser { padding: 22px 20px; }
     .modal-overlay { padding: 0; align-items: flex-end; }
     .modal { max-height: 90vh; overflow-y: auto; }
     .modal-metrics { flex-direction: column; }
@@ -954,6 +988,7 @@
       <a href="#work">Work</a>
       <a href="#services">Services</a>
       <a href="#open-source">Open Source</a>
+      <a href="#blog">Blog</a>
       <a href="#about">About</a>
     </div>
     <a href="mailto:muratkirazkaya0@gmail.com" class="nav-cta" data-umami-event="nav-hire-me-click">Hire me →</a>
@@ -1203,6 +1238,15 @@
     </div>
 
   </div>
+
+  <a href="/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html" id="blog" class="blog-teaser" data-umami-event="home-blog-teaser-click">
+    <div>
+      <div class="blog-teaser-eyebrow">Blog · Türkçe</div>
+      <div class="blog-teaser-title">Nasıl <em>$10K MRR</em> yapmadan ucuz tech stack kurdum?</div>
+      <div class="blog-teaser-sub">Self-hosted Coolify, VPS, token maliyeti ve OpenRouter.</div>
+    </div>
+    <span class="blog-teaser-arrow">Okuyayım →</span>
+  </a>
 
   <!-- SERVICES -->
   <div id="services" class="sec-header">
