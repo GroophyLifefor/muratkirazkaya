@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV - Murat Kirazkaya</title>
+<style>
+  @page { size: A4; margin: 0; }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #c8c8c8;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    color: #1a1a1a;
+    font: 400 9pt/1.4 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 36px 56px;
+    background: #fff;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+
+  @media print {
+    body {
+      padding: 0;
+      gap: 0;
+      background: #fff;
+    }
+    .page {
+      margin: 0;
+      page-break-after: always;
+    }
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin: 0 0 2pt;
+    color: #000;
+  }
+
+  .contact {
+    font-size: 8.5pt;
+    color: #333;
+    margin: 0 0 18pt;
+    line-height: 1.5;
+  }
+
+  .contact a {
+    color: #1a1a1a;
+    text-decoration: none;
+  }
+
+  h2 {
+    font-size: 10pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1.5pt solid #1a1a1a;
+    padding-bottom: 3pt;
+    margin: 14pt 0 8pt;
+    color: #000;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0 0 7pt;
+  }
+
+  .section-item {
+    margin-bottom: 9pt;
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2pt;
+  }
+
+  .item-title {
+    font-weight: 600;
+    font-size: 9.5pt;
+    color: #000;
+  }
+
+  .item-date {
+    font-size: 8pt;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  .item-subtitle {
+    font-size: 8.5pt;
+    color: #444;
+    margin-bottom: 3pt;
+  }
+
+  .item-desc {
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.45;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 0 0 16pt;
+  }
+
+  li {
+    margin-bottom: 3pt;
+    font-size: 8.5pt;
+    line-height: 1.4;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4pt 10pt;
+    font-size: 8.5pt;
+  }
+
+  .skill-label {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .skill-items {
+    color: #333;
+  }
+
+  .compact-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .compact-list li {
+    margin-bottom: 5pt;
+  }
+
+  .project-name {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .page-header {
+    font-size: 8.5pt;
+    color: #666;
+    margin-bottom: 18pt;
+    padding-bottom: 6pt;
+    border-bottom: 1pt solid #e0e0e0;
+  }
+
+  .page-header-name {
+    font-weight: 600;
+    color: #000;
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+
+<h1>Murat Kirazkaya</h1>
+<div class="contact">
+  İstanbul, Türkiye
+  · <a href="mailto:muratkirazkaya0@gmail.com">muratkirazkaya0@gmail.com</a>
+  · <a href="https://muratkirazkaya.com">muratkirazkaya.com</a><br>
+  <a href="https://github.com/GroophyLifefor">github.com/GroophyLifefor</a>
+  · <a href="https://www.linkedin.com/in/muratkirazkaya">linkedin.com/in/muratkirazkaya</a>
+</div>
+
+<p style="font-size: 8.5pt; color: #444; margin: 0 0 10pt; line-height: 1.5;">
+  <strong>Target Roles:</strong> Full-Stack Developer, Backend Developer, DevOps / Platform Engineer, Developer Tooling / Open Source Engineer, DevRel (Developer Relations)
+</p>
+
+<h2>Education</h2>
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Ordu University</span>
+    <span class="item-date">Aug 2024 – Jun 2026 <span id="university-left-days"></span></span>
+  </div>
+  <div class="item-subtitle">Associate of Science in Computer Programming · Ordu, Turkey</div>
+  <div class="item-desc">Relevant Coursework: OOP, Database Systems (SQL, Triggers, Functions), Web Programming, Network Fundamentals, Open Source OS, System Analysis & Design, Server Operating Systems</div>
+</div>
+
+<h2>Experience</h2>
+
+<p style="font-size: 8.5pt; color: #333; margin-bottom: 2pt; line-height: 1.45;">
+  I don't have long-term experience because I'm 19 years old that also studied University at the same time.
+</p>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Tech Operations, Valentura</span>
+    <span class="item-date">Sep 2024 – Sep 2025</span>
+  </div>
+  <div class="item-subtitle">Remote · Full-Time</div>
+  <div class="item-desc">Promoted from internship to operations role in collaborative team environment. Manage production systems, backend infrastructure, monitoring, and deployment pipelines for operational reliability. Work with cross-functional teams using Git workflow and async collaboration.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Frontend Developer, Valentura</span>
+    <span class="item-date">Mar 2024 – Sep 2024</span>
+  </div>
+  <div class="item-subtitle">Remote · Internship</div>
+  <div class="item-desc">Frontend development internship in team setting focused on modern web technologies and user interface implementation. Collaborated using Git branching strategies and preview environments.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Web Developer, Collective Idea TR</span>
+    <span class="item-date">Jan 2024 – Mar 2024</span>
+  </div>
+  <div class="item-subtitle">Kadıköy, Istanbul · Hybrid · Internship</div>
+  <div class="item-desc">Web development internship delivering client projects with modern JavaScript frameworks in collaborative team environment.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Frontend Developer, Insider</span>
+    <span class="item-date">Jul 2023 – Sep 2023</span>
+  </div>
+  <div class="item-subtitle">Istanbul · On-site · Internship</div>
+  <div class="item-desc">Selected for in-person phase at Insider's office following 6-month application process. Worked on enterprise-scale web applications in team collaboration environment.</div>
+</div>
+
+<h2>Open Source Contributions</h2>
+
+<p style="font-size: 8.5pt; color: #333; margin-bottom: 8pt; line-height: 1.45;">
+  Ranked <strong>#68</strong> among 300,000 developers in Turkey and <strong>#11,851</strong> among 50 million developers globally based on open-source contributions (gitista.com).
+</p>
+
+<ul class="compact-list">
+  <li><span class="project-name">ExpressJS Organization</span> - Triager and Performance Working Group member. Maintain core packages across Express, jshttp, and pillarjs ecosystems (on-finished HTTP/2 support, mime-db compressibility updates). Operate at package level of Node.js HTTP stack.</li>
+  <li><span class="project-name">Deno Runtime</span> - Contributed <code>deno init --empty</code> feature to CLI for minimal project initialization. Merged within 24 hours by core team.</li>
+  <li><span class="project-name">jshttp/on-finished</span> - Added HTTP/2 support to widely-used Node.js utility package for response completion detection.</li>
+  <li><span class="project-name">Kiren Runtime</span> - Added initial Windows support to lightweight JavaScript runtime built with Zig and QuickJS. Fixed low-level runtime issues in first PR.</li>
+  <li><span class="project-name">Exercism</span> - Created and published Batch scripting language track for coding education platform. </li>
+</ul>
+
+<h2>Selected Projects</h2>
+
+<ul class="compact-list">
+  <li><span class="project-name">Yelix</span> - Deno-native web framework built on Hono using standard Web APIs. Won Gold Medal (National, 1Fikir1Türkiye) and Silver Medal (Regional). TypeScript inference over decorators, no compatibility layer.</li>
+  <li><span class="project-name">Hackathon Platform for TUA</span> - Full-stack event platform for Turkish Space Agency accepted by Ministry of Industry and Technology. Custom endpoint auto-discovery, dynamic route registration, OpenAPI auto-generation from Zod schemas. Built for peak registration load handling with complete audit trails.</li>
+</ul>
+
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+
+<div class="page-header">
+  <span class="page-header-name">Murat Kirazkaya</span> - (Page 2)
+</div>
+
+<ul class="compact-list">
+  <li><span class="project-name">Dijital Staj</span> - Multi-university internship workflow system built in team collaboration. 9-state lifecycle with 4-role RBAC, JSONB audit logging with field-level diffs. PDF form automation for government documents, ASP.NET legacy system integration via web scraping. MinIO for document storage. Live in production.</li>
+  <li><span class="project-name">Sportyluxe GYM</span> - Full operational backend for 550+ member gym built as part of 4-person team (UI/UX, Android, iOS, Backend). Custom multi-tenant architecture (same-server/different-database pattern). Firebase FCM v1 protocol-level implementation with token rotation. 15K+ requests/day, 99.9% uptime on self-hosted VPS.</li>
+  <li><span class="project-name">ordu.dev</span> - Community platform with custom workflow engine using Blob + dynamic imports for sandboxed code execution. Web Push (VAPID protocol) with subscription lifecycle management. Custom cron parser supporting ranges, steps, lists. 5K+ clicks/month, 50K+ impressions.</li>
+</ul>
+<br/>
+<h2>Leadership & Community</h2>
+
+<ul class="compact-list">
+  <li><span class="project-name">Ordu Bilişim Topluluğu</span> - Founded regional developer community at ordu.dev, bringing together software developers across Ordu province.</li>
+  <li><span class="project-name">Winterbytes 2026</span> - Co-organized 3-day technical camp with 230+ attendees from Black Sea region. Speakers from Node.js TSC (Rafael Gonzaga), IBM, and Trendyol.</li>
+  <li>Attended 400+ tech events throughout career, approximately one every other day for two years.</li>
+  <li>Featured in Kodluyoruz × Microsoft success story for outstanding progress in web development.</li>
+</ul>
+
+<h2>Technical Skills</h2>
+
+<div class="skills-grid">
+  <span class="skill-label">Languages:</span>
+  <span class="skill-items">TypeScript, JavaScript, C#, C++, Batch, SQL</span>
+  
+  <span class="skill-label">Backend:</span>
+  <span class="skill-items">Node.js/Deno runtime operations, Express.js (triage contributor also performance team member), Hono, Next.js, OpenAPI schema-first design</span>
+  
+  <span class="skill-label">Frontend:</span>
+  <span class="skill-items">React, Next.js (App Router, RSC), Astro, Tailwind CSS, Capacitor, component architecture</span>
+  
+  <span class="skill-label">Databases:</span>
+  <span class="skill-items">PostgreSQL (native client, manual migrations, indexing strategies), MongoDB (connection resilience, audit trails), ClickHouse (analytical workloads), DrizzleORM, Mongoose, MinIO S3</span>
+  
+  <span class="skill-label">Infrastructure:</span>
+  <span class="skill-items">Self-hosted production operations (99.9% uptime), Docker multi-stage builds, Sentry observability, Firebase FCM v1, Web Push (VAPID protocol), Contentful CMS</span>
+  
+  <span class="skill-label">Systems:</span>
+  <span class="skill-items">Multi-tenant architecture, custom workflow execution engines, RBAC with audit logging, state machine design, legacy system integration (ASP.NET scraping), real-time push notifications, distributed request tracing, fault-tolerant distributed systems</span>
+  
+  <span class="skill-label">Security:</span>
+  <span class="skill-items">JWT with refresh rotation, bearer auth, temporary key systems (QR access control), VAPID, rate limiting, httpOnly cookies</span>
+  
+  <span class="skill-label">Engineering:</span>
+  <span class="skill-items">CI/CD pipelines, unit and integration testing with isolated environments (containerized test databases, in-memory stores), OOP and design patterns, test-driven development, Agile methodologies, Git workflow (branching strategies, async collaboration, preview environments), code review practices, collaborative development in cross-functional teams</span>
+</div>
+
+<h2>Languages</h2>
+
+<div class="skills-grid">
+  <span class="skill-label">Turkish:</span>
+  <span class="skill-items">Native</span>
+  
+  <span class="skill-label">English:</span>
+  <span class="skill-items">B2 (Upper-Intermediate)</span>
+</div>
+
+</div>
+
+<script>
+  const universityLeftDays = document.getElementById('university-left-days');
+  const now = new Date();
+  const universityEnd = new Date('2026-06-15');
+  const diffTime = Math.abs(universityEnd - now);
+  const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  universityLeftDays.textContent = `(${diffDays} days left)`;
+</script>
+</body>
+</html>
