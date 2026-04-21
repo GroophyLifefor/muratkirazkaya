@@ -181,9 +181,118 @@
     font-weight: 600;
     color: #000;
   }
+
+  /* Mobile PDF Viewer */
+  .mobile-pdf-container {
+    display: none;
+  }
+
+  @media (max-width: 850px) {
+    body {
+      padding: 0;
+      background: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .mobile-pdf-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      background: #1a1a1a;
+    }
+
+    .mobile-pdf-header {
+      background: #fff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .mobile-pdf-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .mobile-pdf-download {
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 4px;
+    }
+
+    .mobile-pdf-download:hover {
+      background: #333;
+    }
+
+    .mobile-pdf-viewer {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    .mobile-pdf-fallback {
+      padding: 40px 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .mobile-pdf-fallback h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      border: none;
+      padding: 0;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .mobile-pdf-fallback p {
+      font-size: 14px;
+      margin-bottom: 24px;
+      color: #ccc;
+    }
+
+    .mobile-pdf-fallback a {
+      background: #fff;
+      color: #1a1a1a;
+      padding: 12px 32px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+  }
 </style>
 </head>
 <body>
+
+<!-- Mobile PDF Viewer (shown on screens < 850px) -->
+<div class="mobile-pdf-container">
+  <div class="mobile-pdf-header">
+    <div class="mobile-pdf-title">CV - Murat Kirazkaya</div>
+    <a href="cv-en.pdf" download="Murat_Kirazkaya_CV.pdf" class="mobile-pdf-download">Download PDF</a>
+  </div>
+  <iframe src="cv-en.pdf" class="mobile-pdf-viewer" id="pdf-iframe"></iframe>
+  <div class="mobile-pdf-fallback" id="pdf-fallback" style="display: none;">
+    <h2>View CV</h2>
+    <p>Your browser doesn't support embedded PDFs. Please download the CV to view it.</p>
+    <a href="cv-en.pdf" download="Murat_Kirazkaya_CV.pdf">Download CV (PDF)</a>
+  </div>
+</div>
 
 <!-- PAGE 1 -->
 <div class="page">
@@ -345,6 +454,35 @@
   const diffTime = Math.abs(universityEnd - now);
   const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
   universityLeftDays.textContent = `(${diffDays} days left)`;
+</script>
+
+<script>
+  // Mobile PDF viewer error handling
+  const pdfIframe = document.getElementById('pdf-iframe');
+  const pdfFallback = document.getElementById('pdf-fallback');
+  
+  if (pdfIframe && pdfFallback) {
+    // Check if PDF loaded successfully after a short delay
+    setTimeout(() => {
+      try {
+        // If iframe fails to load or is blocked, show fallback
+        if (!pdfIframe.contentDocument && !pdfIframe.contentWindow) {
+          pdfIframe.style.display = 'none';
+          pdfFallback.style.display = 'block';
+        }
+      } catch (e) {
+        // Cross-origin or other errors
+        pdfIframe.style.display = 'none';
+        pdfFallback.style.display = 'block';
+      }
+    }, 1000);
+
+    // Handle iframe load errors
+    pdfIframe.addEventListener('error', () => {
+      pdfIframe.style.display = 'none';
+      pdfFallback.style.display = 'block';
+    });
+  }
 </script>
 </body>
 </html>
