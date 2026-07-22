@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CV - Murat Kirazkaya</title>
+<style>
+  @page { size: A4; margin: 0; }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #c8c8c8;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    color: #1a1a1a;
+    font: 400 9pt/1.4 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 36px 56px;
+    background: #fff;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+
+  @media print {
+    html {
+      background: #fff;
+    }
+    body {
+      padding: 0;
+      gap: 0;
+      background: #fff;
+      display: block;
+    }
+    /* Screen-narrow rules hide .page and show PDF. Print must always use HTML pages. */
+    .mobile-pdf-container {
+      display: none !important;
+      visibility: hidden !important;
+      position: absolute !important;
+      width: 0 !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+    .page {
+      display: block !important;
+      margin: 0;
+      page-break-after: always;
+      overflow: visible;
+      box-shadow: none;
+    }
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin: 0 0 2pt;
+    color: #000;
+  }
+
+  .contact {
+    font-size: 8.5pt;
+    color: #333;
+    margin: 0 0 18pt;
+    line-height: 1.5;
+  }
+
+  .contact a {
+    color: #1a1a1a;
+    text-decoration: none;
+  }
+
+  h2 {
+    font-size: 10pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1.5pt solid #1a1a1a;
+    padding-bottom: 3pt;
+    margin: 14pt 0 8pt;
+    color: #000;
+  }
+
+  h2:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    margin: 0 0 7pt;
+  }
+
+  .section-item {
+    margin-bottom: 9pt;
+  }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2pt;
+  }
+
+  .item-title {
+    font-weight: 600;
+    font-size: 9.5pt;
+    color: #000;
+  }
+
+  .item-date {
+    font-size: 8pt;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  .item-subtitle {
+    font-size: 8.5pt;
+    color: #444;
+    margin-bottom: 3pt;
+  }
+
+  .item-desc {
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.45;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0 0 0 16pt;
+  }
+
+  li {
+    margin-bottom: 3pt;
+    font-size: 8.5pt;
+    line-height: 1.4;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4pt 10pt;
+    font-size: 8.5pt;
+  }
+
+  .skill-label {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .skill-items {
+    color: #333;
+  }
+
+  .compact-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .compact-list li {
+    margin-bottom: 5pt;
+  }
+
+  .project-name {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .page-header {
+    font-size: 8.5pt;
+    color: #666;
+    margin-bottom: 18pt;
+    padding-bottom: 6pt;
+    border-bottom: 1pt solid #e0e0e0;
+  }
+
+  .page-header-name {
+    font-weight: 600;
+    color: #000;
+  }
+
+  /* Mobile PDF Viewer */
+  .mobile-pdf-container {
+    display: none;
+  }
+
+  @media (max-width: 850px) {
+    body {
+      padding: 0;
+      background: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .mobile-pdf-container {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      min-height: 100vh;
+      background: #1a1a1a;
+    }
+
+    .mobile-pdf-header {
+      background: #fff;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .mobile-pdf-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .mobile-pdf-download {
+      background: #1a1a1a;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      border-radius: 4px;
+    }
+
+    .mobile-pdf-download:hover {
+      background: #333;
+    }
+
+    .mobile-pdf-viewer {
+      flex: 1;
+      width: 100%;
+      border: none;
+      background: #fff;
+    }
+
+    .mobile-pdf-fallback {
+      padding: 40px 20px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .mobile-pdf-fallback h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      border: none;
+      padding: 0;
+      text-transform: none;
+      letter-spacing: normal;
+    }
+
+    .mobile-pdf-fallback p {
+      font-size: 14px;
+      margin-bottom: 24px;
+      color: #ccc;
+    }
+
+    .mobile-pdf-fallback a {
+      background: #fff;
+      color: #1a1a1a;
+      padding: 12px 32px;
+      text-decoration: none;
+      display: inline-block;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- Mobile PDF Viewer (shown on screens < 850px) -->
+<div class="mobile-pdf-container">
+  <div class="mobile-pdf-header">
+    <div class="mobile-pdf-title">CV - Murat Kirazkaya</div>
+    <a href="cv-tr.pdf" download="Murat_Kirazkaya_CV_TR.pdf" class="mobile-pdf-download">PDF İndir</a>
+  </div>
+  <iframe src="cv-tr.pdf" class="mobile-pdf-viewer" id="pdf-iframe"></iframe>
+  <div class="mobile-pdf-fallback" id="pdf-fallback" style="display: none;">
+    <h2>CV'yi Görüntüle</h2>
+    <p>Tarayıcınız gömülü PDF'leri desteklemiyor. CV'yi görüntülemek için lütfen indirin.</p>
+    <a href="cv-tr.pdf" download="Murat_Kirazkaya_CV_TR.pdf">CV'yi İndir (PDF)</a>
+  </div>
+</div>
+
+<!-- PAGE 1 -->
+<div class="page">
+
+<h1>Murat Kirazkaya</h1>
+<div class="contact">
+  İstanbul, Türkiye
+  · <a href="mailto:muratkirazkaya0@gmail.com">muratkirazkaya0@gmail.com</a>
+  · <a href="https://muratkirazkaya.com">muratkirazkaya.com</a><br>
+  <a href="https://github.com/GroophyLifefor">github.com/GroophyLifefor</a>
+  · <a href="https://www.linkedin.com/in/muratkirazkaya">linkedin.com/in/muratkirazkaya</a>
+</div>
+
+<h2>Eğitim</h2>
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Ordu Üniversitesi</span>
+    <span class="item-date">Ağu 2024 – Haz 2026</span>
+  </div>
+  <div class="item-subtitle">Bilgisayar Programcılığı Ön Lisans · Ordu, Türkiye · GPA 3.57 · Bölüm Birincisi</div>
+  <div class="item-desc">İlgili Dersler: OOP, Veritabanı Sistemleri (SQL, Tetikleyiciler, Fonksiyonlar), Web Programlama, Ağ Temelleri, Açık Kaynak İşletim Sistemi, Sistem Analizi & Tasarımı, Sunucu İşletim Sistemleri</div>
+</div>
+
+<h2>Deneyim</h2>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Teknik Operasyonlar, Valentura</span>
+    <span class="item-date">Eyl 2024 – Eyl 2025</span>
+  </div>
+  <div class="item-subtitle">Uzaktan · Tam Zamanlı</div>
+  <div class="item-desc">Stajdan operasyon rolüne terfi edildi. Üretim sistemleri, backend altyapısı, izleme ve dağıtım hatlarını operasyonel güvenilirlik için yönetir. Git iş akışı ve asenkron işbirliği kullanarak çapraz fonksiyonlu ekiplerle çalışır.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Frontend Geliştirici, Valentura</span>
+    <span class="item-date">Mar 2024 – Eyl 2024</span>
+  </div>
+  <div class="item-subtitle">Uzaktan · Staj</div>
+  <div class="item-desc">Modern web teknolojileri ve kullanıcı arayüzü uygulamasına odaklanan takım ortamında frontend geliştirme stajı. Git dallanma stratejileri ve önizleme ortamları kullanılarak işbirliği yapıldı.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Web Geliştirici, Collective Idea TR</span>
+    <span class="item-date">Oca 2024 – Mar 2024</span>
+  </div>
+  <div class="item-subtitle">İstanbul · Hibrit · Staj</div>
+  <div class="item-desc">İşbirlikçi takım ortamında modern JavaScript çerçeveleriyle müşteri projelerini teslim eden web geliştirme stajı.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Frontend Geliştirici, Insider</span>
+    <span class="item-date">Tem 2023 – Eyl 2023</span>
+  </div>
+  <div class="item-subtitle">İstanbul · Ofiste · Staj</div>
+  <div class="item-desc">6 aylık başvuru sürecinin ardından Insider ofisinde yüz yüze aşama için seçildi. Takım işbirliği ortamında kurumsal ölçekli web uygulamaları üzerinde çalışıldı.</div>
+</div>
+
+<h2>Açık Kaynak Katkıları</h2>
+
+<div style="display:grid; grid-template-columns: auto 1fr; gap: 2pt 10pt; font-size: 8.5pt; color: #333; margin-bottom: 8pt; line-height: 1.5;">
+  <span><strong>#68</strong> / 300.000</span><span>Türkiye'deki geliştirici · açık kaynak katkıları (gitista.com)</span>
+  <span><strong>#11.851</strong> / 50M</span><span>dünya genelinde geliştirici · açık kaynak katkıları (gitista.com)</span>
+  <span><strong>#123</strong> / 4.192</span><span>OpenJS Foundation katkıcı sıralaması (Tem 2025 – Tem 2026)</span>
+  <span><strong>#10</strong> / 754</span><span>Express.js organizasyonu katkıcı sıralaması (Tem 2025 – Tem 2026)</span>
+</div>
+
+<ul class="compact-list">
+  <li><span class="project-name">ExpressJS Organization</span> - Triage üyesi ve Performans Çalışma Grubu üyesi. Express, jshttp ve pillarjs ekosistemlerindeki temel paketleri yönetir (on-finished HTTP/2 desteği, mime-db sıkıştırılabilirlik güncellemeleri). Node.js HTTP yığınının paket düzeyinde çalışır.</li>
+  <li><span class="project-name">Deno Runtime</span> - Minimal proje başlatma için CLI'ye <code>deno init --empty</code> özelliği katkısı. Çekirdek ekip tarafından 24 saat içinde birleştirildi.</li>
+  <li><span class="project-name">jshttp/on-finished</span> - Yanıt tamamlanma tespiti için yaygın kullanılan Node.js yardımcı paketine HTTP/2 desteği eklendi.</li>
+  <li><span class="project-name">Exercism</span> - Kodlama eğitim platformu için Toplu komut dosyası dili pisti oluşturuldu ve yayınlandı.</li>
+</ul>
+
+<h2>Seçili Projeler</h2>
+
+<ul class="compact-list">
+  <li><span class="project-name">Yelix</span> - Standart Web API'leri kullanan Hono üzerine inşa edilmiş Deno tabanlı web çerçevesi. Altın Madalya (Ulusal, 1Fikir1Türkiye) ve Gümüş Madalya (Bölgesel) kazandı. Dekoratörler üzerinden TypeScript çıkarımı, uyumluluk katmanı yok.</li>
+  <li><span class="project-name">TUA için Hackathon Platformu</span> - Sanayi ve Teknoloji Bakanlığı tarafından kabul edilen Türkiye Uzay Ajansı için tam yığın etkinlik platformu. Özel uç nokta otomatik keşfi, dinamik rota kaydı, Zod şemalarından OpenAPI otomatik oluşturma. Tam denetim izleriyle yoğun kayıt yükünü karşılamak için inşa edildi.</li>
+</ul>
+
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+
+<div class="page-header">
+  <span class="page-header-name">Murat Kirazkaya</span> - (Sayfa 2)
+</div>
+
+<ul class="compact-list">
+  <li><span class="project-name">Dijital Staj</span> - Takım işbirliğiyle oluşturulmuş çok üniversiteli staj iş akışı sistemi. 4 rollü RBAC ile 9 durumlu yaşam döngüsü, alan düzeyinde farklarla JSONB denetim kaydı. Devlet belgeleri için PDF form otomasyonu, web kazıma yoluyla ASP.NET eski sistem entegrasyonu. Belge depolama için MinIO. Canlı üretimde.</li>
+  <li><span class="project-name">Sportyluxe GYM</span> - 4 kişilik ekibin parçası olarak (UI/UX, Android, iOS, Backend) oluşturulan 550+ üyeli spor salonu için tam operasyonel backend. Özel çok kiracılı mimari (aynı sunucu/farklı veritabanı deseni). Token rotasyonlu Firebase FCM v1 protokol düzeyinde uygulama. Günlük 15K+ istek, kendi barındırılan VPS'te %99.9 uptime.</li>
+  <li><span class="project-name">ordu.dev</span> - Sandbox kod yürütme için Blob + dinamik içe aktarmaları kullanan özel iş akışı motoruyla topluluk platformu. Abonelik yaşam döngüsü yönetimiyle Web Push (VAPID protokolü). Aralıkları, adımları, listeleri destekleyen özel cron ayrıştırıcısı. Aylık 5K+ tıklama, 50K+ gösterim.</li>
+  <li><span class="project-name">OGID Mobil Uygulama</span> - Dernek yönetimi için kampanya ve satın alım paylaşımı, aidat takibi gibi işlevleri kapsayan mobil uygulama projesi. Deno, Hono ve Yelix üzerine inşa edilmiş backend geliştirmesinden sorumluydum. PostgreSQL ile veri yönetimi; çapraz fonksiyonlu ekiple (mobil + backend) işbirliğiyle geliştirildi.</li>
+</ul>
+<br/>
+<h2>Liderlik & Topluluk</h2>
+
+<ul class="compact-list">
+  <li><span class="project-name">Ordu Bilişim Topluluğu</span> - Ordu ilindeki yazılım geliştiricilerini bir araya getirerek ordu.dev'de bölgesel geliştirici topluluğu kuruldu.</li>
+  <li><span class="project-name">Winterbytes 2026</span> - Karadeniz bölgesinden 230+ katılımcıyla 3 günlük teknik kamp ortak düzenlendi. Node.js TSC (Rafael Gonzaga), IBM ve Trendyol'dan konuşmacılar.</li>
+  <li><span class="project-name">SummerBytes 2026</span> - Türkiye genelinden 100+ katılımcıyla 3 günlük teknik kamp düzenlendi.</li>
+  <li>Kariyer boyunca 400+ teknoloji etkinliğine katıldı; iki yıl boyunca yaklaşık her iki günde bir.</li>
+  <li>Web geliştirmede olağanüstü ilerleme için Kodluyoruz × Microsoft başarı hikayesinde yer aldı.</li>
+</ul>
+
+<h2>Teknik Beceriler</h2>
+
+<div class="skills-grid">
+  <span class="skill-label">Prog. Dilleri:</span>
+  <span class="skill-items">TypeScript, JavaScript, C#, C++, Batch, SQL</span>
+  
+  <span class="skill-label">Backend:</span>
+  <span class="skill-items">Node.js/Deno çalışma zamanı operasyonları, Express.js (triage katkıcısı ve performans ekibi üyesi), Hono, Next.js, OpenAPI şema-önce tasarım</span>
+  
+  <span class="skill-label">Frontend:</span>
+  <span class="skill-items">React, Next.js (App Router, RSC), Astro, Tailwind CSS, Capacitor, bileşen mimarisi</span>
+  
+  <span class="skill-label">Veritabanları:</span>
+  <span class="skill-items">PostgreSQL (yerel istemci, manuel migrasyonlar, indeksleme stratejileri), MongoDB (bağlantı dayanıklılığı, denetim izleri), ClickHouse (analitik iş yükleri), DrizzleORM, Mongoose, MinIO S3</span>
+  
+  <span class="skill-label">Altyapı:</span>
+  <span class="skill-items">Kendi barındırılan üretim operasyonları (%99.9 uptime), Docker çok aşamalı derlemeler, Sentry gözlemlenebilirlik, Firebase FCM v1, Web Push (VAPID protokolü), Contentful CMS</span>
+  
+  <span class="skill-label">Sistemler:</span>
+  <span class="skill-items">Çok kiracılı mimari, özel iş akışı yürütme motorları, denetim kaydıyla RBAC, durum makinesi tasarımı, eski sistem entegrasyonu (ASP.NET kazıma), gerçek zamanlı push bildirimleri, dağıtık istek izleme, hata toleranslı dağıtık sistemler</span>
+  
+  <span class="skill-label">Güvenlik:</span>
+  <span class="skill-items">Yenileme rotasyonlu JWT, bearer kimlik doğrulama, geçici anahtar sistemleri (QR erişim kontrolü), VAPID, hız sınırlama, httpOnly çerezler</span>
+  
+  <span class="skill-label">Mühendislik:</span>
+  <span class="skill-items">CI/CD hatları, izole ortamlarla birim ve entegrasyon testleri (konteynerize test veritabanları, bellek içi depolar), OOP ve tasarım desenleri, test güdümlü geliştirme, Çevik metodolojiler, Git iş akışı (dallanma stratejileri, asenkron işbirliği, önizleme ortamları), kod inceleme uygulamaları, çapraz fonksiyonlu ekiplerde işbirlikçi geliştirme</span>
+</div>
+
+<h2>Diller</h2>
+
+<div class="skills-grid">
+  <span class="skill-label">Türkçe:</span>
+  <span class="skill-items">Anadil</span>
+  
+  <span class="skill-label">İngilizce:</span>
+  <span class="skill-items">B2 (Üst-Orta Seviye)</span>
+</div>
+
+<h2>Referanslar</h2>
+<p class="item-desc" style="margin-bottom: 6pt;">Aşağıdaki referanslara ait iletişim bilgileri talep üzerine paylaşılacaktır.</p>
+<ul class="compact-list" style="margin-bottom: 0;">
+  <li><strong>Attila Alkoç</strong> (kariyer gelişimi ve geliştirici topluluk katılımı) · IstanbulCoders Organizatörü ve Agile Coach</li>
+  <li><strong>Can Kurucu</strong> (Alan Güdümlü Tasarım ve Mikro Servisler) · TurkNet'te Kıdemli Yazılım Mühendisi</li>
+  <li><strong>Oğuzhan Abuhanoğlu</strong> (Sportyluxe GYM, çapraz fonksiyonlu ekipte backend mühendisliği) · Sportyluxe PM ve iOS Geliştirici</li>
+  <li><strong>Dr. Kerem Erzurumlu</strong> (Yükseköğretim için Dijital Staj yönetim platformu) · Ordu Üniversitesi Bilgisayar Bilimleri Akademisyeni</li>
+</ul>
+
+</div>
+
+<script>
+  // Mobile PDF viewer error handling
+  const pdfIframe = document.getElementById('pdf-iframe');
+  const pdfFallback = document.getElementById('pdf-fallback');
+  
+  if (pdfIframe && pdfFallback) {
+    // Check if PDF loaded successfully after a short delay
+    setTimeout(() => {
+      try {
+        // If iframe fails to load or is blocked, show fallback
+        if (!pdfIframe.contentDocument && !pdfIframe.contentWindow) {
+          pdfIframe.style.display = 'none';
+          pdfFallback.style.display = 'block';
+        }
+      } catch (e) {
+        // Cross-origin or other errors
+        pdfIframe.style.display = 'none';
+        pdfFallback.style.display = 'block';
+      }
+    }, 1000);
+
+    // Handle iframe load errors
+    pdfIframe.addEventListener('error', () => {
+      pdfIframe.style.display = 'none';
+      pdfFallback.style.display = 'block';
+    });
+  }
+</script>
+</body>
+</html>
