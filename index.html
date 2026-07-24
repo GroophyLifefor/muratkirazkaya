@@ -425,6 +425,7 @@
   .migration-sub { font-size: 13px; color: var(--ink3); line-height: 1.5; }
 
   /* BLOG TEASER */
+  #blog { margin-top: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
   .blog-teaser {
     display: flex; align-items: center; justify-content: space-between;
     gap: 24px; flex-wrap: wrap;
@@ -433,7 +434,7 @@
     background: var(--surface);
     border: 1px solid var(--line);
     border-left: 3px solid var(--accent2);
-    margin-top: 20px; margin-bottom: 12px;
+    margin: 0;
     transition: background 0.15s, border-color 0.15s;
   }
   .blog-teaser:hover {
@@ -456,6 +457,14 @@
     transition: transform 0.15s, color 0.15s;
   }
   .blog-teaser:hover .blog-teaser-arrow { transform: translateX(4px); color: var(--ink); }
+  .blog-teaser-actions { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+  .blog-teaser-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.03em;
+    text-decoration: none; color: var(--ink); background: var(--surface2);
+    border: 1px solid var(--line); padding: 8px 14px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .blog-teaser-btn:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
 
   @media (max-width: 600px) {
     .about-grid { grid-template-columns: 1fr; }
@@ -478,12 +487,112 @@
 
 <!-- ==================== MODALS ==================== -->
 
+<div class="modal-overlay" id="modal-ogid">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">OGİD</div>
+        <div class="modal-subtitle">04 — Association platform · Invite only · Mobile API</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('ogid')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          Ordu Genç İş İnsanları Derneği needed a private member app, not a public social network.
+          ~180 invite only members, six roles (root → üye), and board approvals that must survive
+          presidency transfers without orphaning queues. Shares, sector purchase requests, and dues
+          all needed different feeds, notification rules, and audit trails on a mobile only
+          surface with unreliable push delivery and Turkish calendar billing.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Role based approvals, not person based queues.</strong> Post and purchase
+          requests are approved by <code style="font-family:var(--mono);font-size:12px;">yk_baskan</code> /
+          <code style="font-family:var(--mono);font-size:12px;">yk_vekili</code> roles so a presidency
+          transfer does not break pending work.<br><br>
+          <strong>Separate share vs purchase feeds.</strong> Event style posts and sector buying
+          announcements never merge in the API. Different schemas, paths, and notification targets.<br><br>
+          <strong>Deno + Yelix/Hono + MongoDB.</strong> OpenAPI first REST for a Flutter client,
+          Zod validation end to end, Coolify self hosting, R2 for media, FCM with retry cron,
+          Istanbul aware dues jobs.<br><br>
+          <strong>Root Admin Ask with read only Mongo.</strong> OpenRouter chat can query association
+          data only through a readonly URI, so ops Q&amp;A cannot mutate production state.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key Features</div>
+        <p class="modal-section-text">
+          • <strong>Member directory &amp; companies.</strong> Invite only accounts, company profiles, sector tags<br>
+          • <strong>Share feed.</strong> Moderated posts with media, comments, redflag filtering<br>
+          • <strong>Purchase requests.</strong> Sector buying pipeline → separate announcement feed<br>
+          • <strong>Dues (aidat).</strong> Monthly rows, role multipliers, partial payments, reminder cron<br>
+          • <strong>Notifications.</strong> In app inbox + FCM device tokens, event level push prefs<br>
+          • <strong>Governance.</strong> Soft archive for members, hard delete + audit for companies<br>
+          • <strong>Admin Ask.</strong> Root only AI over read only aggregates
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Technical Implementation</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Technology</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>API runtime</td><td>Deno</td><td>TypeScript server + cron</td></tr>
+              <tr><td>HTTP / OpenAPI</td><td>Hono + Yelix</td><td>REST <code style="font-family:var(--mono);font-size:12px;">/v1</code> · Scalar docs</td></tr>
+              <tr><td>Validation</td><td>Zod</td><td>Request/response schemas</td></tr>
+              <tr><td>Database</td><td>MongoDB + Mongoose</td><td>Members, feeds, dues, audits</td></tr>
+              <tr><td>Auth</td><td>JWT + refresh (DB)</td><td>Single device sessions</td></tr>
+              <tr><td>Push</td><td>Firebase FCM</td><td>Per device notifications + retry</td></tr>
+              <tr><td>Email / SMS</td><td>Resend · Twilio</td><td>Reset codes, YK alerts, verify</td></tr>
+              <tr><td>Object storage</td><td>Cloudflare R2</td><td>Avatars, logos, post media</td></tr>
+              <tr><td>AI</td><td>OpenRouter</td><td>Root Admin Ask</td></tr>
+              <tr><td>Deploy</td><td>Docker + Coolify</td><td>Self hosted API</td></tr>
+              <tr><td>Client</td><td>Flutter</td><td>Production mobile UI</td></tr>
+              <tr><td>Observability</td><td>Sentry</td><td>Errors + cron spans</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">Running today</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">~180</span>
+            <span class="modal-metric-label">Invite only members</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">6</span>
+            <span class="modal-metric-label">Roles</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">50+</span>
+            <span class="modal-metric-label">API test files</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://ogid.com.tr/" target="_blank" rel="noreferrer" class="modal-visit" data-umami-event="modal-ogid-site-click">ogid.com.tr ↗</a>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-kumrukuymak">
   <div class="modal wide">
     <div class="modal-header">
       <div>
         <div class="modal-title">Kumru Kuymak v1.1 2B</div>
-        <div class="modal-subtitle">01 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
+        <div class="modal-subtitle">08 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
       </div>
       <button class="modal-close" onclick="closeModal('kumrukuymak')">×</button>
     </div>
@@ -573,8 +682,8 @@
   <div class="modal wide">
     <div class="modal-header">
       <div>
-        <div class="modal-title">OrduBenim</div>
-        <div class="modal-subtitle">02 — Location-based AI chat platform · Full-stack · Live</div>
+        <div class="modal-title">Ordu Benim</div>
+        <div class="modal-subtitle">06 — Location-based AI chat platform · Full-stack · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('ordubenim')">×</button>
     </div>
@@ -721,56 +830,166 @@
 </div>
 
 <div class="modal-overlay" id="modal-dijitalstaj">
-  <div class="modal">
+  <div class="modal wide">
     <div class="modal-header">
       <div>
         <div class="modal-title">Dijital Staj</div>
-        <div class="modal-subtitle">04 — Workflow engine · Multi-university · Live</div>
+        <div class="modal-subtitle">02 — Staj workflow · Ordu Üniversitesi · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('dijitalstaj')">×</button>
     </div>
     <div class="modal-body">
       <div>
-        <div class="modal-section-label">The hard problem</div>
-        <p class="modal-section-text">
-          Universities ran internship approvals entirely on paper, routed physically between 4 different
-          roles (student, advisor, workplace, internship office) — each with different authority levels.
-          The state machine had 12+ distinct states and rejections at any step had to route back to the
-          correct party with the original context intact, not just "rejected."
-        </p>
+        <div class="modal-section-label">Stack</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Katman</th><th>Teknoloji</th><th>Ne için</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Frontend</td><td>Next.js 16 · React 19 · Tailwind 4</td><td>Rollere göre dashboard, formlar, PDF önizleme</td></tr>
+              <tr><td>Backend</td><td>Deno · Hono · Yelix · Zod</td><td>API, OpenAPI, şema doğrulama</td></tr>
+              <tr><td>DB</td><td>PostgreSQL · DrizzleORM</td><td>Başvuru state, belgeler, audit</td></tr>
+              <tr><td>Object storage</td><td>MinIO (S3 API)</td><td>PDF, sağlık provizyonu, günlük görselleri, paketler</td></tr>
+              <tr><td>PDF</td><td>pdf-lib · fontkit</td><td>Resmi form üretimi (D0 to D4, SB2/4/5, muafiyet)</td></tr>
+              <tr><td>Auth session</td><td>OIDB login → JWT (jose)</td><td>Üniversite kimliğiyle giriş</td></tr>
+              <tr><td>Monitoring</td><td>Sentry</td><td>FE + BE hata takibi</td></tr>
+              <tr><td>Rich text</td><td>TipTap · TinyMCE</td><td>Staj günlüğü / form alanları</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
       <div>
-        <div class="modal-section-label">Key decisions</div>
-        <p class="modal-section-text">
-          <strong>Next.js with React Server Components</strong> — the document-heavy views (PDF previews,
-          form history) rendered far better server-side. Reduced client bundle size significantly.<br><br>
-          <strong>DrizzleORM over Prisma</strong> — requirements changed frequently. Drizzle's migration
-          model gave more control over schema changes without the abstraction overhead.<br><br>
-          <strong>MinIO for document storage</strong> — PDFs and attachments couldn't live in the
-          database, and MinIO gave an S3-compatible self-hosted option the university could control.
-          Auto-PDF generation via pdf-lib for official forms.
-        </p>
+        <div class="modal-section-label">Entegrasyonlar</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Sistem</th><th>Ne yapıyor</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>OIDB / UniPA</td><td>Login, oturum, transkript çekme</td></tr>
+              <tr><td>Transkript parser</td><td>Staj 1 / Staj 2 geçti mi, planlanan iş günü (20/40), İSG uygunluğu</td></tr>
+              <tr><td>Resend + SMTP</td><td>Çift mail yolu. Ofis tek mailde hangisini kullanacağını seçebilir</td></tr>
+              <tr><td>OpenRouter</td><td>Ofis AI sohbeti (tool calling)</td></tr>
+              <tr><td>SSH + read only Postgres</td><td>AI’nin sorguladığı salt okunur DB tüneli</td></tr>
+              <tr><td>CUPS / drop folder print</td><td>Üretilen PDF’leri otomatik yazıcı kuyruğuna</td></tr>
+              <tr><td>MinIO presigned URL</td><td>Private bucket’tan güvenli dosya erişimi</td></tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
       <div>
-        <div class="modal-section-label">Running today</div>
-        <div class="modal-metrics">
-          <div class="modal-metric">
-            <span class="modal-metric-val">4</span>
-            <span class="modal-metric-label">Approval roles</span>
-          </div>
-          <div class="modal-metric">
-            <span class="modal-metric-val">12+</span>
-            <span class="modal-metric-label">Workflow states</span>
-          </div>
-          <div class="modal-metric">
-            <span class="modal-metric-val">Live</span>
-            <span class="modal-metric-label">Multi-university</span>
-          </div>
+        <div class="modal-section-label">Roller &amp; workflow</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Aktör</th><th>Ne biliyor / ne yapıyor</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Öğrenci</td><td>Talep → başvuru → belgeler → günlük → düzeltme. Durumunu görür</td></tr>
+              <tr><td>Danışman</td><td>Talep/başvuru onayı, değerlendirme, düzeltme isteği, staj kurulu üyeliği</td></tr>
+              <tr><td>İşyeri</td><td>Hesapsız token link ile onay, imza, D3/SB4/SB5, SB5 teslim</td></tr>
+              <tr><td>Staj ofisi</td><td>Sağlık provizyonu (22/43/eksi 1), takvim, e posta yeniden gönder, paket, istatistik, CSV</td></tr>
+              <tr><td>Staj kurulu</td><td>Bitmiş dosyayı onay / red / düzeltmeye geri gönder (öğrenci veya danışman)</td></tr>
+              <tr><td>Admin</td><td>Sistem yönetimi</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="modal-section-label">Başvuru durumları</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>#</th><th>Status</th><th>Anlamı</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1</td><td>PENDING</td><td>Başvuru açıldı, işyeri bekleniyor</td></tr>
+              <tr><td>2</td><td>COMPANY_APPROVED</td><td>İşyeri onayladı</td></tr>
+              <tr><td>3</td><td>ADVISOR_APPROVED</td><td>Danışman onayladı</td></tr>
+              <tr><td>4</td><td>INTERNSHIP_IN_PROGRESS</td><td>Ofis sağlık provizyonunu onayladı → staj başladı</td></tr>
+              <tr><td>5</td><td>WORKPLACE_SIGNED</td><td>İşyeri bitiş imzaları (D3 + SB4)</td></tr>
+              <tr><td>6</td><td>ADVISOR_EVALUATED</td><td>Danışman notlandırdı</td></tr>
+              <tr><td>7</td><td>STAJ_KURULU_APPROVED</td><td>Kurul onayladı</td></tr>
+              <tr><td>8</td><td>COMPLETED</td><td>Süreç bitti</td></tr>
+              <tr><td>·</td><td>REJECTED</td><td>Kaynak: COMPANY / ADVISOR / STAJ_KURULU (+ sebep)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="modal-section-label">Üretilen belgeler</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Kod</th><th>Belge</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>SB2</td><td>Zorunlu staj başvuru formu</td></tr>
+              <tr><td>D0</td><td>Öğrenci staj dosyası kapağı</td></tr>
+              <tr><td>D1</td><td>Staj dosyası sayfa 1</td></tr>
+              <tr><td>D2</td><td>Staj iş takip çizelgesi (günlükten)</td></tr>
+              <tr><td>D3</td><td>Devam kontrol çizelgesi + işyeri imza</td></tr>
+              <tr><td>D4</td><td>Staj dosyası / günlük (görseller gömülü)</td></tr>
+              <tr><td>SB4</td><td>İşyeri değerlendirme formu</td></tr>
+              <tr><td>SB5</td><td>Staj bitiş onay belgesi</td></tr>
+              <tr><td>Muafiyet</td><td>Muafiyet sertifikası PDF</td></tr>
+              <tr><td>Paket</td><td>Başvuru/bitiş paketi + MD5 hash manifest</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="modal-section-label">Sistem ne biliyor / ne zorluyor</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Kural</th><th>Sonuç</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Transkript → Staj 1/2</td><td>Hangi stajın alınabileceğini ve geçilip geçilmediğini bilir</td></tr>
+              <tr><td>İSG dersi</td><td>Uygunluk kapısı (bypass kurallı)</td></tr>
+              <tr><td>Planlanan iş günü</td><td>20 / 40 gün. 20+20 split (iki işyeri) destekli</td></tr>
+              <tr><td>Başvuru penceresi + takvim</td><td>Resmi başlangıç/bitiş, dosya teslim, not giriş tarihleri</td></tr>
+              <tr><td>Sağlık provizyonu</td><td>Onaysız günlük doldurulamaz. Kod 22/43 başlatır, eksi 1 reddeder</td></tr>
+              <tr><td>Token imza</td><td>İşyeri / bölüm başkanı hesap açmadan imzalar</td></tr>
+              <tr><td>Red + düzeltme</td><td>Kime gideceği ve sebep saklanır. Bağlam kaybolmaz</td></tr>
+              <tr><td>Audit log</td><td>INSERT/UPDATE/DELETE + actor + old/new data</td></tr>
+              <tr><td>SB5 teslim</td><td>Sistem upload veya öğrenciye fiziksel teslim kaydı</td></tr>
+              <tr><td>Program / danışman atama</td><td>Program eşleme, danışman öğrenci ağacı, danışman değiştirme</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div>
+        <div class="modal-section-label">Modüller</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Modül</th><th>Kapsam</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Staj talebi</td><td>Öğrenci → danışman ön onayı</td></tr>
+              <tr><td>Staj başvurusu</td><td>Tam onay zinciri + belgeler</td></tr>
+              <tr><td>Staj günlüğü</td><td>Günlük kayıt, fotoğraf/DOCX, D3 tetikleme</td></tr>
+              <tr><td>Muafiyet</td><td>İşyeri onayı → staj kurulu → sertifika</td></tr>
+              <tr><td>Değerlendirme</td><td>Danışman notlandırma / kısmi / red</td></tr>
+              <tr><td>Ofis AI</td><td>Read only SQL tool’larıyla soru cevap</td></tr>
+              <tr><td>İstatistik / export</td><td>Ofis dashboard, sağlık provizyonu CSV</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
     <div class="modal-footer">
       <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="modal-visit">Visit Dijital Staj ↗</a>
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--ink3);">Ordu Üniversitesi · Live</span>
     </div>
   </div>
 </div>
@@ -780,7 +999,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">PELS</div>
-        <div class="modal-subtitle">05 — CMS platform · Bilingual · Live</div>
+        <div class="modal-subtitle">09 — CMS platform · Bilingual · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('pels')">×</button>
     </div>
@@ -830,7 +1049,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Yelix</div>
-        <div class="modal-subtitle">06 — Framework · 🥇 National award · Open source</div>
+        <div class="modal-subtitle">07 — Framework · 🥇 National award · Open source</div>
       </div>
       <button class="modal-close" onclick="closeModal('yelix')">×</button>
     </div>
@@ -880,8 +1099,8 @@
   <div class="modal">
     <div class="modal-header">
       <div>
-        <div class="modal-title">ordu.dev</div>
-        <div class="modal-subtitle">07 — Community platform · Self-hosted · Live</div>
+        <div class="modal-title">Ordu IT Community</div>
+        <div class="modal-subtitle">05 — Community platform · Self-hosted · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('ordudev')">×</button>
     </div>
@@ -922,7 +1141,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <a href="https://ordu.dev" target="_blank" rel="noreferrer" class="modal-visit">Visit ordu.dev ↗</a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" class="modal-visit">Visit Ordu IT Community ↗</a>
     </div>
   </div>
 </div>
@@ -932,7 +1151,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Hackathon Platform for TUA</div>
-        <div class="modal-subtitle">08 — Event platform · Government · Accepted</div>
+        <div class="modal-subtitle">01 — Event platform · Government · Accepted</div>
       </div>
       <button class="modal-close" onclick="closeModal('tua')">×</button>
     </div>
@@ -1043,55 +1262,54 @@
 
   <div class="project-list">
 
-    <div class="project-item" onclick="openModal('kumrukuymak')">
+    <div class="project-item" onclick="openModal('tua')">
       <div>
-        <div class="proj-number">01 — Fine-tuned adapter</div>
-        <div class="proj-title">Kumru Kuymak v1.1 2B</div>
+        <div class="proj-number">01 — Event platform</div>
+        <div class="proj-title">Hackathon Platform for TUA</div>
         <div class="proj-desc">
-          LoRA-style adapter on Kara Kumru for tool-vs-direct routing. Curated TR benchmark subset (218 examples):
-          full valid JSON and schema conformance, with large gains in route accuracy over base and Kara Kumru alone.
+          Full-stack hackathon management platform built for Türkiye Uzay Ajansı (Turkish Space Agency).
+          Accepted and used by the Ministry of Industry and Technology.
         </div>
         <div class="proj-tags">
-          <span class="tag">Fine-Tuned</span>
-          <span class="tag">LoRA</span>
-          <span class="tag">Hugging Face</span>
-          <span class="tag">Text generation</span>
-          <span class="tag">Tool routing</span>
-          <span class="tag">Turkish</span>
+          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
+          <span class="tag">Self-hosted</span>
+          <span class="tag">Full-stack</span>
+          <span class="tag">Government</span>
         </div>
       </div>
       <div class="proj-stat">
-        <span class="proj-stat-val">49% → 85.3%</span>
-        <span class="proj-stat-label">route accuracy</span>
-        <div class="proj-stat-secondary">100% valid JSON · 218 ex.</div>
-        <a href="https://huggingface.co/muratkirazkaya0/Kumru-Kuymak-v1.1-2B" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-kumrukuymak-hf-click">Hugging Face ↗</a>
+        <span class="proj-stat-val">Gov.</span>
+        <span class="proj-stat-label">Ministry accepted</span>
+        <span class="proj-case-hint">Click for details →</span>
       </div>
     </div>
 
-    <div class="project-item" onclick="openModal('ordubenim')">
+    <div class="project-item" onclick="openModal('dijitalstaj')">
       <div>
-        <div class="proj-number">02 — Location-based AI platform</div>
-        <div class="proj-title">OrduBenim</div>
+        <div class="proj-number">02 — Staj workflow</div>
+        <div class="proj-title">Dijital Staj</div>
         <div class="proj-desc">
-          Location-based chat application and information platform for Ordu province. AI-powered interface with local services 
-          including transportation, news, places search, and regional information. Full-stack with mobile app support.
+          Ordu Üniversitesi staj yönetim sistemi. Öğrenci, danışman, işyeri, ofis ve staj kurulu
+          için rol bazlı onay zinciri. Transkript entegrasyonu, resmi PDF üretimi, sağlık provizyonu,
+          günlük takibi ve ofis AI.
         </div>
         <div class="proj-tags">
-          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
-          <span class="tag">Hono</span>
-          <span class="tag"><i class="ci ci-mongodb"></i> MongoDB</span>
-          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
-          <span class="tag">Capacitor</span>
-          <span class="tag">AI Chat</span>
-          <span class="tag">OpenRouter</span>
-          <span class="tag">Mobile Apps</span>
+          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
+          <span class="tag"><i class="ci ci-postgresql"></i> PostgreSQL</span>
+          <span class="tag">DrizzleORM</span>
+          <span class="tag">MinIO</span>
+          <span class="tag">pdf-lib</span>
         </div>
       </div>
       <div class="proj-stat">
-        <span class="proj-stat-val">10+</span>
-        <span class="proj-stat-label">local services</span>
-        <div class="proj-stat-secondary">AI-powered · Full-stack</div>
-        <a href="https://github.com/GroophyLifefor/ordu-benim" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-ordubenim-github-click">GitHub ↗</a>
+        <span class="proj-stat-val">6 roller</span>
+        <span class="proj-stat-label">onay zinciri</span>
+        <div class="proj-stat-secondary">Ordu Üniversitesi · Live</div>
+        <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
       </div>
     </div>
 
@@ -1120,78 +1338,37 @@
       </div>
     </div>
 
-    <div class="project-item" onclick="openModal('dijitalstaj')">
+    <div class="project-item" onclick="openModal('ogid')">
       <div>
-        <div class="proj-number">04 — Workflow engine</div>
-        <div class="proj-title">Dijital Staj</div>
+        <div class="proj-number">04 — Association platform</div>
+        <div class="proj-title">OGİD</div>
         <div class="proj-desc">
-          Multi-role internship application system for universities. Students, advisors, workplaces, and offices
-          each have their own view. State-machine workflow, document storage, auto-PDF generation, and SMTP
-          notifications throughout.
-        </div>
-        <div class="proj-tags">
-          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
-          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
-          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
-          <span class="tag"><i class="ci ci-postgresql"></i> PostgreSQL</span>
-          <span class="tag">DrizzleORM</span>
-          <span class="tag">MinIO</span>
-          <span class="tag">pdf-lib</span>
-        </div>
-      </div>
-      <div class="proj-stat">
-        <span class="proj-stat-val">4 roles</span>
-        <span class="proj-stat-label">approval pipeline</span>
-        <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
-      </div>
-    </div>
-
-    <div class="project-item" onclick="openModal('pels')">
-      <div>
-        <div class="proj-number">05 — CMS platform</div>
-        <div class="proj-title">PELS</div>
-        <div class="proj-desc">
-          Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with
-          Astro and Contentful CMS for managing TR/EN content — editable by the client's team, no dev needed.
-        </div>
-        <div class="proj-tags">
-          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
-          <span class="tag">Contentful</span>
-          <span class="tag">i18n</span>
-        </div>
-      </div>
-      <div class="proj-stat">
-        <span class="proj-stat-val">TR/EN</span>
-        <span class="proj-stat-label">bilingual CMS</span>
-        <a href="https://pel-s.com/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
-      </div>
-    </div>
-
-    <div class="project-item" onclick="openModal('yelix')">
-      <div>
-        <div class="proj-number">06 — Framework</div>
-        <div class="proj-title">Yelix <span class="badge">🥇 National</span></div>
-        <div class="proj-desc">
-          A Deno-native web framework built around the runtime's actual strengths — not a Node.js port.
-          Won Silver (Regional) and Gold (National) at 1Fikir1Türkiye.
+          Invite only member platform for Ordu Genç İş İnsanları Derneği. Role based board approvals,
+          separate share and purchase feeds, dues with Istanbul aware cron, FCM notifications, and a
+          read only Admin Ask over Mongo. Flutter client on a Deno/Yelix API.
         </div>
         <div class="proj-tags">
           <span class="tag"><i class="ci ci-deno"></i> Deno</span>
-          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
-          <span class="tag">Web framework</span>
+          <span class="tag">Hono + Yelix</span>
+          <span class="tag"><i class="ci ci-mongodb"></i> MongoDB</span>
+          <span class="tag">Flutter</span>
+          <span class="tag"><i class="ci ci-firebase"></i> FCM</span>
+          <span class="tag">Zod</span>
+          <span class="tag">Self hosted</span>
         </div>
       </div>
       <div class="proj-stat">
-        <span class="proj-stat-val">🥇</span>
-        <span class="proj-stat-label">National award</span>
-        <span class="proj-case-hint">Click for details →</span>
+        <span class="proj-stat-val">~180</span>
+        <span class="proj-stat-label">invite only members</span>
+        <div class="proj-stat-secondary">6 roles · 50+ API tests</div>
+        <a href="https://ogid.com.tr/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-ogid-site-click">Visit ↗</a>
       </div>
     </div>
 
     <div class="project-item" onclick="openModal('ordudev')">
       <div>
-        <div class="proj-number">07 — Community platform</div>
-        <div class="proj-title">ordu.dev</div>
+        <div class="proj-number">05 — Community platform</div>
+        <div class="proj-title">Ordu IT Community</div>
         <div class="proj-desc">
           Platform for Ordu Bilişim Topluluğu — blog, events, docs, and daily cafeteria menu.
           Includes a custom in-house workflow engine, ad management panel, and web push notification
@@ -1214,33 +1391,116 @@
       </div>
     </div>
 
-    <div class="project-item" onclick="openModal('tua')">
+    <div class="project-item" onclick="openModal('ordubenim')">
       <div>
-        <div class="proj-number">08 — Event platform</div>
-        <div class="proj-title">Hackathon Platform for TUA</div>
+        <div class="proj-number">06 — Location-based AI platform</div>
+        <div class="proj-title">Ordu Benim</div>
         <div class="proj-desc">
-          Full-stack hackathon management platform built for Türkiye Uzay Ajansı (Turkish Space Agency).
-          Accepted and used by the Ministry of Industry and Technology.
+          Location-based chat application and information platform for Ordu province. AI-powered interface with local services 
+          including transportation, news, places search, and regional information. Full-stack with mobile app support.
         </div>
         <div class="proj-tags">
-          <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
-          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
-          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
-          <span class="tag">Self-hosted</span>
-          <span class="tag">Full-stack</span>
-          <span class="tag">Government</span>
+          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
+          <span class="tag">Hono</span>
+          <span class="tag"><i class="ci ci-mongodb"></i> MongoDB</span>
+          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag">Capacitor</span>
+          <span class="tag">AI Chat</span>
+          <span class="tag">OpenRouter</span>
+          <span class="tag">Mobile Apps</span>
         </div>
       </div>
       <div class="proj-stat">
-        <span class="proj-stat-val">Gov.</span>
-        <span class="proj-stat-label">Ministry accepted</span>
+        <span class="proj-stat-val">10+</span>
+        <span class="proj-stat-label">local services</span>
+        <div class="proj-stat-secondary">AI-powered · Full-stack</div>
+        <a href="https://github.com/GroophyLifefor/ordu-benim" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-ordubenim-github-click">GitHub ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('yelix')">
+      <div>
+        <div class="proj-number">07 — Framework</div>
+        <div class="proj-title">Yelix <span class="badge">🥇 National</span></div>
+        <div class="proj-desc">
+          A Deno-native web framework built around the runtime's actual strengths — not a Node.js port.
+          Won Silver (Regional) and Gold (National) at 1Fikir1Türkiye.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag">Web framework</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">🥇</span>
+        <span class="proj-stat-label">National award</span>
         <span class="proj-case-hint">Click for details →</span>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('kumrukuymak')">
+      <div>
+        <div class="proj-number">08 — Fine-tuned adapter</div>
+        <div class="proj-title">Kumru Kuymak v1.1 2B</div>
+        <div class="proj-desc">
+          LoRA-style adapter on Kara Kumru for tool-vs-direct routing. Curated TR benchmark subset (218 examples):
+          full valid JSON and schema conformance, with large gains in route accuracy over base and Kara Kumru alone.
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Fine-Tuned</span>
+          <span class="tag">LoRA</span>
+          <span class="tag">Hugging Face</span>
+          <span class="tag">Text generation</span>
+          <span class="tag">Tool routing</span>
+          <span class="tag">Turkish</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">49% → 85.3%</span>
+        <span class="proj-stat-label">route accuracy</span>
+        <div class="proj-stat-secondary">100% valid JSON · 218 ex.</div>
+        <a href="https://huggingface.co/muratkirazkaya0/Kumru-Kuymak-v1.1-2B" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-kumrukuymak-hf-click">Hugging Face ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('pels')">
+      <div>
+        <div class="proj-number">09 — CMS platform</div>
+        <div class="proj-title">PELS</div>
+        <div class="proj-desc">
+          Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with
+          Astro and Contentful CMS for managing TR/EN content — editable by the client's team, no dev needed.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag">Contentful</span>
+          <span class="tag">i18n</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">TR/EN</span>
+        <span class="proj-stat-label">bilingual CMS</span>
+        <a href="https://pel-s.com/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
       </div>
     </div>
 
   </div>
 
-  <a href="/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html" id="blog" class="blog-teaser" data-umami-event="home-blog-teaser-click">
+  <div id="blog">
+  <div class="blog-teaser">
+    <div>
+      <div class="blog-teaser-eyebrow">Blog · TR / EN</div>
+      <div class="blog-teaser-title">Is Express really <em>slow</em></div>
+      <div class="blog-teaser-sub">Node 18→26 bench: the real gap is your Node version, not the framework.</div>
+    </div>
+    <div class="blog-teaser-actions">
+      <a href="/blogs/express-gercekten-yavas-mi.html" class="blog-teaser-btn" data-umami-event="home-blog-express-tr-click">Türkçe oku</a>
+      <a href="/blogs/is-express-really-slow.html" class="blog-teaser-btn" data-umami-event="home-blog-express-en-click">Read in English</a>
+    </div>
+  </div>
+
+  <a href="/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html" class="blog-teaser" data-umami-event="home-blog-teaser-click">
     <div>
       <div class="blog-teaser-eyebrow">Blog · Türkçe</div>
       <div class="blog-teaser-title">Nasıl <em>$10K MRR</em> yapmadan ucuz tech stack kurdum?</div>
@@ -1248,6 +1508,7 @@
     </div>
     <span class="blog-teaser-arrow">Okuyayım →</span>
   </a>
+  </div>
 
   <!-- SERVICES -->
   <div id="services" class="sec-header">

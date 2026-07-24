@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Express gerçekten yavaş mı — Murat Kirazkaya</title>
+<meta name="description" content="Express 4/5, Hono ve Elysia’yı Node 18–26 üzerinde ölçtük. Asıl fark framework’te değil, Node sürümünde.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.yelix.cloud/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Express gerçekten yavaş mı">
+<meta property="og:description" content="Kod değiştirmeden Node 18’den 26’ya geçince Express ~2.3× hızlanıyor.">
+<meta property="og:image" content="/img/pp.jpeg">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/express-gercekten-yavas-mi.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/express-gercekten-yavas-mi.html">
+<link rel="alternate" hreflang="en" href="/blogs/is-express-really-slow.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+    --chart-blue: #2a6bb0;
+    --chart-orange: #c94a1e;
+    --chart-aqua: #1a5c3a;
+    --chart-yellow: #a67c1a;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .lang-switch {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; margin-left: auto;
+    padding: 20px 0 0;
+  }
+  .lang-switch:hover { color: var(--ink); }
+  .post-top { display: flex; align-items: baseline; gap: 16px; }
+
+  .post-hero { padding: 40px 0 36px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-lead {
+    font-family: var(--serif); font-size: clamp(16px, 2.8vw, 20px);
+    color: var(--ink2); line-height: 1.45; max-width: 640px;
+    padding-left: 18px; border-left: 3px solid var(--accent);
+  }
+  .hero-stat {
+    display: flex; align-items: baseline; gap: 18px;
+    margin-top: 28px; max-width: 640px;
+  }
+  .hero-stat .num {
+    font-family: var(--mono); font-size: clamp(2.8rem, 8vw, 4rem);
+    font-weight: 500; color: var(--accent); line-height: 1;
+  }
+  .hero-stat .cap {
+    font-size: 14px; color: var(--ink2); line-height: 1.5; max-width: 320px;
+  }
+
+  .post-main { padding-bottom: 72px; max-width: 640px; }
+
+  .post-main h2 {
+    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 400; color: var(--ink); margin: 48px 0 8px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .post-main h2:first-of-type { margin-top: 8px; }
+  .post-main .lede {
+    font-size: 14px; color: var(--ink3); margin-bottom: 1.2em; line-height: 1.55;
+  }
+
+  .post-main p {
+    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
+  }
+  .post-main p strong { color: var(--ink); font-weight: 500; }
+  .post-main a {
+    color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .post-main a:hover { color: var(--ink); }
+
+  .post-main ul {
+    margin: 0 0 1.15em; padding: 0; list-style: none;
+    color: var(--ink2); font-size: 15px; line-height: 1.7;
+  }
+  .post-main ul li {
+    position: relative; padding-left: 22px; margin-bottom: 0.55em;
+  }
+  .post-main ul li::before {
+    content: ''; position: absolute; left: 0; top: 0.55em;
+    width: 8px; height: 8px; background: var(--accent2);
+  }
+
+  .post-main blockquote {
+    margin: 1.25em 0 1.5em; padding: 16px 20px;
+    background: var(--surface2); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+  }
+  .post-main blockquote p {
+    margin-bottom: 0; font-family: var(--serif); font-size: 18px; font-style: italic;
+    color: var(--ink2);
+  }
+
+  .post-main code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--surface3); padding: 0.12em 0.35em;
+  }
+
+  .infobox {
+    background: var(--surface2); border: 1px solid var(--line);
+    padding: 18px 20px; margin: 1.4em 0 1.6em; font-size: 14px; color: var(--ink2); line-height: 1.65;
+  }
+  .infobox-title {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 18px 16px 10px;
+    margin: 1.4em 0;
+    max-width: 100%;
+  }
+  .chart-title { font-size: 14px; font-weight: 500; color: var(--ink); margin: 0 0 2px; }
+  .chart-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin: 0 0 12px; }
+  .chart-card svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 6px; font-size: 12px; color: var(--ink2); }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .legend .swatch { width: 10px; height: 10px; display: inline-block; }
+  .bar-label { font-size: 10px; fill: var(--ink2); font-family: var(--mono); }
+  .axis-label { font-size: 10.5px; fill: var(--ink3); font-family: var(--mono); }
+  .gridline { stroke: var(--line); stroke-width: 1; }
+  .baseline { stroke: var(--ink3); stroke-width: 1; opacity: 0.45; }
+  .bar-group:hover rect.fill-rect { filter: brightness(1.06); }
+  .tooltip {
+    position: absolute; pointer-events: none; background: var(--surface);
+    border: 1px solid var(--line); padding: 7px 10px;
+    font-size: 12px; font-family: var(--mono);
+    color: var(--ink); box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    opacity: 0; transition: opacity 0.1s; white-space: nowrap; z-index: 10;
+  }
+
+  .colophon {
+    margin-top: 2em; padding-top: 1.2em; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--ink3); line-height: 1.55;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .hero-stat { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="/booking" class="nav-cta" data-umami-event="blog-nav-book">Book a call →</a>
+  </nav>
+
+  <div class="post-top">
+    <a href="/" class="back-link" data-umami-event="blog-back-home">← Ana sayfa</a>
+    <a href="/blogs/is-express-really-slow.html" class="lang-switch" data-umami-event="blog-lang-switch">English →</a>
+  </div>
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog · Türkçe</div>
+    <h1 class="post-title">Express gerçekten yavaş mı</h1>
+    <p class="post-lead">Node.js × Express performans ölçümü</p>
+    <div class="hero-stat">
+      <div class="num" id="heroStat">2.3×</div>
+      <div class="cap">Kodda tek satır değişmeden, sadece Node 18’den 26’ya geçilince Express’in saniyede işlediği istek sayısı bu kadar artıyor.</div>
+    </div>
+  </header>
+
+  <article class="post-main">
+<p>Express hakkında en çok duyduğumuz şikayetlerden biri şu cümle. Express yavaş, Hono kullan, Elysia kullan, Fastify kullan. Bu iddiayı gerçek verilerle test etmek için Express 4.22.2 ve Express 5.2.1 sürümlerini Node.js 18, 20, 22, 24 ve 26 üzerinde ölçtük. Üstüne Node 26’da Hono 4.12.32 ve Elysia 1.4.29 ile de karşılaştırdık.</p>
+
+<p>Sonuç beklediğimizden farklı çıktı.</p>
+
+<blockquote><p>Express yavaş değil. Senin Node sürümün yavaş.</p></blockquote>
+
+<div class="infobox">
+  <div class="infobox-title">Nasıl ölçtük</div>
+  <div>Kendine ait <code>2 çekirdekli AMD EPYC</code> bir Hetzner sunucusunda, <code>Ubuntu 26.04</code> üzerinde çalıştırdık. Her framework aynı üç uç noktayı sundu. Basit bir JSON dönüşü, parametre okuyan bir kullanıcı sorgusu ve gövdesi JSON olan bir echo isteği. Yük testi olarak autocannon kullanıldı, <code>20 bağlantı</code>, <code>5 saniye</code> ısınma ve ardından <code>55 saniye</code> ölçüm. Her satır yüz binlerce isteğin ortalaması.</div>
+</div>
+
+<h2>Asıl mesele Node sürümün</h2>
+<p class="lede">Değişkeni tek tek kapattığımızda ortaya çıkan tek gerçek fark buydu.</p>
+
+<p>Aşağıda Express 4 ve Express 5 için saniyede işlenen istek sayısını Node sürümüne göre görüyorsun.</p>
+
+<div class="chart-card" id="chartRps"></div>
+
+<p>Node 18, 20 ve 22 arasında sonuçlar birbirine oldukça yakın, saniyede kabaca 3200 ile 4000 istek arasında. Ama Node 24’e geçtiğin anda sayı neredeyse ikiye katlanıyor, saniyede 8000’in üzerine çıkıyor. Bu artış hem Express 4’te hem Express 5’te aynı şekilde görülüyor.</p>
+
+<p>Gecikme tarafında da aynı hikaye tekrarlanıyor.</p>
+
+<div class="chart-card" id="chartLatency"></div>
+
+<p>Node 18’de Express 4’ün p99 gecikmesi <code>13.47 ms</code>, Node 26’da aynı Express 4 uygulaması <code>5.95 ms</code>’e düşüyor. Kod aynı, middleware aynı, route’lar aynı.</p>
+
+<blockquote><p>Değişen tek şey altındaki Node sürümü. Sorun kütüphanede değil, altyapıda.</p></blockquote>
+
+<p>Bu iyileşmenin hem Express 4’te hem Express 5’te aynı oranda yaşanması önemli bir ipucu. Yani bu bir Express meselesi değil, tamamen Node’un kendi motorundaki (V8) ve http modülündeki iyileştirmelerin sonucu. Eski bir Node sürümü üzerinde çalışan her framework benzer bir tavanla karşılaşır.</p>
+
+<h2>Peki Hono ve Elysia neden daha hızlı</h2>
+<p class="lede">Aynı Node 26 üzerinde, aynı üç uç noktayla test ettik.</p>
+
+<div class="chart-card" id="chartFrameworkRps"></div>
+
+<p>Hono, Express’in neredeyse iki katı istek işliyor. Elysia da oldukça yakın bir performans sergiliyor. Burada Hono veya Elysia’yı kötülemek gibi bir niyetim yok, ikisi de gerçekten iyi tasarlanmış, modern araçlar.</p>
+
+<p>Ama bu farkın nereden geldiğini anlamak önemli. Express, 2010 yılından beri sürekli geliştirilen ve olağanüstü geniş bir geriye dönük uyumluluk taşıyan bir kütüphane. Node’un klasik http modülünü saran, on yıllar boyunca eklenen middleware desenlerini, eski route tanımlama biçimlerini ve binlerce üçüncü parti paketle uyumluluğu koruyan bir katman üzerine kurulu. Hono ve Elysia ise sıfırdan, modern web standardı Request ve Response nesneleri üzerine, taşıması gereken hiçbir eski yük olmadan yazıldı. Daha ince bir soyutlama katmanı doğal olarak daha az iş yapıyor ve daha hızlı çalışıyor.</p>
+
+<p>Yani Express’in görece yavaşlığı bir tembellik veya kötü mühendislik meselesi değil. Geriye dönük uyumluluğun getirdiği bir bedel. Bu bedeli neden ödediğini bir sonraki bölümde anlatıyoruz.</p>
+
+<h2>Performans her şeyi belirlemez</h2>
+<p class="lede">Bir kütüphane seçerken sadece saniyedeki istek sayısına bakmak eksik bir yaklaşım.</p>
+
+<p>Express’i on beş yılı aşkın süredir ayakta tutan şey ham hız değil, sağladığı istikrar. Express’in sahip olduğu avantajlar şunlar.</p>
+
+<ul>
+  <li>Binlerce hazır middleware paketi ve devasa bir ekosistem</li>
+  <li>On beş yılı aşan, olgunlaşmış ve neredeyse hiç kırılmayan bir API</li>
+  <li>Sayısız üretim ortamında test edilmiş, güvenilirliği kanıtlanmış bir altyapı</li>
+  <li>İnternetteki en geniş dokümantasyon, eğitim ve topluluk desteği</li>
+  <li>Büyük şirketlerin uzun vadeli projelerinde tercih ettiği, düşük riskli bir seçim</li>
+</ul>
+
+<p>Geriye dönük uyumluluk aslında bir zayıflık değil, bir özellik. Beş yıl önce yazılmış bir Express projesi bugün hâlâ küçük değişikliklerle çalışabiliyor. Yeni ve daha hızlı bir framework seçtiğinde bu garantiyi her zaman bulamazsın. Hono ve Elysia harika araçlar, ama henüz Express kadar uzun bir olgunluk sınavından geçmediler.</p>
+
+<blockquote><p>Bir proje beş, on yıl boyunca bakım isteyecekse, saniyedeki birkaç bin istek farkından çok daha önemli olan şey o kütüphanenin beş yıl sonra hâlâ sorunsuz çalışıp çalışmayacağı.</p></blockquote>
+
+<h2>Peki Express kötü mü, hiç de değil</h2>
+<p class="lede">Şimdiye kadar Hono ve Elysia’nın öne çıktığı noktalara baktık. Madalyonun diğer yüzüne bakalım.</p>
+
+<div class="chart-card" id="chartMemory"></div>
+
+<p>Bellek tarafında Express, Hono’ya çok yakın ve Elysia’nın oldukça gerisinde kalıyor. Daha doğrusu Elysia çok daha fazla bellek tüketiyor, Express’in yaklaşık yüzde altmış fazlası.</p>
+
+<div class="chart-card" id="chartStartup"></div>
+
+<p>Başlangıç süresinde Express 4, Hono’nun hemen arkasında ikinci sırada yer alıyor ve Elysia’yı üç buçuk kattan fazla bir farkla geride bırakıyor. Elysia aslında Bun için tasarlanmış bir framework ve Node üzerinde bir uyumluluk katmanı üzerinden çalışıyor. Bu da hem başlangıç süresine hem bellek kullanımına yansıyor.</p>
+
+<p>CPU kullanımına gelirsek, dört framework de yüzde 98 ile yüzde 101 arasında, aralarında pratikte anlamlı bir fark yok, hepsi tek çekirdeği benzer oranda kullanıyor. Gecikme tarafında Express, Hono ve Elysia’nın gerisinde kalıyor ama p99 gecikmesi Node 26’da 6 milisaniyenin altında. Gerçek dünyada bir API çağrısının toplam süresi genelde veritabanı sorguları, ağ gecikmesi ve dış servis çağrıları tarafından belirlenir, framework’ün eklediği birkaç milisaniyelik fark çoğu üretim senaryosunda gözle görülür bir etki yaratmaz.</p>
+
+<p>Son olarak, Express 4 ile Express 5 arasındaki fark da dikkat çekici derecede küçük ve tutarsız. Bazı Node sürümlerinde Express 4 biraz önde, Node 24’te ise Express 5 öne çıkıyor. Bu da gösteriyor ki hangi Express sürümünü seçtiğin performans açısından belirleyici bir faktör değil.</p>
+
+<h2>Sonuç</h2>
+
+<p>Express uygulaman yavaş çalışıyorsa, framework değiştirmeyi düşünmeden önce Node sürümüne bak. Node 18, 20 ve 22’den Node 24 veya 26’ya geçmek, hiçbir kod değişikliği yapmadan performansı yaklaşık iki buçuk kat artırabiliyor. Bu, framework değiştirmekten çok daha ucuz ve çok daha az riskli bir çözüm.</p>
+
+<p>Hono ve Elysia gibi modern framework’ler gerçekten hızlı ve gerçekten iyi tasarlanmış araçlar. Ham performans önceliğinse ve proje kısa ömürlü veya küçük ölçekliyse harika seçimler olabilirler.</p>
+
+<p><strong>Ama Express hâlâ gecikme, bellek kullanımı, CPU kullanımı ve başlangıç süresinde son derece rekabetçi bir konumda duruyor.</strong> Üstüne on beş yılı aşkın olgunluk, devasa bir ekosistem ve eşi benzeri olmayan bir uzun vadeli destek geçmişi sunuyor. Uzun ömürlü, ekip değişimlerine dayanıklı ve bakımı kolay bir proje inşa ediyorsan Express hâlâ piyasadaki en sağlıklı seçim.</p>
+  <p class="colophon">Express 4.22.2 ve Express 5.2.1, Node.js 18.20.8, 20.20.2, 22.23.1, 24.18.0 ve 26.5.0, Hono 4.12.32 ve Elysia 1.4.29 ile ölçüldü. Tüm testler tek bir 2 çekirdekli sunucuda, istemci ve sunucu aynı makinede çalışacak şekilde yapıldı.</p>
+  </article>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+const DATA = [
+  {
+    "nodeMajor": 18,
+    "nodeFullVersion": "18.20.8",
+    "startupMs": 206,
+    "idleRssMB": 53.046875,
+    "rps": 3769,
+    "latencyMs": {
+      "p50": 5.105007,
+      "p95": 9.422661,
+      "p99": 13.474368
+    },
+    "errorRatePct": 0,
+    "totalRequests": 207261,
+    "avgRssMB": 92.2676997481685,
+    "maxRssMB": 93.32421875,
+    "avgCpuPct": 104.28540473874881,
+    "maxCpuPct": 125.0317204300136,
+    "variant": "express4"
+  },
+  {
+    "nodeMajor": 18,
+    "nodeFullVersion": "18.20.8",
+    "startupMs": 229,
+    "idleRssMB": 53.0234375,
+    "rps": 3233.55,
+    "latencyMs": {
+      "p50": 6.061685,
+      "p95": 11.432329,
+      "p99": 15.217487
+    },
+    "errorRatePct": 0,
+    "totalRequests": 177819,
+    "avgRssMB": 94.53275792738971,
+    "maxRssMB": 95.23046875,
+    "avgCpuPct": 106.36409406299578,
+    "maxCpuPct": 119.93215957034262,
+    "variant": "express5"
+  },
+  {
+    "nodeMajor": 20,
+    "nodeFullVersion": "20.20.2",
+    "startupMs": 185,
+    "idleRssMB": 52.4140625,
+    "rps": 3963.55,
+    "latencyMs": {
+      "p50": 4.608979,
+      "p95": 8.950287,
+      "p99": 12.865249
+    },
+    "errorRatePct": 0,
+    "totalRequests": 217968,
+    "avgRssMB": 94.60440991300366,
+    "maxRssMB": 95.2265625,
+    "avgCpuPct": 105.4792005392296,
+    "maxCpuPct": 116.34951279847625,
+    "variant": "express4"
+  },
+  {
+    "nodeMajor": 20,
+    "nodeFullVersion": "20.20.2",
+    "startupMs": 200,
+    "idleRssMB": 53.52734375,
+    "rps": 3594.8,
+    "latencyMs": {
+      "p50": 5.362478,
+      "p95": 10.166602,
+      "p99": 14.27263
+    },
+    "errorRatePct": 0,
+    "totalRequests": 197685,
+    "avgRssMB": 97.57134271978022,
+    "maxRssMB": 98.36328125,
+    "avgCpuPct": 106.5282751068305,
+    "maxCpuPct": 118.98080035716352,
+    "variant": "express5"
+  },
+  {
+    "nodeMajor": 22,
+    "nodeFullVersion": "22.23.1",
+    "startupMs": 180,
+    "idleRssMB": 60.80078125,
+    "rps": 3839.2,
+    "latencyMs": {
+      "p50": 5.198179,
+      "p95": 9.409376,
+      "p99": 13.009598
+    },
+    "errorRatePct": 0,
+    "totalRequests": 211124,
+    "avgRssMB": 103.51286764705883,
+    "maxRssMB": 103.515625,
+    "avgCpuPct": 105.93482144336707,
+    "maxCpuPct": 116.99483896844146,
+    "variant": "express4"
+  },
+  {
+    "nodeMajor": 22,
+    "nodeFullVersion": "22.23.1",
+    "startupMs": 171,
+    "idleRssMB": 61.9375,
+    "rps": 3264.04,
+    "latencyMs": {
+      "p50": 6.004268,
+      "p95": 11.188151,
+      "p99": 14.68964
+    },
+    "errorRatePct": 0,
+    "totalRequests": 179488,
+    "avgRssMB": 108.56580307904412,
+    "maxRssMB": 109.6328125,
+    "avgCpuPct": 106.67796346871688,
+    "maxCpuPct": 116.81740462015759,
+    "variant": "express5"
+  },
+  {
+    "nodeMajor": 24,
+    "nodeFullVersion": "24.18.0",
+    "startupMs": 184,
+    "idleRssMB": 65.4296875,
+    "rps": 8071.86,
+    "latencyMs": {
+      "p50": 2.449771,
+      "p95": 4.372477,
+      "p99": 6.119024
+    },
+    "errorRatePct": 0,
+    "totalRequests": 443919,
+    "avgRssMB": 96.89407835144928,
+    "maxRssMB": 99.01953125,
+    "avgCpuPct": 99.4857850430182,
+    "maxCpuPct": 112.4804048081269,
+    "variant": "express4"
+  },
+  {
+    "nodeMajor": 24,
+    "nodeFullVersion": "24.18.0",
+    "startupMs": 202,
+    "idleRssMB": 65.734375,
+    "rps": 8886.73,
+    "latencyMs": {
+      "p50": 1.974011,
+      "p95": 3.999809,
+      "p99": 5.703525
+    },
+    "errorRatePct": 0,
+    "totalRequests": 488745,
+    "avgRssMB": 94.0634907155797,
+    "maxRssMB": 96.16015625,
+    "avgCpuPct": 100.06936886868147,
+    "maxCpuPct": 111.3542066992506,
+    "variant": "express5"
+  },
+  {
+    "nodeMajor": 26,
+    "nodeFullVersion": "26.5.0",
+    "startupMs": 98,
+    "idleRssMB": 66.07421875,
+    "rps": 8338.62,
+    "latencyMs": {
+      "p50": 2.348212,
+      "p95": 4.269374,
+      "p99": 5.953163
+    },
+    "errorRatePct": 0,
+    "totalRequests": 458614,
+    "avgRssMB": 93.18810858242753,
+    "maxRssMB": 97.6328125,
+    "avgCpuPct": 100.50634529982298,
+    "maxCpuPct": 120.7031984263278,
+    "variant": "express4"
+  },
+  {
+    "nodeMajor": 26,
+    "nodeFullVersion": "26.5.0",
+    "startupMs": 184,
+    "idleRssMB": 65.99609375,
+    "rps": 8316.59,
+    "latencyMs": {
+      "p50": 2.376484,
+      "p95": 4.240491,
+      "p99": 5.809083
+    },
+    "errorRatePct": 0,
+    "totalRequests": 457359,
+    "avgRssMB": 95.29745738636363,
+    "maxRssMB": 100.24609375,
+    "avgCpuPct": 100.84890620372555,
+    "maxCpuPct": 122.00699132618134,
+    "variant": "express5"
+  },
+  {
+    "nodeMajor": 26,
+    "nodeFullVersion": "26.5.0",
+    "variant": "hono",
+    "startupMs": 74,
+    "idleRssMB": 61.37890625,
+    "rps": 15620.66,
+    "latencyMs": {
+      "p50": 1.234819,
+      "p95": 2.307175,
+      "p99": 3.26742
+    },
+    "errorRatePct": 0,
+    "totalRequests": 859124,
+    "avgRssMB": 87.64654017857143,
+    "maxRssMB": 87.73046875,
+    "avgCpuPct": 97.7908138834968,
+    "maxCpuPct": 103.04472369318682
+  },
+  {
+    "nodeMajor": 26,
+    "nodeFullVersion": "26.5.0",
+    "variant": "elysia",
+    "startupMs": 346,
+    "idleRssMB": 78.6328125,
+    "rps": 12801.39,
+    "latencyMs": {
+      "p50": 1.450814,
+      "p95": 2.908679,
+      "p99": 4.539909
+    },
+    "errorRatePct": 0,
+    "totalRequests": 704088,
+    "avgRssMB": 150.13559059115522,
+    "maxRssMB": 153.83984375,
+    "avgCpuPct": 100.70141548029923,
+    "maxCpuPct": 116.97332736528574
+  }
+];
+
+const COLOR = { express4: 'var(--chart-blue)', express5: 'var(--chart-orange)', hono: 'var(--chart-aqua)', elysia: 'var(--chart-yellow)' };
+const NAME = { express4: 'Express 4', express5: 'Express 5', hono: 'Hono', elysia: 'Elysia' };
+
+function find(major, variant) {
+  return DATA.find(d => d.nodeMajor === major && d.variant === variant);
+}
+
+function niceMax(m) {
+  if (m <= 0) return 1;
+  const mag = Math.pow(10, Math.floor(Math.log10(m)));
+  const n = m / mag;
+  const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10;
+  return step * mag;
+}
+
+function renderChart(containerId, chartTitle, chartSub, getValue, decimals, unit, groups, legendVariants, locale) {
+  const container = document.getElementById(containerId);
+  const W = 640, H = 260;
+  const padL = 44, padR = 12, padT = 16, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const groupW = plotW / groups.length;
+  const gap = 3;
+  const maxBarsPerGroup = Math.max(...groups.map(g => g.bars.length));
+  const barW = Math.min(26, Math.floor((groupW - (maxBarsPerGroup - 1) * gap) / maxBarsPerGroup));
+  const emptyLabel = locale === 'tr' ? 'yok' : 'n/a';
+
+  function fmt(v, decimals) {
+    if (v === null || v === undefined) return emptyLabel;
+    return v.toLocaleString(locale === 'tr' ? 'tr-TR' : 'en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  }
+
+  let maxVal = 0;
+  groups.forEach(g => g.bars.forEach(({ record }) => {
+    if (record) maxVal = Math.max(maxVal, getValue(record));
+  }));
+  const yMax = niceMax(maxVal * 1.15);
+  const yTicks = 4;
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+
+  for (let i = 0; i <= yTicks; i++) {
+    const val = (yMax / yTicks) * i;
+    const y = padT + plotH - (val / yMax) * plotH;
+    svg += `<line x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" class="gridline" />`;
+    svg += `<text x="${padL - 8}" y="${y + 3}" text-anchor="end" class="axis-label">${fmt(val, val < 10 && val !== 0 ? 1 : 0)}</text>`;
+  }
+  svg += `<line x1="${padL}" x2="${W - padR}" y1="${padT + plotH}" y2="${padT + plotH}" class="baseline" />`;
+
+  groups.forEach((group) => {
+    const groupX = padL + groups.indexOf(group) * groupW + groupW / 2;
+    const totalBarsW = group.bars.length * barW + (group.bars.length - 1) * gap;
+    let x0 = groupX - totalBarsW / 2;
+
+    group.bars.forEach(({ variant, record }) => {
+      const val = record ? getValue(record) : 0;
+      const barH = (val / yMax) * plotH;
+      const y = padT + plotH - barH;
+      const label = record ? fmt(val, decimals) : emptyLabel;
+      svg += `<g class="bar-group" data-group="${group.label}" data-variant="${variant}" data-value="${label}" data-unit="${unit}">`;
+      svg += `<rect x="${x0}" y="${padT}" width="${barW}" height="${plotH}" fill="transparent" />`;
+      svg += `<rect class="fill-rect" x="${x0}" y="${y}" width="${barW}" height="${Math.max(barH, 1)}" rx="4" ry="4" fill="${COLOR[variant]}" />`;
+      svg += `<rect class="fill-rect" x="${x0}" y="${padT + plotH - 4}" width="${barW}" height="4" fill="${COLOR[variant]}" />`;
+      svg += `<text x="${x0 + barW / 2}" y="${y - 6}" text-anchor="middle" class="bar-label">${label}</text>`;
+      svg += `</g>`;
+      x0 += barW + gap;
+    });
+
+    svg += `<text x="${groupX}" y="${H - 8}" text-anchor="middle" class="axis-label">${group.label}</text>`;
+  });
+
+  svg += `</svg>`;
+
+  const legendHtml = `<div class="legend">${legendVariants.map(v =>
+    `<div class="item"><span class="swatch" style="background:${COLOR[v]}"></span>${NAME[v]}</div>`
+  ).join('')}</div>`;
+
+  container.innerHTML = `<p class="chart-title">${chartTitle}</p><p class="chart-sub">${chartSub}</p>${svg}${legendHtml}`;
+
+  const tip = document.createElement('div');
+  tip.className = 'tooltip';
+  document.body.appendChild(tip);
+  container.querySelectorAll('.bar-group').forEach(g => {
+    const variant = g.getAttribute('data-variant');
+    const html = `<span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${COLOR[variant]};margin-right:6px;vertical-align:middle"></span>` +
+      `${NAME[variant]} · ${g.getAttribute('data-group')}: ${g.getAttribute('data-value')}${g.getAttribute('data-unit')}`;
+    g.addEventListener('mousemove', e => {
+      tip.innerHTML = html;
+      tip.style.left = (e.pageX + 12) + 'px';
+      tip.style.top = (e.pageY + 12) + 'px';
+      tip.style.opacity = '1';
+    });
+    g.addEventListener('mouseleave', () => { tip.style.opacity = '0'; });
+  });
+}
+
+const NODE_VERSIONS = [18, 20, 22, 24, 26];
+
+const expressGroups = NODE_VERSIONS.map(major => ({
+  label: `Node ${major}`,
+  bars: ['express4', 'express5'].map(variant => ({ variant, record: find(major, variant) })),
+}));
+
+const node26Group = [{
+  label: 'Node 26',
+  bars: ['express4', 'express5', 'hono', 'elysia'].map(variant => ({ variant, record: find(26, variant) })),
+}];
+
+const avgRps = majors => {
+  const rows = DATA.filter(d => majors.includes(d.nodeMajor) && (d.variant === 'express4' || d.variant === 'express5'));
+  return rows.reduce((a, d) => a + d.rps, 0) / rows.length;
+};
+const jump = avgRps([24, 26]) / avgRps([18, 20, 22]);
+
+renderChart('chartRps', "Node sürümüne göre saniyedeki istek sayısı", "İstek / saniye, yüksek daha iyi",
+  d => d.rps, 0, '', expressGroups, ['express4', 'express5'], "tr");
+
+renderChart('chartLatency', "Node sürümüne göre p99 gecikme", "Milisaniye, düşük daha iyi",
+  d => d.latencyMs.p99, 2, ' ms', expressGroups, ['express4', 'express5'], "tr");
+
+renderChart('chartFrameworkRps', "Node 26’da framework karşılaştırması", "Saniyedeki istek sayısı, yüksek daha iyi",
+  d => d.rps, 0, '', node26Group, ['express4', 'express5', 'hono', 'elysia'], "tr");
+
+renderChart('chartMemory', "Node 26’da yük altında ortalama bellek", "Megabayt, düşük daha iyi",
+  d => d.avgRssMB, 1, ' MB', node26Group, ['express4', 'express5', 'hono', 'elysia'], "tr");
+
+renderChart('chartStartup', "Node 26’da başlangıç süresi", "Milisaniye, düşük daha iyi",
+  d => d.startupMs, 0, ' ms', node26Group, ['express4', 'express5', 'hono', 'elysia'], "tr");
+
+document.getElementById('heroStat').textContent = jump.toFixed(1).replace('.', ',') + '×';
+</script>
+
+</body>
+</html>
