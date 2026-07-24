@@ -20,7 +20,7 @@
 
 <meta property="og:type" content="article">
 <meta property="og:title" content="Express gerçekten yavaş mı">
-<meta property="og:description" content="Kod değiştirmeden Node 18’den 26’ya geçince Express ~2.3× hızlanıyor.">
+<meta property="og:description" content="Kod değiştirmeden Node 18’den 26’ya geçince Express ~2.5× hızlanıyor.">
 <meta property="og:url" content="https://muratkirazkaya.com/blogs/express-gercekten-yavas-mi.html">
 
 <link rel="canonical" href="https://muratkirazkaya.com/blogs/express-gercekten-yavas-mi.html">
@@ -113,6 +113,11 @@
   }
   .hero-stat .cap {
     font-size: 14px; color: var(--ink2); line-height: 1.5; max-width: 320px;
+  }
+
+  .post-main .correction-note {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    line-height: 1.5; margin-bottom: 1.2em;
   }
 
   .post-main { padding-bottom: 72px; max-width: 640px; }
@@ -248,12 +253,14 @@
     <h1 class="post-title">Express gerçekten yavaş mı</h1>
     <p class="post-lead">Node.js × Express performans ölçümü</p>
     <div class="hero-stat">
-      <div class="num" id="heroStat">2.3×</div>
+      <div class="num" id="heroStat">2,5×</div>
       <div class="cap">Kodda tek satır değişmeden, sadece Node 18’den 26’ya geçilince Express’in saniyede işlediği istek sayısı bu kadar artıyor.</div>
     </div>
   </header>
 
   <article class="post-main">
+<p class="correction-note">Düzeltme: yazının önceki halinde yanlışlıkla ~2,3× yazılmıştı. Doğru rakam ~2,5×.</p>
+
 <p>Express hakkında en çok duyduğumuz şikayetlerden biri şu cümle. Express yavaş, Hono kullan, Elysia kullan, Fastify kullan. Bu iddiayı gerçek verilerle test etmek için Express 4.22.2 ve Express 5.2.1 sürümlerini Node.js 18, 20, 22, 24 ve 26 üzerinde ölçtük. Üstüne Node 26’da Hono 4.12.32 ve Elysia 1.4.29 ile de karşılaştırdık.</p>
 
 <p>Sonuç beklediğimizden farklı çıktı.</p>
@@ -691,12 +698,6 @@ const node26Group = [{
   bars: ['express4', 'express5', 'hono', 'elysia'].map(variant => ({ variant, record: find(26, variant) })),
 }];
 
-const avgRps = majors => {
-  const rows = DATA.filter(d => majors.includes(d.nodeMajor) && (d.variant === 'express4' || d.variant === 'express5'));
-  return rows.reduce((a, d) => a + d.rps, 0) / rows.length;
-};
-const jump = avgRps([24, 26]) / avgRps([18, 20, 22]);
-
 renderChart('chartRps', "Node sürümüne göre saniyedeki istek sayısı", "İstek / saniye, yüksek daha iyi",
   d => d.rps, 0, '', expressGroups, ['express4', 'express5'], "tr");
 
@@ -712,7 +713,7 @@ renderChart('chartMemory', "Node 26’da yük altında ortalama bellek", "Megaba
 renderChart('chartStartup', "Node 26’da başlangıç süresi", "Milisaniye, düşük daha iyi",
   d => d.startupMs, 0, ' ms', node26Group, ['express4', 'express5', 'hono', 'elysia'], "tr");
 
-document.getElementById('heroStat').textContent = jump.toFixed(1).replace('.', ',') + '×';
+document.getElementById('heroStat').textContent = '2,5×';
 </script>
 
 </body>
