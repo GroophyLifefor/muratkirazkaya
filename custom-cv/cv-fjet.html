@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>CV · Murat Kirazkaya</title>
+<style>
+  @page { size: A4; margin: 0; }
+
+  *, *::before, *::after { box-sizing: border-box; }
+
+  html {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background: #c8c8c8;
+  }
+
+  body {
+    margin: 0;
+    padding: 10px 0;
+    color: #1a1a1a;
+    font: 400 9pt/1.4 'Segoe UI', system-ui, sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .page {
+    width: 210mm;
+    height: 297mm;
+    padding: 36px 56px;
+    background: #fff;
+    overflow: hidden;
+    page-break-after: always;
+  }
+
+  .page:last-child {
+    page-break-after: auto;
+  }
+
+  @media print {
+    html { background: #fff; }
+    body {
+      padding: 0;
+      gap: 0;
+      background: #fff;
+      display: block;
+    }
+    .page {
+      margin: 0;
+      page-break-after: always;
+      overflow: visible;
+      box-shadow: none;
+    }
+  }
+
+  h1 {
+    font-size: 22pt;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    margin: 0 0 2pt;
+    color: #000;
+  }
+
+  .role {
+    font-size: 9.5pt;
+    color: #333;
+    margin: 0 0 4pt;
+    font-weight: 600;
+  }
+
+  .contact {
+    font-size: 8.5pt;
+    color: #333;
+    margin: 0 0 12pt;
+    line-height: 1.5;
+  }
+
+  .contact a {
+    color: #1a1a1a;
+    text-decoration: none;
+  }
+
+  h2 {
+    font-size: 10pt;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1.5pt solid #1a1a1a;
+    padding-bottom: 3pt;
+    margin: 12pt 0 7pt;
+    color: #000;
+  }
+
+  h2:first-of-type { margin-top: 0; }
+
+  p { margin: 0 0 7pt; }
+
+  .summary {
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  .section-item { margin-bottom: 8pt; }
+
+  .item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 2pt;
+  }
+
+  .item-title {
+    font-weight: 600;
+    font-size: 9.5pt;
+    color: #000;
+  }
+
+  .item-date {
+    font-size: 8pt;
+    color: #555;
+    white-space: nowrap;
+  }
+
+  .item-subtitle {
+    font-size: 8.5pt;
+    color: #444;
+    margin-bottom: 3pt;
+  }
+
+  .item-desc {
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.45;
+  }
+
+  ul { margin: 0; padding: 0 0 0 16pt; }
+
+  li {
+    margin-bottom: 3pt;
+    font-size: 8.5pt;
+    line-height: 1.4;
+  }
+
+  .skills-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4pt 10pt;
+    font-size: 8.5pt;
+  }
+
+  .skill-label {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .skill-items { color: #333; }
+
+  .compact-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .compact-list li { margin-bottom: 5pt; }
+
+  .project-name {
+    font-weight: 600;
+    color: #000;
+  }
+
+  .compact-list a,
+  .item-subtitle a,
+  .contact a {
+    color: #1155cc;
+    text-decoration: none;
+  }
+
+  .rank-grid {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 2pt 10pt;
+    font-size: 8.5pt;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 6pt;
+  }
+
+  .page-header {
+    font-size: 8.5pt;
+    color: #666;
+    margin-bottom: 14pt;
+    padding-bottom: 6pt;
+    border-bottom: 1pt solid #e0e0e0;
+  }
+
+  .page-header-name {
+    font-weight: 600;
+    color: #000;
+  }
+
+  @media (max-width: 850px) {
+    body { padding: 0; background: #1a1a1a; }
+    .page {
+      width: 100%;
+      height: auto;
+      padding: 24px 20px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1 -->
+<div class="page">
+
+<h1>Murat Kirazkaya</h1>
+<div class="role">Full Stack Geliştirici · Next.js App Router, TypeScript, PostgreSQL, Node.js</div>
+<div class="contact">
+  İstanbul, Türkiye
+  · <a href="mailto:muratkirazkaya0@gmail.com">muratkirazkaya0@gmail.com</a>
+  · <a href="https://muratkirazkaya.com">muratkirazkaya.com</a><br>
+  <a href="https://github.com/GroophyLifefor">github.com/GroophyLifefor</a>
+  · <a href="https://www.linkedin.com/in/muratkirazkaya">linkedin.com/in/muratkirazkaya</a>
+</div>
+
+<h2>Özet</h2>
+<p class="summary">
+  Next.js App Router ve TypeScript ile production seviyesinde ürünler geliştiren full stack geliştiriciyim. PostgreSQL
+  üzerinde veri modelleme, ISR ile veriden otomatik sayfa üretimi ve programatik SEO, i18n, Redis önbellek, üçüncü parti
+  API entegrasyonları ve API öncelikli mimari günlük çalıştığım alanlar. Ürettiğim sistemleri Hetzner ve özel VPS
+  sunucularda kendim kuruyor, deploy ediyor ve canlı olarak yönetiyorum. Halen yayında olan işlerim ordu.dev,
+  dijitalstaj.online ve tuaastrohackathon.com adreslerinden, Sportyluxe uygulaması ise App Store ve Play Store
+  üzerinden incelenebilir. Express.js organizasyonunda triage
+  üyesi ve Performans Çalışma Grubu üyesiyim, kullandığım Node.js yığınının bakımına da katkı veriyorum.
+  Açık olmak adına, çok kiracılı (multi tenant) bir ürünü sıfırdan canlıya almadım, Plesk, WordPress ve WhatsApp Cloud
+  API tarafında da deneyimim yok. Mimarisine ve altyapısına hakim olduğum için bunlar benim için öğrenme süresi kısa
+  konular, ilerlemeye engel değiller.
+</p>
+
+<h2>Deneyim</h2>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Teknik Operasyonlar, Valentura</span>
+    <span class="item-date">Eyl 2024 → Eyl 2025</span>
+  </div>
+  <div class="item-subtitle">Uzaktan · Tam Zamanlı</div>
+  <div class="item-desc">Production sistemlerinin, backend altyapısının, izleme ve deploy hatlarının işletilmesinden sorumluydum. Şirketteki tüm Next.js projeleri App Router ile, tüm JavaScript projeleri TypeScript ile yürütüldü. VPS tabanlı ortamlarda sürüm çıkma, hata takibi ve canlı site yönetimi rutin işlerimdi. Uzaktan ve asenkron çalışan çapraz fonksiyonlu ekiplerde Git iş akışıyla ilerledim.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Frontend Geliştirici, Valentura</span>
+    <span class="item-date">Mar 2024 → Eyl 2024</span>
+  </div>
+  <div class="item-subtitle">Uzaktan · Staj</div>
+  <div class="item-desc">Next.js ve TypeScript ile arayüz geliştirdim. Dallanma stratejileri, kod inceleme ve önizleme ortamlarıyla ekip içinde işbirliği yaptım.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Web Geliştirici, Collective Idea TR</span>
+    <span class="item-date">Oca 2024 → Mar 2024</span>
+  </div>
+  <div class="item-subtitle">İstanbul · Hibrit · Staj</div>
+  <div class="item-desc">Modern JavaScript çerçeveleriyle müşteri projeleri teslim edildi, canlı yayın süreçlerinde görev aldım.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Frontend Geliştirici, Insider</span>
+    <span class="item-date">Tem 2023 → Eyl 2023</span>
+  </div>
+  <div class="item-subtitle">İstanbul · Ofiste · Staj</div>
+  <div class="item-desc">Altı aylık başvuru sürecinin ardından yüz yüze aşamaya seçildim. Kurumsal ölçekli web uygulamalarında ekip içinde çalıştım.</div>
+</div>
+
+<h2>Eğitim</h2>
+<div class="section-item" style="margin-bottom: 4pt">
+  <div class="item-header">
+    <span class="item-title">Ordu Üniversitesi</span>
+    <span class="item-date">Ağu 2024 → Haz 2026</span>
+  </div>
+  <div class="item-subtitle">Bilgisayar Programcılığı Ön Lisans · GPA 3.57 · Bölüm Birincisi</div>
+  <div class="item-desc">İlgili dersler: Veritabanı Sistemleri (SQL, tetikleyiciler, fonksiyonlar), Web Programlama, Nesne Yönelimli Programlama, Sunucu İşletim Sistemleri, Ağ Temelleri, Sistem Analizi ve Tasarımı.</div>
+</div>
+
+<h2>Seçili Projeler</h2>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Ordu Bilişim Topluluğu · canlı</span>
+    <span class="item-date">2024 → devam</span>
+  </div>
+  <div class="item-subtitle">Next.js App Router · TypeScript · PostgreSQL · Redis · SEO · Hetzner VPS · <a href="https://ordu.dev">ordu.dev</a></div>
+  <div class="item-desc">Kurucusu olduğum topluluğun tüm platformunu tek başıma geliştirdim ve işletiyorum. Tüm SEO server side yönetiliyor, structured data ile zenginleştirildi, blog sayfaları bir CMS'e bağlı olarak programatik SEO'suyla birlikte otomatik üretiliyor, site haritası veriden besleniyor. PostgreSQL üzerinde kendi yazdığım migration yönetimi, Redis önbellek katmanı, kendi yazdığım zamanlanmış iş çalıştırıcısı ve Web Push (VAPID) bildirim sistemi. Organik trafik son 6 ayda 24.5K ziyaretçi, 31.2K ziyaret ve 39.3K sayfa görüntüleme. Sunucu kurulumu, deploy hattı, alan adı ve izleme tarafı bana ait.</div>
+</div>
+
+<div class="section-item">
+  <div class="item-header">
+    <span class="item-title">Dijital Staj · canlı</span>
+    <span class="item-date">2025 → devam</span>
+  </div>
+  <div class="item-subtitle">Next.js App Router · TypeScript · PostgreSQL · DrizzleORM · VPS · <a href="https://dijitalstaj.online">dijitalstaj.online</a></div>
+  <div class="item-desc">Çok üniversiteli staj yönetim sistemi. Dört rollü RBAC ile dokuz durumlu başvuru yaşam döngüsü, alan düzeyinde farklarla JSONB denetim kaydı, ilişkisel veri modeli ve indeksleme çalışması. Devlet belgeleri için PDF form otomasyonu, eski ASP.NET sistemiyle entegrasyon, belge depolama için MinIO. Ordu Üniversitesi tarafından aktif olarak kullanılıyor, gerçek kullanıcılarla production ortamında çalışıyor.</div>
+</div>
+
+</div>
+
+<!-- PAGE 2 -->
+<div class="page">
+
+<div class="page-header">
+  <span class="page-header-name">Murat Kirazkaya</span> · Sayfa 2
+</div>
+
+<ul class="compact-list">
+  <li><span class="project-name">TUA Astro Hackathon Platformu</span> · Next.js App Router, TypeScript, Astro, i18n (TR ve EN), MongoDB, AWS · <a href="https://tuaastrohackathon.com/tr">tuaastrohackathon.com</a>. Türkiye Uzay Ajansı için tam yığın etkinlik platformu, Sanayi ve Teknoloji Bakanlığı tarafından kabul edildi. Zod şemalarından otomatik OpenAPI üretimi, uç nokta otomatik keşfi ve dinamik rota kaydıyla API öncelikli kuruldu. Çok dilli arayüz ve kayıt penceresindeki yoğun eşzamanlı yük için tasarlandı.</li>
+  <li><span class="project-name">Sportyluxe GYM</span> · canlı · TypeScript backend, müşteri başına ayrı veritabanı, VPS · <a href="https://apps.apple.com/us/app/sportyluxe/id6752954417">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.sportyluxe.club">Play Store</a>. 550+ üyeli spor salonunun tüm operasyonel backend'i, dört kişilik ekipte backend benim sorumluluğumdaydı. Firebase FCM v1 protokol düzeyinde uygulama ve token rotasyonu. Günlük 15K+ istek, kendi sunucumda yüzde 99.9 uptime.</li>
+  <li><span class="project-name">OGİD Mobil Uygulama</span> · mağaza yayını bekleniyor · TypeScript backend, MongoDB, kendi VPS altyapım. Dernek yönetimi için aidat takibi, kampanya ve satın alım akışları. Mobil ekiple çapraz fonksiyonlu çalışıldı, API sözleşmesi önce tasarlandı.</li>
+  <li><span class="project-name">Yelix</span> · Deno ve Hono üzerine kurulu açık kaynak TypeScript çerçevesi. Tip çıkarımı ve şemadan otomatik OpenAPI üretimi çekirdek özellikleri. 1Fikir1Türkiye kapsamında Altın Madalya (Ulusal).</li>
+</ul>
+
+<h2>Teknik Beceriler</h2>
+
+<div class="skills-grid">
+  <span class="skill-label">Geliştirme:</span>
+  <span class="skill-items">Next.js (App Router, ISR, SSR, CSR), React, TypeScript, Astro, Tailwind CSS, i18n çok dilli arayüz, server side programatik SEO, structured data ve site haritası üretimi, Node.js, Deno, Express.js (triage ve performans ekibi üyesi), Hono, REST API, OpenAPI şema önceliği, API öncelikli tasarım, kimlik doğrulama ve yetkilendirme</span>
+
+  <span class="skill-label">Veri:</span>
+  <span class="skill-items">PostgreSQL (veri modelleme, migration yönetimi, indeksleme, JSONB, ilişkisel şema tasarımı), DrizzleORM, Redis (önbellek ve kuyruk), MongoDB, MinIO S3</span>
+
+  <span class="skill-label">Altyapı:</span>
+  <span class="skill-items">Hetzner ve özel VPS tam yönetimi, Linux sunucu kurulumu, Nginx ve ters vekil, SSL ve alan adı yönetimi, Docker, CI/CD, Sentry ile izleme, yedekleme, müşteri başına ayrı veritabanı ile izolasyon, denetim kaydıyla RBAC, JWT ve yenileme rotasyonu, hız sınırlama, Twilio, Resend, Firebase FCM v1, OpenRouter, Google Maps, Mapbox, Polar Payment, Google Auth, Web Push (VAPID), Contentful CMS</span>
+
+  <span class="skill-label">Çalışma:</span>
+  <span class="skill-items">Git iş akışı, kod inceleme, birim ve entegrasyon testleri, Çevik süreçler, uzaktan ve asenkron işbirliği, teknik dokümantasyon</span>
+</div>
+
+<h2>Açık Kaynak Katkıları</h2>
+
+<div class="rank-grid">
+  <span><strong>#68</strong> / 300.000</span><span>Türkiye'deki geliştiriciler arasında açık kaynak katkı sıralaması (gitista.com)</span>
+  <span><strong>#10</strong> / 754</span><span>Express.js organizasyonu katkıcı sıralaması (Tem 2025 → Tem 2026)</span>
+</div>
+
+<ul class="compact-list">
+  <li><span class="project-name">Express.js Organizasyonu</span> · Triage üyesi ve Performans Çalışma Grubu üyesi. Express, jshttp ve pillarjs ekosistemlerindeki temel paketlerin bakımına katkı veriyorum, Node.js HTTP yığınında paket düzeyinde çalışıyorum.</li>
+  <li><span class="project-name">Deno Runtime</span> · CLI tarafına minimal proje başlatma özelliği katkısı, çekirdek ekip tarafından 24 saat içinde birleştirildi.</li>
+</ul>
+
+<h2>Liderlik ve Topluluk</h2>
+
+<ul class="compact-list">
+  <li><span class="project-name">Ordu Bilişim Topluluğu</span> · Bölgesel geliştirici topluluğunu kurdum ve platformunu geliştirip işletiyorum.</li>
+  <li><span class="project-name">Winterbytes 2026 ve SummerBytes 2026</span> · Node.js TSC, IBM ve Trendyol konuşmacılarıyla toplam 330+ katılımcılı teknik kamplar düzenledim.</li>
+</ul>
+
+<h2>Hızlı Uyum Alanları</h2>
+
+<ul class="compact-list">
+  <li><span class="project-name">Prisma</span> · Production ortamında DrizzleORM ve yerel PostgreSQL istemcisiyle şema ve migration yönettim. Prisma aynı şema odaklı yaklaşım, geçiş birkaç günlük konu.</li>
+  <li><span class="project-name">RTL ve binlerce sayfa ölçeği</span> · Çok dilli arayüzü ve veriden otomatik sayfa üretimini canlı üründe çalıştırdım. RTL düzenini ve binlerce sayfalık ölçeği henüz production ortamına almadım.</li>
+  <li><span class="project-name">Çok kiracılı (multi tenant) mimari</span> · Sportyluxe'te müşteri başına ayrı veritabanıyla çalıştım, tam çok kiracılı bir ürünü sıfırdan canlıya almadım. Kurgusunu tasarlayabilirim.</li>
+  <li><span class="project-name">WhatsApp Cloud API ve uçuş verisi</span> · Twilio, Polar Payment, Firebase ve Google servislerinde yaptığım entegrasyonlar aynı kalıpta ilerliyor, bu iki sağlayıcı hızlı öğrenilir.</li>
+  <li><span class="project-name">Plesk ve WordPress</span> · Sunucularımı panel kullanmadan yönetiyorum, altyapı tarafına hakim olduğum için mevcut sitelerin bakımını devralmak sorun olmaz.</li>
+</ul>
+
+<h2>Diller</h2>
+
+<div class="skills-grid">
+  <span class="skill-label">Türkçe:</span>
+  <span class="skill-items">Anadil</span>
+
+  <span class="skill-label">İngilizce:</span>
+  <span class="skill-items">B2 (Üst Orta Seviye)</span>
+</div>
+
+</div>
+
+</body>
+</html>

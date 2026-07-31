@@ -6,8 +6,38 @@
     <changefreq>daily</changefreq>
   </url>
   <url>
-    <loc>https://muratkirazkaya.com/unides.html</loc>
+    <loc>https://muratkirazkaya.com/cv</loc>
+    <priority>1.0</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://muratkirazkaya.com/cv-tr</loc>
+    <priority>1.0</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://muratkirazkaya.com/blogs/cluster-and-worker-threads-on-express.html</loc>
     <priority>0.8</priority>
-    <changefreq>weekly</changefreq>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://muratkirazkaya.com/blogs/express-cluster-ve-worker-threads.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://muratkirazkaya.com/blogs/is-express-really-slow.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://muratkirazkaya.com/blogs/express-gercekten-yavas-mi.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://muratkirazkaya.com/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html</loc>
+    <priority>0.8</priority>
+    <changefreq>monthly</changefreq>
   </url>
 </urlset>

@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cluster and Worker threads on Express — Murat Kirazkaya</title>
+<meta name="description" content="Watch what happens to an Express event loop when a heavy CPU request arrives, then see how cluster and worker threads fix it. Measured on a 2-core VPS.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Cluster and Worker threads on Express">
+<meta property="og:description" content="Four concurrency setups, one Express app: the light endpoint went from 2.9 to 81.8 requests per second while heavy CPU work ran.">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/cluster-and-worker-threads-on-express.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/cluster-and-worker-threads-on-express.html">
+<link rel="alternate" hreflang="tr" href="/blogs/express-cluster-ve-worker-threads.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+    --chart-blue: #2a6bb0;
+    --chart-orange: #c94a1e;
+    --chart-aqua: #1a5c3a;
+    --chart-yellow: #a67c1a;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .lang-switch {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; margin-left: auto;
+    padding: 20px 0 0;
+  }
+  .lang-switch:hover { color: var(--ink); }
+  .post-top { display: flex; align-items: baseline; gap: 16px; }
+
+  .post-hero { padding: 40px 0 24px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-lead {
+    font-family: var(--serif); font-size: clamp(16px, 2.8vw, 20px);
+    color: var(--ink2); line-height: 1.45; max-width: 640px;
+    padding-left: 18px; border-left: 3px solid var(--accent);
+  }
+
+  /* hero animation */
+  .anim-stage { margin: 30px 0 8px; border: 1px solid var(--line); background: var(--surface2); padding: 14px 14px 10px; }
+  .anim-wrap { position: relative; }
+  .anim-btn-overlay {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: rgba(14,13,12,0.28); border: 0; cursor: pointer; z-index: 5;
+  }
+  .anim-btn-overlay.hidden { display: none; }
+  .anim-btn-overlay span {
+    display: flex; align-items: center; justify-content: center;
+    width: 68px; height: 68px; border-radius: 50%;
+    background: var(--ink); color: var(--surface);
+    line-height: 0;
+    box-shadow: 0 6px 24px rgba(14,13,12,0.35); transition: background 0.15s, transform 0.1s;
+  }
+  .anim-btn-overlay span svg { width: 22px; height: 22px; display: block; }
+  .anim-btn-overlay:hover span { background: var(--accent); transform: scale(1.04); }
+  .anim-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 6px; }
+  .anim-title { font-size: 13px; font-weight: 500; color: var(--ink); }
+  .anim-controls { display: flex; gap: 8px; align-items: center; }
+  .anim-btn {
+    font-family: var(--mono); font-size: 11px; padding: 4px 12px;
+    background: var(--ink); color: var(--surface); border: 0; cursor: pointer;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .anim-btn:hover { background: var(--accent); }
+  .anim-btn.ghost { background: transparent; color: var(--ink2); border: 1px solid var(--line); }
+  .anim-btn.ghost:hover { border-color: var(--ink); color: var(--ink); }
+  .anim-cap { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin-top: 6px; line-height: 1.5; }
+  .anim svg { width: 100%; height: auto; display: block; }
+  .anim .legend { display: flex; gap: 14px; flex-wrap: wrap; margin: 8px 0 4px; font-size: 11.5px; color: var(--ink2); }
+  .anim .legend .item { display: flex; align-items: center; gap: 5px; }
+  .anim .legend .swatch { width: 9px; height: 9px; display: inline-block; border-radius: 2px; }
+
+  /* stat strip */
+  .stat-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 24px 0 4px; }
+  .stat { border-top: 2px solid var(--ink); padding-top: 10px; }
+  .stat .num { font-family: var(--mono); font-size: clamp(1.6rem, 4vw, 2.2rem); font-weight: 500; color: var(--accent); line-height: 1; }
+  .stat .lab { font-size: 12px; color: var(--ink3); margin-top: 5px; line-height: 1.45; }
+  @media (max-width: 600px) { .stat-strip { grid-template-columns: 1fr; } }
+
+  .post-main { padding-bottom: 72px; max-width: 640px; }
+
+  .post-main h2 {
+    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 400; color: var(--ink); margin: 48px 0 8px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .post-main h2:first-of-type { margin-top: 8px; }
+  .post-main h3 {
+    font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--ink);
+    margin: 32px 0 6px;
+  }
+  .post-main .lede {
+    font-size: 14px; color: var(--ink3); margin-bottom: 1.2em; line-height: 1.55;
+  }
+
+  .post-main p {
+    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
+  }
+  .post-main p strong { color: var(--ink); font-weight: 500; }
+  .post-main a {
+    color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .post-main a:hover { color: var(--ink); }
+
+  .post-main ul {
+    margin: 0 0 1.15em; padding: 0; list-style: none;
+    color: var(--ink2); font-size: 15px; line-height: 1.7;
+  }
+  .post-main ul li {
+    position: relative; padding-left: 22px; margin-bottom: 0.55em;
+  }
+  .post-main ul li::before {
+    content: ''; position: absolute; left: 0; top: 0.55em;
+    width: 8px; height: 8px; background: var(--accent2);
+  }
+
+  .post-main blockquote {
+    margin: 1.25em 0 1.5em; padding: 16px 20px;
+    background: var(--surface2); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+  }
+  .post-main blockquote p {
+    margin-bottom: 0; font-family: var(--serif); font-size: 18px; font-style: italic;
+    color: var(--ink2);
+  }
+
+  .post-main code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--surface3); padding: 0.12em 0.35em;
+  }
+
+  .post-main pre {
+    background: var(--surface3); border: 1px solid var(--line);
+    padding: 14px 16px; font-family: var(--mono); font-size: 12.5px;
+    line-height: 1.6; overflow-x: auto; margin: 1.2em 0 1.5em; color: var(--ink2);
+  }
+  .post-main pre code { background: none; padding: 0; }
+
+  .infobox {
+    background: var(--surface2); border: 1px solid var(--line);
+    padding: 18px 20px; margin: 1.4em 0 1.6em; font-size: 14px; color: var(--ink2); line-height: 1.65;
+  }
+  .infobox-title {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+  }
+
+  .post-main table {
+    width: 100%; border-collapse: collapse; margin: 1.2em 0 1.6em;
+    font-size: 13px;
+  }
+  .post-main th, .post-main td {
+    text-align: right; padding: 7px 10px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 12px; color: var(--ink2);
+  }
+  .post-main th {
+    color: var(--ink3); font-weight: 500; text-transform: uppercase;
+    letter-spacing: 0.05em; font-size: 10.5px;
+  }
+  .post-main th:first-child, .post-main td:first-child { text-align: left; }
+  .post-main td.highlight { color: var(--accent2); font-weight: 700; }
+  .post-main td.worst { color: var(--accent); font-weight: 700; }
+  .post-main .linked {
+    cursor: pointer; border-bottom: 1px dashed var(--ink3); padding-bottom: 1px;
+    transition: background 0.12s, color 0.12s;
+  }
+  .post-main .linked:hover, .post-main .linked.active { background: var(--surface3); color: var(--ink); }
+  .post-main table tr.row-lit td {
+    background: var(--surface2); box-shadow: inset 0 0 0 1px var(--line);
+  }
+  .post-main table tr.row-lit td.highlight { color: var(--accent2); }
+  .post-main table tr.row-lit td.worst { color: var(--accent); }
+
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 18px 16px 10px;
+    margin: 1.4em 0;
+    max-width: 100%;
+  }
+  .chart-title { font-size: 14px; font-weight: 500; color: var(--ink); margin: 0 0 2px; }
+  .chart-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin: 0 0 12px; }
+  .chart-card svg { width: 100%; height: auto; display: block; overflow: visible; }
+  .legend { display: flex; gap: 16px; flex-wrap: wrap; margin: 14px 0 6px; font-size: 12px; color: var(--ink2); }
+  .legend .item { display: flex; align-items: center; gap: 6px; }
+  .legend .swatch { width: 10px; height: 10px; display: inline-block; }
+  .bar-label { font-size: 10px; fill: var(--ink2); font-family: var(--mono); }
+  .axis-label { font-size: 10.5px; fill: var(--ink3); font-family: var(--mono); }
+  .gridline { stroke: var(--line); stroke-width: 1; }
+  .baseline { stroke: var(--ink3); stroke-width: 1; opacity: 0.45; }
+  .bar-group:hover rect.fill-rect { filter: brightness(1.06); }
+
+  /* quadrant / decision matrix */
+  .quad-card { background: var(--surface); border: 1px solid var(--line); padding: 18px 16px 10px; margin: 1.4em 0; }
+  .quad-card svg { width: 100%; height: auto; display: block; }
+  .quad-card .quad-name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.02em; }
+  .quad-card .quad-desc { font-size: 11px; fill: var(--ink3); }
+
+  .tooltip {
+    position: absolute; pointer-events: none; background: var(--surface);
+    border: 1px solid var(--line); padding: 7px 10px;
+    font-size: 12px; font-family: var(--mono);
+    color: var(--ink); box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+    opacity: 0; transition: opacity 0.1s; white-space: nowrap; z-index: 10;
+  }
+
+  .colophon {
+    margin-top: 2em; padding-top: 1.2em; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--ink3); line-height: 1.55;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="/booking" class="nav-cta" data-umami-event="blog-nav-book">Book a call →</a>
+  </nav>
+
+  <div class="post-top">
+    <a href="/" class="back-link" data-umami-event="blog-back-home">← Home</a>
+    <a href="/blogs/express-cluster-ve-worker-threads.html" class="lang-switch" data-umami-event="blog-lang-switch">Türkçe →</a>
+  </div>
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog · English</div>
+    <h1 class="post-title">Cluster and Worker threads on Express</h1>
+    <p class="post-lead">Same Express app, same two routes. Only the concurrency machinery underneath changed, and the light endpoint went from 2.9 to 82 requests per second while a heavy CPU task was running.</p>
+  </header>
+
+  <!-- Hero: the animated queueing diagram -->
+  <div class="anim-stage">
+    <div class="anim-head">
+      <div class="anim-title">Watch the event loop. Two ways of running the same Express app.</div>
+      <div class="anim-controls">
+        <button class="anim-btn ghost" id="animToggle">play</button>
+        <button class="anim-btn" id="animReplay">replay</button>
+      </div>
+    </div>
+    <div class="anim-wrap">
+      <div class="anim" id="animWrap"></div>
+      <button class="anim-btn-overlay" id="animStart" aria-label="Play animation"><span><svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z" fill="currentColor"/></svg></span></button>
+    </div>
+    <div class="anim-cap">Blue squares are light requests. On the plain lane, one orange block occupies the only worker, so light requests queue up. The second half runs two processes side by side: light requests flow through both, and heavy CPU work drops to a shared worker thread, then returns to the loop when done.</div>
+  </div>
+
+  <div class="stat-strip">
+    <div class="stat"><div class="num">28×</div><div class="lab">light endpoint throughput while heavy work ran, plain vs cluster + worker threads</div></div>
+    <div class="stat"><div class="num">34×</div><div class="lab">better p99 latency of the light endpoint during the same window</div></div>
+    <div class="stat"><div class="num">2</div><div class="lab">vCPU cores the whole test used. The same two everywhere</div></div>
+  </div>
+
+  <article class="post-main">
+
+<h2>How we tested</h2>
+
+<p>Node is single-threaded, and this benchmark is about what happens when a CPU-bound request meets the event loop. We ran everything on a dedicated Hetzner <strong>2-core VPS</strong> (AMD EPYC, Ubuntu 26.04) with Node 26.5.0 and Express 5.2.1. Two endpoints:</p>
+
+<ul>
+  <li><code>/fast</code>: <code>fibonacci(30)</code>, roughly 12 ms of pure CPU. The normal request.</li>
+  <li><code>/slow</code>: <code>fibonacci(37)</code>, roughly 380 ms of pure CPU. The heavy, blocking one.</li>
+</ul>
+
+<p>Each configuration was measured the same way: <code>autocannon</code> with 2 connections per endpoint, a 15-second warm-up, then a 30-second <em>fast-only</em> phase, then a 75-second <em>mixed</em> phase where both endpoints were hammered simultaneously. Percentiles are computed exactly from every individual response time, and the server samples its own CPU and RSS every 200 ms.</p>
+
+<blockquote><p>In a minimal two-endpoint benchmark, how you handle concurrency changed the result by 28×.</p></blockquote>
+
+<h2>Concurrency, and what it does to Express</h2>
+<p class="lede">One thread, two kinds of work, and where the second one breaks everything.</p>
+
+<p>Node runs JavaScript on one thread. When an Express route hits a database, the query goes to the operating system and the loop is free to handle other requests. That is the asynchronous model that lets a single process serve thousands of requests. The loop only stops being free when something does <em>synchronous CPU work</em>.</p>
+
+<p>That is exactly the situation the animation above simulates. A handler that burns 380 ms of CPU does not yield. Every request behind it waits in line, and a single <code>/slow</code> request every few hundred milliseconds is enough to keep the loop permanently busy.</p>
+
+<p>There is a second, quieter limit: a single process can only use <em>one core</em>. So concurrency in Node splits into two independent questions, and each configuration from the benchmark answers one of them:</p>
+
+<div class="quad-card">
+  <p class="chart-title">Where each configuration belongs</p>
+  <p class="chart-sub">Two questions, four setups. Hover a quadrant for the verdict.</p>
+  <svg viewBox="0 0 640 420" xmlns="http://www.w3.org/2000/svg">
+    <rect x="44" y="40" width="268" height="168" rx="8" fill="var(--surface2)" stroke="var(--line)"/>
+    <rect x="322" y="40" width="274" height="168" rx="8" fill="var(--surface2)" stroke="var(--line)"/>
+    <rect x="44" y="218" width="268" height="168" rx="8" fill="var(--surface2)" stroke="var(--line)"/>
+    <rect x="322" y="218" width="274" height="168" rx="8" fill="var(--surface2)" stroke="var(--line)"/>
+
+    <circle cx="86" cy="72" r="7" fill="var(--chart-aqua)"/>
+    <text x="100" y="77" class="quad-name" fill="var(--chart-aqua)">Worker threads</text>
+    <text x="86" y="104" class="quad-desc">Heavy CPU work offloaded to threads.</text>
+    <text x="86" y="122" class="quad-desc">Latency stays low, but HTTP runs on</text>
+    <text x="86" y="140" class="quad-desc">one core.</text>
+
+    <circle cx="364" cy="72" r="7" fill="var(--chart-yellow)"/>
+    <text x="378" y="77" class="quad-name" fill="var(--chart-yellow)">cluster + wt</text>
+    <text x="364" y="104" class="quad-desc">Cores for HTTP, threads for the heavy</text>
+    <text x="364" y="122" class="quad-desc">handlers. The production shape.</text>
+
+    <circle cx="86" cy="250" r="7" fill="var(--chart-blue)"/>
+    <text x="100" y="255" class="quad-name" fill="var(--chart-blue)">plain</text>
+    <text x="86" y="282" class="quad-desc">Fine while every handler is fast.</text>
+    <text x="86" y="300" class="quad-desc">One heavy endpoint stalls the whole</text>
+    <text x="86" y="318" class="quad-desc">server.</text>
+
+    <circle cx="364" cy="250" r="7" fill="var(--chart-orange)"/>
+    <text x="378" y="255" class="quad-name" fill="var(--chart-orange)">cluster</text>
+    <text x="364" y="282" class="quad-desc">More processes, more cores, roughly</text>
+    <text x="364" y="300" class="quad-desc">2× HTTP throughput. Each loop is still</text>
+    <text x="364" y="318" class="quad-desc">blocked by heavy work.</text>
+
+    <text x="178" y="36" text-anchor="middle" class="quad-desc">heavy CPU work in routes</text>
+    <text x="178" y="398" text-anchor="middle" class="quad-desc">no heavy CPU work in routes</text>
+    <text x="600" y="213" text-anchor="middle" class="quad-desc" transform="rotate(90 600 213)">one core is enough</text>
+    <text x="12" y="213" text-anchor="middle" class="quad-desc" transform="rotate(-90 12 213)">need more cores</text>
+  </svg>
+</div>
+
+<p>Every bar in the charts below is the same Express app. The only difference is which machinery sits in the right quadrant.</p>
+
+<h3>Cluster: when should you use it?</h3>
+
+<p>Cluster forks independent Node processes that share one port. Each worker has its own memory, its own heap, its own event loop, and its own core. It is the standard production answer for “use more cores for HTTP”.</p>
+
+<ul>
+  <li><strong>Use it when</strong> your app is mostly I/O-bound (databases, external APIs) and you need more than one core. This is the default for any production Node server.</li>
+  <li><strong>Understand</strong> that each process duplicates memory, and in-memory state (sessions, caches) is per-worker. Shared state lives in Redis or a database.</li>
+  <li><strong>What it does not fix:</strong> a blocking handler. Each worker still runs one event loop, so cluster scales throughput without protecting latency, as the p99 chart below shows.</li>
+</ul>
+
+<div class="chart-card" id="chartScaling"></div>
+
+<h3>Worker threads: when should you use it?</h3>
+
+<p>Worker threads live inside the process. Same memory space, separate V8 isolate, and they talk to the main thread through messages, exactly like Web Workers in a browser. The main thread keeps serving HTTP. The workers run the CPU-heavy code and post the result back.</p>
+
+<p>The critical thing to understand: <strong>worker_threads does not make HTTP itself faster.</strong> The event loop still handles every request, and HTTP still runs on one core. A single-process worker-thread app scales throughput exactly like the plain one, as the fast-only chart showed. What worker threads do is <em>keep the loop free</em>. That shows up somewhere different: tail latency.</p>
+
+<div class="chart-card" id="chartP99"></div>
+
+<p>Read the p99 axis. In <code>plain</code>, the slowest 1% of light requests waited 1.6 seconds, queued behind heavy work. <code>cluster</code> helps a little, but each worker’s loop is still blocked one at a time. <code>worker_threads</code> drops it to 85 ms. Combined with cluster, it is 48 ms.</p>
+
+<ul>
+  <li><strong>Use it when</strong> a handler does real CPU work: image resizing, crypto, video encoding, parsing huge payloads. Offload that, and the event loop keeps serving everyone else.</li>
+  <li><strong>Understand</strong> that a small pool is spawned up front instead of a new worker per request. Thread creation is not free.</li>
+  <li><strong>What it does not fix:</strong> more cores for HTTP. For that you still need cluster.</li>
+</ul>
+
+<blockquote><p>Cluster adds cores. worker_threads protects the loop. They solve different problems, and neither replaces the other.</p></blockquote>
+
+<h2>The scenarios, side by side</h2>
+<p class="lede">One table, four configurations, every number from the benchmark.</p>
+
+<p>Mixed means the heavy endpoint ran for the whole window. Fast-only means it did not.</p>
+
+<table>
+  <thead>
+    <tr><th>metric (mixed phase)</th><th>plain</th><th>cluster</th><th>Worker threads</th><th>cluster + wt</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>/fast throughput (RPS)</td><td>2.9</td><td>5.1</td><td>59.6</td><td class="highlight">81.8</td></tr>
+    <tr><td>/fast p99 (ms)</td><td class="worst">1627</td><td>1049</td><td>85</td><td class="highlight">48</td></tr>
+    <tr><td>/fast p50 (ms)</td><td class="worst">619</td><td>321</td><td>29</td><td class="highlight">22</td></tr>
+    <tr id="row-slow"><td>/slow throughput (RPS)</td><td>2.7</td><td class="highlight">5.4</td><td>3.5</td><td>2.7</td></tr>
+    <tr><td>/fast throughput (fast-only)</td><td>78.8</td><td class="highlight">136.6</td><td>82.3</td><td>134.7</td></tr>
+    <tr><td>CPU (mixed, % of all cores)</td><td>100</td><td>99</td><td>196</td><td>99</td></tr>
+    <tr><td>RSS idle (MB)</td><td class="highlight">65</td><td>128</td><td>86</td><td>151</td></tr>
+  </tbody>
+</table>
+
+<p>Two numbers deserve attention. <span class="linked" data-target="row-slow">First, <code>/slow</code> throughput is flat everywhere, about 2.7 to 5.4 RPS, because the workload is CPU-bound and there are two cores.</span> worker_threads does not make heavy work faster. It makes heavy work <em>stop punishing everyone else</em>. Second, notice where cluster’s cost lives: idle RSS doubles, 128 MB against 65 MB, because you now run two full Node processes. Threads, sharing one process, add only about 20 MB.</p>
+
+<div class="chart-card" id="chartMixed"></div>
+<div class="chart-card" id="chartSlow"></div>
+
+<div class="infobox">
+  <div class="infobox-title">The honest summary</div>
+  <div><strong>plain</strong> is correct as long as nothing heavy ever hits the loop. One heavy endpoint breaks it. <strong>cluster only</strong> is right when the workload is I/O-bound and you have spare cores. It is useless against blocking CPU work. <strong>worker_threads only</strong> is right when the loop is getting blocked but one core is enough for HTTP. <strong>cluster + worker_threads</strong> is the production shape: cores for HTTP, a small pool for the heavy handlers.</div>
+</div>
+
+<h2>Conclusion</h2>
+
+<p>In the <a href="/blogs/is-express-really-slow.html">previous post</a> we saw that Express is not slow. Your Node version is. The same lesson repeats here in a different form: <strong>Express is not slow. Your concurrency setup is.</strong> A single-process, single-loop Express app is perfectly fast until one handler decides to burn 380 ms of CPU. Then the whole server stalls, and no amount of request throughput elsewhere fixes it.</p>
+
+<p>The fix is not a different framework. It is knowing what each tool does:</p>
+
+<ul>
+  <li>Use <strong>cluster</strong> to spread HTTP across cores. This is the default for production Node.</li>
+  <li>Use <strong>worker_threads</strong>, via a small pool, for anything a handler does synchronously that takes more than a few milliseconds of CPU.</li>
+  <li>Use <strong>both</strong>. That is what production Express with a bcrypt route looks like.</li>
+</ul>
+
+<p><strong>In a minimal two-endpoint benchmark, that combination moved the light endpoint from 2.9 to 81.8 requests per second, 28×, and cut its p99 latency from 1.6 seconds to 48 ms.</strong> No route changed. No middleware changed. Only the machinery underneath.</p>
+
+  <p class="colophon">Measured with Express 5.2.1 on Node.js 26.5.0. Two-core AMD EPYC Hetzner VPS (Ubuntu 26.04). autocannon, 2 connections per endpoint. 15 s warm-up. 30 s fast-only + 75 s mixed phases. Percentiles computed from per-request latencies. CPU/RSS self-sampled at 200 ms. Workload: fibonacci(30) ≈ 12 ms and fibonacci(37) ≈ 380 ms of synchronous CPU.</p>
+  </article>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+/* ---------- data ---------- */
+const DATA = {
+  plain:   { name: 'plain',           note: '1 process',                   aFastRps: 78.8, bFastRps: 2.87, bFastP99: 1627, bSlowRps: 2.71,  cpuB: 100.2, rssB: 67.8,  rssIdle: 64.7,  fastPct: { p50: 619, p90: 1169, p95: 1402, p99: 1627 } },
+  cluster: { name: 'cluster',         note: '2 processes',                 aFastRps: 136.6, bFastRps: 5.12, bFastP99: 1049, bSlowRps: 5.35,  cpuB: 99.4,  rssB: 68.4,  rssIdle: 128.4, fastPct: { p50: 321, p90: 609, p95: 631, p99: 1049 } },
+  worker:  { name: 'worker_threads',  note: '1 process + 2 threads',       aFastRps: 82.3, bFastRps: 59.59, bFastP99: 85,  bSlowRps: 3.5,   cpuB: 195.9, rssB: 90.6,  rssIdle: 85.9,  fastPct: { p50: 29, p90: 55, p95: 65, p99: 85 } },
+  both:    { name: 'cluster + wt',    note: '2 processes, 1 thread each',  aFastRps: 134.7, bFastRps: 81.8, bFastP99: 48,  bSlowRps: 2.74,  cpuB: 99.0,  rssB: 80.8,  rssIdle: 151.5, fastPct: { p50: 22, p90: 39, p95: 42, p99: 48 } }
+};
+const ORDER = ['plain', 'cluster', 'worker', 'both'];
+const COLOR = { plain: 'var(--chart-blue)', cluster: 'var(--chart-orange)', worker: 'var(--chart-aqua)', both: 'var(--chart-yellow)' };
+const NAME = { plain: 'plain', cluster: 'cluster', worker: 'Worker threads', both: 'cluster + wt' };
+
+/* ---------- bar charts ---------- */
+function niceMax(m) {
+  if (m <= 0) return 1;
+  const mag = Math.pow(10, Math.floor(Math.log10(m)));
+  const n = m / mag;
+  const step = n <= 1 ? 1 : n <= 2 ? 2 : n <= 5 ? 5 : 10;
+  return step * mag;
+}
+
+function renderChart(containerId, chartTitle, chartSub, getValue, decimals, unit, locale) {
+  const container = document.getElementById(containerId);
+  const W = 640, H = 260;
+  const padL = 44, padR = 12, padT = 16, padB = 30;
+  const plotW = W - padL - padR, plotH = H - padT - padB;
+  const barW = 34, gap = 12;
+  const totalW = ORDER.length * barW + (ORDER.length - 1) * gap;
+  let x0 = padL + (plotW - totalW) / 2;
+
+  let maxVal = 0;
+  ORDER.forEach(k => { maxVal = Math.max(maxVal, getValue(DATA[k])); });
+  const yMax = niceMax(maxVal * 1.15);
+  const yTicks = 4;
+
+  function fmt(v, decimals) {
+    return v.toLocaleString(locale === 'tr' ? 'tr-TR' : 'en-US', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+  }
+
+  let svg = `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg">`;
+  for (let i = 0; i <= yTicks; i++) {
+    const val = (yMax / yTicks) * i;
+    const y = padT + plotH - (val / yMax) * plotH;
+    svg += `<line x1="${padL}" x2="${W - padR}" y1="${y}" y2="${y}" class="gridline" />`;
+    svg += `<text x="${padL - 8}" y="${y + 3}" text-anchor="end" class="axis-label">${fmt(val, val < 10 && val !== 0 ? 1 : 0)}</text>`;
+  }
+  svg += `<line x1="${padL}" x2="${W - padR}" y1="${padT + plotH}" y2="${padT + plotH}" class="baseline" />`;
+
+  ORDER.forEach((key) => {
+    const val = getValue(DATA[key]);
+    const barH = (val / yMax) * plotH;
+    const y = padT + plotH - barH;
+    const label = fmt(val, decimals);
+    svg += `<g class="bar-group" data-key="${key}" data-value="${label}${unit}">`;
+    svg += `<rect x="${x0}" y="${padT}" width="${barW}" height="${plotH}" fill="transparent" />`;
+    svg += `<rect class="fill-rect" x="${x0}" y="${y}" width="${barW}" height="${Math.max(barH, 1)}" rx="4" ry="4" fill="${COLOR[key]}" />`;
+    svg += `<rect class="fill-rect" x="${x0}" y="${padT + plotH - 4}" width="${barW}" height="4" fill="${COLOR[key]}" />`;
+    svg += `<text x="${x0 + barW / 2}" y="${y - 6}" text-anchor="middle" class="bar-label">${label}</text>`;
+    svg += `<text x="${x0 + barW / 2}" y="${H - 8}" text-anchor="middle" class="axis-label">${NAME[key]}</text>`;
+    svg += `</g>`;
+    x0 += barW + gap;
+  });
+  svg += `</svg>`;
+
+  const legendHtml = `<div class="legend">${ORDER.map(k =>
+    `<div class="item"><span class="swatch" style="background:${COLOR[k]}"></span>${NAME[k]}</div>`
+  ).join('')}</div>`;
+
+  container.innerHTML = `<p class="chart-title">${chartTitle}</p><p class="chart-sub">${chartSub}</p>${svg}${legendHtml}`;
+
+  const tip = document.createElement('div');
+  tip.className = 'tooltip';
+  document.body.appendChild(tip);
+  container.querySelectorAll('.bar-group').forEach(g => {
+    const key = g.getAttribute('data-key');
+    const html = `<span style="display:inline-block;width:8px;height:8px;border-radius:2px;background:${COLOR[key]};margin-right:6px;vertical-align:middle"></span>` +
+      `${NAME[key]} · ${DATA[key].note}: ${g.getAttribute('data-value')}`;
+    g.addEventListener('mousemove', e => {
+      tip.innerHTML = html;
+      tip.style.left = (e.pageX + 12) + 'px';
+      tip.style.top = (e.pageY + 12) + 'px';
+      tip.style.opacity = '1';
+    });
+    g.addEventListener('mouseleave', () => { tip.style.opacity = '0'; });
+  });
+}
+
+renderChart('chartScaling', 'Throughput with nothing else competing', 'Fast-only phase, requests per second. Higher is better.',
+  d => d.aFastRps, 1, ' RPS', "en");
+renderChart('chartP99', 'p99 latency of the light endpoint during heavy load', 'Mixed phase, milliseconds. Lower is better.',
+  d => d.bFastP99, 0, ' ms', "en");
+renderChart('chartMixed', 'Light endpoint throughput while heavy work ran', 'Mixed phase, requests per second. Higher is better.',
+  d => d.bFastRps, 1, ' RPS', "en");
+renderChart('chartSlow', 'Heavy endpoint throughput', 'Mixed phase, requests per second. Higher is better.',
+  d => d.bSlowRps, 1, ' RPS', "en");
+
+/* ---------- text-to-table linking ---------- */
+document.querySelectorAll('.linked').forEach(span => {
+  const row = document.getElementById(span.dataset.target);
+  if (!row) return;
+  span.addEventListener('mouseenter', () => row.classList.add('row-lit'));
+  span.addEventListener('mouseleave', () => row.classList.remove('row-lit'));
+  span.addEventListener('click', () => {
+    row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    row.classList.add('row-lit');
+    setTimeout(() => row.classList.remove('row-lit'), 1800);
+  });
+});
+
+/* ---------- animated queueing diagram ---------- */
+(function () {
+  const NS = 'http://www.w3.org/2000/svg';
+  const wrap = document.getElementById('animWrap');
+  const W = 640, H = 390;
+  const HANDLER_X = 336;
+  const RIGHT = 620;
+  const PLAIN_Y = 80;
+  const P1_Y = 176;   // process 1 row
+  const P2_Y = 216;   // process 2 row
+  const RAIL_Y = 300; // worker thread rail
+
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+  svg.setAttribute('xmlns', NS);
+
+  function el(name, attrs) {
+    const n = document.createElementNS(NS, name);
+    for (const k in attrs) n.setAttribute(k, attrs[k]);
+    return n;
+  }
+  function text(x, y, cls, str) {
+    const t = el('text', { x, y, class: cls });
+    t.textContent = str;
+    return t;
+  }
+
+  // lane labels
+  svg.appendChild(text(40, PLAIN_Y - 34, 'axis-label', 'plain'));
+  svg.appendChild(text(40, P1_Y - 34, 'axis-label', 'cluster + Worker threads'));
+  svg.appendChild(text(RIGHT - 70, P1_Y - 10, 'axis-label', 'process 1'));
+  svg.appendChild(text(RIGHT - 70, P2_Y - 10, 'axis-label', 'process 2'));
+
+  // lane guide lines
+  svg.appendChild(el('line', { x1: 36, y1: PLAIN_Y, x2: RIGHT, y2: PLAIN_Y, stroke: 'var(--line)', 'stroke-width': 1 }));
+  svg.appendChild(el('line', { x1: 36, y1: P1_Y, x2: RIGHT, y2: P1_Y, stroke: 'var(--line)', 'stroke-width': 1 }));
+  svg.appendChild(el('line', { x1: 36, y1: P2_Y, x2: RIGHT, y2: P2_Y, stroke: 'var(--line)', 'stroke-width': 1 }));
+
+  // worker rail for the bottom half
+  svg.appendChild(el('line', { x1: 36, y1: RAIL_Y, x2: RIGHT, y2: RAIL_Y, stroke: 'var(--line)', 'stroke-dasharray': '3 4', 'stroke-width': 1 }));
+  svg.appendChild(text(40, RAIL_Y + 16, 'axis-label', 'worker thread rail'));
+
+  // handler zone markers
+  svg.appendChild(el('line', { x1: HANDLER_X, y1: PLAIN_Y - 26, x2: HANDLER_X, y2: PLAIN_Y + 26, stroke: 'var(--ink3)', 'stroke-width': 1, opacity: 0.35 }));
+  svg.appendChild(el('line', { x1: HANDLER_X, y1: P1_Y - 26, x2: HANDLER_X, y2: RAIL_Y + 8, stroke: 'var(--ink3)', 'stroke-width': 1, opacity: 0.35 }));
+
+  // the orange blocking block on the plain lane
+  const block = el('rect', { x: HANDLER_X - 3, y: PLAIN_Y - 11, width: 34, height: 22, rx: 4, fill: 'var(--chart-orange)' });
+  svg.appendChild(block);
+  svg.appendChild(text(HANDLER_X + 14, PLAIN_Y + 4, 'bar-label', ''));
+
+  const labelPlain = text(HANDLER_X + 4, PLAIN_Y + 30, 'bar-label', '');
+  labelPlain.setAttribute('fill', 'var(--accent)');
+  svg.appendChild(labelPlain);
+
+  // legend
+  const legend = document.createElement('div');
+  legend.className = 'legend';
+  legend.innerHTML =
+    `<div class="item"><span class="swatch" style="background:var(--chart-blue)"></span>light request</div>` +
+    `<div class="item"><span class="swatch" style="background:var(--chart-orange)"></span>heavy CPU on the loop</div>` +
+    `<div class="item"><span class="swatch" style="background:var(--chart-aqua)"></span>heavy CPU offloaded to a thread</div>`;
+  wrap.appendChild(svg);
+  wrap.appendChild(legend);
+
+  let squares = [];
+  let tick = 0;
+  let paused = true;   // starts paused so mobile browsers don't burn frames on load
+  let queueCap = 6;
+  let frames = 0;
+  let altRow = true; // alternates which process row receives a request
+
+  function makeSquare(y, color, vx) {
+    const r = el('rect', { x: 0, y: y - 7, width: 14, height: 14, rx: 2, fill: color });
+    svg.appendChild(r);
+    return { el: r, x: 34, y, vx: vx || 1.6, state: 'moving' };
+  }
+
+  function reset() {
+    squares.forEach(s => s.el.remove());
+    squares = [];
+    tick = 0;
+    frames = 0;
+    labelPlain.textContent = '';
+  }
+
+  function step() {
+    if (paused) return;
+    tick++;
+    frames++;
+
+    // spawn light requests on the plain lane (they pile up at the handler)
+    if (tick % 24 === 0) {
+      const waitingCount = squares.filter(s => s.lane === 'plain' && s.state === 'waiting').length;
+      if (waitingCount < queueCap) {
+        squares.push({ ...makeSquare(PLAIN_Y, 'var(--chart-blue)'), lane: 'plain' });
+      }
+    }
+    // spawn light requests on the cluster+wt half, alternating across two
+    // process rows so the parallelism is visible
+    if (tick % 20 === 0) {
+      altRow = !altRow;
+      const rowY = altRow ? P1_Y : P2_Y;
+      squares.push({ ...makeSquare(rowY, 'var(--chart-blue)'), lane: 'both', row: altRow ? 'p1' : 'p2' });
+    }
+    // spawn heavy work on the cluster+wt half: it drops to the worker rail,
+    // slides along it, then returns to the loop row it came from
+    if (tick % 88 === 0) {
+      const rowY = altRow ? P1_Y : P2_Y;
+      squares.push({
+        ...makeSquare(rowY, 'var(--chart-aqua)'),
+        lane: 'heavy', phase: 'down', homeY: rowY, x: HANDLER_X, vx: 0,
+      });
+    }
+
+    const plainWaiting = squares.filter(s => s.lane === 'plain' && s.state === 'waiting');
+    labelPlain.textContent = plainWaiting.length ? `queued: ${plainWaiting.length}` : '';
+
+    let anyActive = false;
+    squares.forEach(s => {
+      if (s.lane === 'plain') {
+        if (s.state === 'moving') {
+          s.x += s.vx;
+          if (s.x >= HANDLER_X) {
+            s.state = 'waiting';
+            s.x = HANDLER_X;
+          }
+        } else if (s.state === 'waiting') {
+          // parked, stacked visually
+          const idx = plainWaiting.indexOf(s);
+          s.y = PLAIN_Y - 7 + (idx % 3) * 4;
+        } else if (s.state === 'passed') {
+          s.x += s.vx * 1.4;
+          if (s.x > RIGHT + 20) { s.el.remove(); s.dead = true; }
+        }
+      } else if (s.lane === 'both') {
+        s.x += s.vx;
+        if (s.x > RIGHT + 20) { s.el.remove(); s.dead = true; }
+      } else if (s.lane === 'heavy') {
+        // down to the rail, slide along it, then back up to the loop row
+        if (s.phase === 'down') {
+          s.y += 2;
+          if (s.y >= RAIL_Y) { s.y = RAIL_Y; s.phase = 'rail'; }
+        } else if (s.phase === 'rail') {
+          s.x += 0.42;
+          if (s.x >= HANDLER_X + 150) s.phase = 'up';
+        } else if (s.phase === 'up') {
+          s.y -= 1.4;
+          if (s.y <= s.homeY) { s.y = s.homeY; s.phase = 'out'; }
+        } else if (s.phase === 'out') {
+          s.x += 1.5;
+          if (s.x > RIGHT + 20) { s.el.remove(); s.dead = true; }
+        }
+      }
+      if (!s.dead) {
+        anyActive = true;
+        s.el.setAttribute('x', s.x);
+        s.el.setAttribute('y', s.y);
+      }
+    });
+
+    // the plain lane's block is permanently busy; each cycle drains one queued request
+    if (tick % 90 === 0) {
+      const q = squares.filter(s => s.lane === 'plain' && s.state === 'waiting');
+      if (q.length) {
+        const first = q[0];
+        first.state = 'passed';
+        first.y = PLAIN_Y - 7;
+      }
+    }
+
+    squares = squares.filter(s => !s.dead);
+
+    // when the plain queue is full and everything else has drained, restart the loop
+    if (plainWaiting.length >= queueCap && frames > 300) {
+      const remaining = squares.filter(s => s.lane !== 'plain');
+      if (remaining.length === 0) {
+        setTimeout(reset, 800);
+        return;
+      }
+    }
+    if (squares.length === 0 && frames > 200) {
+      setTimeout(reset, 600);
+    }
+  }
+
+  function loop() {
+    step();
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  document.getElementById('animReplay').addEventListener('click', () => { reset(); });
+  const toggle = document.getElementById('animToggle');
+  const startBtn = document.getElementById('animStart');
+  function setRunning(running) {
+    paused = !running;
+    toggle.textContent = running ? 'pause' : 'play';
+    startBtn.classList.toggle('hidden', running);
+  }
+  startBtn.addEventListener('click', () => setRunning(true));
+  toggle.addEventListener('click', () => setRunning(paused));
+})();
+</script>
+
+</body></html>
