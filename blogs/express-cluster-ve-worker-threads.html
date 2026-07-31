@@ -228,6 +228,10 @@
   .post-main th:first-child, .post-main td:first-child { text-align: left; }
   .post-main td.highlight { color: var(--accent2); font-weight: 700; }
   .post-main td.worst { color: var(--accent); font-weight: 700; }
+  .post-main .table-wrap {
+    overflow-x: auto; margin: 1.2em 0 1.6em; -webkit-overflow-scrolling: touch;
+  }
+  .post-main .table-wrap table { margin: 0; }
   .post-main .linked {
     cursor: pointer; border-bottom: 1px dashed var(--ink3); padding-bottom: 1px;
     transition: background 0.12s, color 0.12s;
@@ -444,7 +448,7 @@
 
 <p>Karma, ağır uç noktanın tüm pencere boyunca çalıştığı anlamına geliyor. Sadece-fast ise çalışmadığı.</p>
 
-<table>
+<div class="table-wrap"><table>
   <thead>
     <tr><th>metrik (karma faz)</th><th>plain</th><th>cluster</th><th>Worker threads</th><th>cluster + wt</th></tr>
   </thead>
@@ -457,7 +461,7 @@
     <tr><td>CPU (karma, tüm çekirdeklerin %’si)</td><td>100</td><td>99</td><td>196</td><td>99</td></tr>
     <tr><td>RSS boşta (MB)</td><td class="highlight">65</td><td>128</td><td>86</td><td>151</td></tr>
   </tbody>
-</table>
+</table></div>
 
 <p>İki sayı dikkat etmeye değer. <span class="linked" data-target="row-slow">Birincisi, <code>/slow</code> verimi her yerde hemen hemen aynı, yaklaşık 2,7 ile 5,4 RPS arasında, çünkü iş yükü CPU’ya bağlı ve iki çekirdek var.</span> worker_threads ağır işi hızlandırmaz. Ağır işin <em>herkesi cezalandırmasını durdurur</em>. İkincisi, cluster’ın maliyetinin nerede yaşadığına dikkat: boştaki RSS ikiye katlanıyor, 65 MB’a karşı 128 MB, çünkü artık iki tam Node süreci çalışıyor. Tek bir süreci paylaşan thread’ler yalnızca yaklaşık 20 MB ekliyor.</p>
 
