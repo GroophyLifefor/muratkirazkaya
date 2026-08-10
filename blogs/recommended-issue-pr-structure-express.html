@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recommended Issue/PR Structure to Strengthen Express Organization — Murat Kirazkaya</title>
+<meta name="description" content="A matching algorithm that connects every issue or pull request to the right person in the Express organization. Label tree, skill maintenance, and a simple ranking score.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Recommended Issue/PR Structure to Strengthen Express Organization">
+<meta property="og:description" content="A matching algorithm that connects every issue or pull request to the right person.">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/recommended-issue-pr-structure-express.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/recommended-issue-pr-structure-express.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+  .post-top { display: flex; align-items: baseline; gap: 16px; }
+
+  .post-hero { padding: 40px 0 36px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-lead {
+    font-family: var(--serif); font-size: clamp(16px, 2.8vw, 20px);
+    color: var(--ink2); line-height: 1.45; max-width: 640px;
+    padding-left: 18px; border-left: 3px solid var(--accent);
+  }
+  .proposal-badge {
+    display: inline-block; font-family: var(--mono); font-size: 11px;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent2);
+    border: 1px solid var(--accent2); padding: 4px 12px; margin-bottom: 18px;
+  }
+
+  .post-main { padding-bottom: 72px; max-width: 720px; }
+
+  .post-main h2 {
+    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 400; color: var(--ink); margin: 48px 0 8px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .post-main h2:first-of-type { margin-top: 8px; }
+  .post-main h3 {
+    font-family: var(--serif); font-size: 20px; font-weight: 400; color: var(--ink);
+    margin: 32px 0 6px;
+  }
+
+  .post-main p {
+    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
+  }
+  .post-main p strong { color: var(--ink); font-weight: 500; }
+  .post-main a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; }
+  .post-main a:hover { color: var(--ink); }
+  .post-main .defs { font-size: 14px; color: var(--ink3); margin-bottom: 1.4em; line-height: 1.6; }
+  .post-main .defs strong { color: var(--ink2); font-weight: 500; }
+
+  .post-main blockquote {
+    margin: 1.25em 0 1.5em; padding: 16px 20px;
+    background: var(--surface2); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+  }
+  .post-main blockquote p {
+    margin-bottom: 0; font-family: var(--serif); font-size: 18px; font-style: italic;
+    color: var(--ink2);
+  }
+
+  .post-main code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--surface3); padding: 0.12em 0.35em;
+  }
+
+  figure { margin: 1.6em 0; }
+  figcaption {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    margin-top: 10px; text-align: center; line-height: 1.55;
+  }
+
+  /* label tree */
+  .tree { font-family: var(--sans); }
+  .tree ul { list-style: none; padding-left: 22px; position: relative; margin: 4px 0; }
+  .tree li { position: relative; padding: 5px 0 5px 10px; font-size: 14px; }
+  .tree li::before {
+    content: ""; position: absolute; left: -12px; top: 0; bottom: 50%;
+    width: 1.5px; background: var(--line);
+  }
+  .tree li::after {
+    content: ""; position: absolute; left: -12px; top: 50%;
+    width: 10px; height: 1.5px; background: var(--line);
+  }
+  .tree ul > li:last-child::before { height: 50%; }
+  .tree > ul { padding-left: 0; }
+  .tree > ul > li::before, .tree > ul > li::after { display: none; }
+  .node {
+    display: inline-block; padding: 3px 12px; border-radius: 6px;
+    background: var(--surface2); color: var(--accent2);
+    border: 1px solid var(--line); font-family: var(--mono); font-size: 12.5px;
+  }
+  .node.root { background: var(--accent2); color: var(--surface); border-color: var(--accent2); }
+  .node.alt { background: var(--surface3); color: var(--ink2); border-color: var(--line); }
+
+  /* flow */
+  .flow { display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap; font-family: var(--mono); margin: 10px 0; }
+  .step { border: 1px solid var(--line); border-radius: 8px; padding: 10px 14px; background: var(--surface2); text-align: center; min-width: 120px; font-size: 13px; }
+  .step.ai { border-color: var(--accent2); background: var(--surface2); color: var(--accent2); }
+  .step.mod { border-color: var(--accent); background: var(--surface2); color: var(--accent); }
+  .step.ok { border-color: var(--accent2); background: var(--surface2); color: var(--accent2); }
+  .step.no { border-color: var(--accent); background: var(--surface2); color: var(--accent); }
+  .arrow { color: var(--ink3); font-size: 20px; }
+
+  /* example flow */
+  .exampleflow { font-family: var(--mono); display: flex; flex-direction: column; align-items: center; gap: 6px; margin: 10px 0; }
+  .efstep { border: 1px solid var(--line); border-radius: 10px; padding: 14px 18px; width: 100%; max-width: 580px; background: var(--surface2); }
+  .efstep.hl { border-color: var(--accent2); background: var(--surface2); }
+  .eflabel { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--ink3); margin-bottom: 8px; }
+  .eftitle { font-size: 14px; color: var(--ink2); line-height: 1.6; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+  .chip { font-size: 12.5px; padding: 3px 10px; border-radius: 999px; background: var(--surface3); color: var(--ink2); border: 1px solid var(--line); font-family: var(--mono); }
+  .efarrow { color: var(--ink3); font-size: 18px; line-height: 1; }
+
+  .rank { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .rank:last-child { margin-bottom: 0; }
+  .rank .who { width: 120px; font-size: 13.5px; overflow: hidden; white-space: nowrap; color: var(--ink2); }
+  .rank .role { width: 74px; font-size: 11px; color: var(--ink3); font-family: var(--mono); text-transform: uppercase; letter-spacing: 0.04em; }
+  .rank .track { flex: 1; background: var(--surface3); border-radius: 5px; height: 12px; overflow: hidden; }
+  .rank .fill { height: 100%; background: linear-gradient(90deg, var(--accent2), #3f7a56); width: 0; transition: width 0.7s ease; border-radius: 5px; }
+  .rank .score { width: 40px; font-size: 13px; font-weight: 600; color: var(--accent2); text-align: right; font-family: var(--mono); }
+  .rank.top .who { font-weight: 600; color: var(--ink); }
+  .rank.top .role { color: var(--accent2); font-weight: 600; }
+
+  /* bars */
+  .bars { font-family: var(--mono); margin: 24px 0; }
+  .bar-row { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+  .bar-label { width: 180px; font-size: 13.5px; color: var(--ink2); }
+  .bar-track { flex: 1; background: var(--surface3); border-radius: 6px; height: 18px; overflow: hidden; }
+  .bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent2), #3f7a56); border-radius: 6px; width: 0; transition: width 0.8s ease; }
+  .bar-value { width: 42px; font-size: 13.5px; font-weight: 600; color: var(--accent2); text-align: right; }
+
+  /* table */
+  .tablewrap { overflow-x: auto; font-family: var(--sans); margin: 24px 0; }
+  .tablewrap table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .tablewrap th, .tablewrap td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  .tablewrap thead th { background: var(--surface2); color: var(--ink3); font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; font-family: var(--mono); }
+  .tablewrap td .pill { display: inline-block; font-size: 12px; padding: 2px 8px; border-radius: 999px; background: var(--surface2); color: var(--accent2); border: 1px solid var(--line); font-family: var(--mono); }
+
+  /* cards */
+  .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin: 24px 0; font-family: var(--sans); }
+  .card { border: 1px solid var(--line); border-radius: 10px; padding: 18px; background: var(--surface2); }
+  .card .num { font-size: 26px; font-weight: 600; color: var(--accent2); font-family: var(--mono); }
+  .card .lbl { font-size: 13px; color: var(--ink3); margin-top: 4px; }
+
+  /* math */
+  .mathbox { font-family: var(--sans); margin: 24px 0; padding: 18px 20px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface2); overflow-x: auto; }
+  .mathtitle { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin-bottom: 12px; font-family: var(--mono); }
+  .formula { font-size: 13px; line-height: 1.9; padding: 3px 0; font-family: var(--mono), 'Cambria Math', 'STIX Two Math', 'DejaVu Sans', 'Arial Unicode MS', sans-serif; color: var(--ink); white-space: pre-wrap; overflow-wrap: break-word; }
+  .formula .tag { color: var(--accent2); font-weight: 500; }
+  .formula sub, .formula sup { font-size: 0.68em; line-height: 0; }
+  .formulanote { font-size: 13px; color: var(--ink3); margin-top: 10px; font-family: var(--mono); line-height: 1.6; }
+
+  .colophon {
+    margin-top: 2em; padding-top: 1.2em; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--ink3); line-height: 1.55;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="/booking" class="nav-cta" data-umami-event="blog-nav-book">Book a call →</a>
+  </nav>
+
+  <div class="post-top">
+    <a href="/" class="back-link" data-umami-event="blog-back-home">← Home</a>
+  </div>
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog · English</div>
+    <h1 class="post-title">Recommended Issue/PR Structure to Strengthen Express Organization</h1>
+    <span class="proposal-badge">Proposal</span>
+    <p class="post-lead">A matching algorithm that connects every issue/pr to the right person</p>
+  </header>
+
+  <article class="post-main">
+
+<p class="defs">
+  <strong>Definitions:</strong><br>
+  <strong>pr</strong> = pull request<br>
+  <strong>entry</strong> = issue or pull request
+</p>
+
+<h2>Why a structure matters</h2>
+<p>Open source grows fast. With growth comes noise. In the Express organization, new issues and pull requests arrive every day. Without a shared structure, good work gets buried. Contributors lose time searching for a useful task. Maintainers struggle to route work to the right person.</p>
+<p>A small structure fixes most of this. Every entry gets a label. Every label has a parent. The long flat list becomes a small map. When you open an entry you first find its area, then its detail.</p>
+
+<h2>The label tree is alive</h2>
+<p>Labels are grouped into a few clear branches. Each branch holds a family of related topics. This keeps the tree short and easy to read.</p>
+<figure>
+  <div class="tree">
+    <ul>
+      <li><span class="node root">community</span>
+        <ul>
+          <li><span class="node">governance</span>
+            <ul>
+              <li><span class="node alt">membership</span></li>
+              <li><span class="node alt">team membership</span></li>
+            </ul>
+          </li>
+          <li><span class="node">meetings</span>
+            <ul>
+              <li><span class="node alt">meeting notes</span></li>
+              <li><span class="node alt">agenda</span></li>
+              <li><span class="node alt">scheduling</span></li>
+            </ul>
+          </li>
+          <li><span class="node">working group</span>
+            <ul>
+              <li><span class="node alt">perf group</span></li>
+            </ul>
+          </li>
+        </ul>
+      </li>
+      <li><span class="node root">performance</span>
+        <ul>
+          <li><span class="node">benchmarking</span></li>
+          <li><span class="node">load testing</span></li>
+          <li><span class="node">profiling</span></li>
+          <li><span class="node">observability</span></li>
+        </ul>
+      </li>
+      <li><span class="node root">maintenance</span>
+        <ul>
+          <li><span class="node">ci</span></li>
+          <li><span class="node">tooling</span></li>
+          <li><span class="node">code quality</span></li>
+        </ul>
+      </li>
+      <li><span class="node root">documentation</span>
+        <ul>
+          <li><span class="node">readme</span></li>
+          <li><span class="node">license</span></li>
+        </ul>
+      </li>
+      <li><span class="node root">issue kind</span>
+        <ul>
+          <li><span class="node">bug</span></li>
+          <li><span class="node">feature</span></li>
+          <li><span class="node">question</span></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <figcaption>The main branches of the recommended label tree</figcaption>
+</figure>
+<p>The tree is not static. It grows through a simple loop. An AI reviews every issue and proposes labels that fit. A moderator then decides. Approved proposals join the tree. Rejected ones disappear. Nothing joins without a human decision, so the tree stays small and honest.</p>
+<figure>
+  <div class="flow">
+    <span class="step ai">AI proposes labels</span>
+    <span class="arrow">→</span>
+    <span class="step mod">Moderator decides</span>
+    <span class="arrow">→</span>
+    <span class="step ok">Approved joins the tree</span>
+  </div>
+  <div class="flow">
+    <span class="step mod">Moderator decides</span>
+    <span class="arrow">→</span>
+    <span class="step no">Rejected is discarded</span>
+  </div>
+  <figcaption>How a new label enters the tree</figcaption>
+</figure>
+
+<h2>What the labels mean</h2>
+<p>A label should tell a story in one glance. The parent gives the area. The label gives the detail. Here are a few examples from the tree.</p>
+<div class="tablewrap">
+  <table>
+    <thead>
+      <tr><th>Label</th><th>Parent</th><th>What it means</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><span class="pill">benchmarking</span></td><td>performance</td><td>Compare how fast the server runs</td></tr>
+      <tr><td><span class="pill">meeting notes</span></td><td>meetings</td><td>Record of what the group decided</td></tr>
+      <tr><td><span class="pill">load testing</span></td><td>performance</td><td>Test the server under heavy traffic</td></tr>
+      <tr><td><span class="pill">code quality</span></td><td>maintenance</td><td>Keep the codebase clean and clear</td></tr>
+      <tr><td><span class="pill">license</span></td><td>documentation</td><td>State how the project may be used</td></tr>
+      <tr><td><span class="pill">perf group</span></td><td>working group</td><td>The performance working group</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>Skills are maintained too</h2>
+<p>Labels describe issues. Skills describe people. A skill shows what a contributor knows, such as benchmarking or profiling. Skills also grow through AI, but in a different way.</p>
+<p>An optimization run reviews the whole skill tree from time to time. It can merge two similar skills into one. It can rename a skill. It can move a skill under a better parent. Every change carries a short reason. Every step is shown live while it happens, so a human can watch and stop the run at any moment.</p>
+<figure>
+  <div class="flow">
+    <span class="step ai">Merge similar skills</span>
+    <span class="step ai">Rename a skill</span>
+    <span class="step ai">Move under a better parent</span>
+  </div>
+  <figcaption>What a skill optimization run can do</figcaption>
+</figure>
+
+<h2>Matching people to work</h2>
+<p>Labels and skills alone are not enough. The real goal is to connect each issue to the person who should look at it. This is where the matching algorithm helps.</p>
+
+<h3>The profile</h3>
+<p>Every contributor has a profile built from their past behavior. The profile records the skills they showed and the repos where they showed them. Nothing is guessed. Everything comes from real work.</p>
+
+<h3>Time and place matter</h3>
+<p>Recent work weighs more than old work. Work inside the same repo weighs the most. Work in a sibling repo inside the same organization weighs a bit less. Work outside the organization weighs the least. This keeps every recommendation local and honest.</p>
+<figure>
+  <div class="bars" id="weights"></div>
+  <figcaption>How much each source of evidence counts toward a match</figcaption>
+</figure>
+
+<h3>The algorithm</h3>
+<p>The core ranking is pure data. First the issue text is matched to the skill tree. Then each profile is compared with those skills. The result is a short ranked list of people who can help. AI is used only for the final choice between the top few names. This keeps the system fast and cheap while staying accurate.</p>
+
+<h3>Roles follow behavior</h3>
+<p>A contributor who writes code is suggested as an implementer. A contributor who reviews and discusses is suggested as a reviewer. The role comes from what the person actually does, not from a guess.</p>
+<div class="cards">
+  <div class="card"><div class="num">1.0</div><div class="lbl">Same repo</div></div>
+  <div class="card"><div class="num">0.6</div><div class="lbl">Same organization</div></div>
+  <div class="card"><div class="num">0.3</div><div class="lbl">Outside</div></div>
+</div>
+
+<div class="mathbox">
+  <div class="mathtitle">The score in plain math</div>
+  <div class="formula"><span class="tag">score(d, e)</span> = skillMatch(d, e) + engagement(d, e) + volume(d)</div>
+  <div class="formula"><span class="tag">skillMatch(d, e)</span> = Σ<sub>k ∈ S(e)</sub> Σ<sub>r ∈ R(d, k)</sub> A(d, k, r) × w(repo(e), r)</div>
+  <div class="formula"><span class="tag">A(d, k, r)</span> = A<sub>0</sub>(d, k, r) × e<sup>−λΔt</sup> , λ = ln 2 ÷ 365</div>
+  <div class="formula"><span class="tag">w(repo(e), r)</span> = 1.0 if r is repo(e) , 0.6 if same owner , 0.3 otherwise</div>
+  <div class="formula"><span class="tag">engagement(d, e)</span> = 2 if d wrote e , 1 if d commented , 0 otherwise</div>
+  <div class="formula"><span class="tag">volume(d)</span> = min(commits(d), 20) ÷ 20</div>
+  <div class="formulanote">Rank every contributor, keep the top few, and let AI pick the final role from them.</div>
+</div>
+
+<h2>The first runs tell a story</h2>
+<p>A small pilot on two real repos shows the shape of the data. In three months the express repo produced 104 issues and pull requests. The perf group repo added 84 more over its lifetime. From these 188 entries the system learned 203 skills and 625 contributor profiles. The label tree now holds 133 labels.</p>
+<div class="tablewrap">
+  <table>
+    <thead>
+      <tr><th>Repo</th><th>Window</th><th>Issues</th><th>Pull requests</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>expressjs/express</td><td>Last 3 months</td><td>13</td><td>91</td></tr>
+      <tr><td>the perf group repo</td><td>All time</td><td>49</td><td>35</td></tr>
+    </tbody>
+  </table>
+</div>
+<div class="cards">
+  <div class="card"><div class="num">203</div><div class="lbl">Skills learned</div></div>
+  <div class="card"><div class="num">625</div><div class="lbl">Contributor profiles</div></div>
+  <div class="card"><div class="num">133</div><div class="lbl">Labels in the tree</div></div>
+</div>
+
+<h2>A real example</h2>
+<p>Here is a real open issue from the express repo. The steps below show how the issue moves through the system.</p>
+<figure>
+  <div class="exampleflow">
+    <div class="efstep">
+      <div class="eflabel">Step 1 The issue</div>
+      <div class="eftitle">expressjs/express #7391 the body parser library fails open on an invalid limit value, a tracked CVE</div>
+    </div>
+    <div class="efarrow">↓</div>
+    <div class="efstep">
+      <div class="eflabel">Step 2 Skills matched</div>
+      <div class="chips">
+        <span class="chip">Security</span>
+        <span class="chip">Dependencies</span>
+        <span class="chip">Node.js</span>
+        <span class="chip">Express</span>
+      </div>
+    </div>
+    <div class="efarrow">↓</div>
+    <div class="efstep">
+      <div class="eflabel">Step 3 Profiles ranked</div>
+      <div class="rank top"><span class="who">UlisesGascon</span><span class="role">reviewer</span><div class="track"><div class="fill"></div></div><span class="score">13.6</span></div>
+      <div class="rank"><span class="who">dougwilson</span><span class="role">top pick</span><div class="track"><div class="fill"></div></div><span class="score">8</span></div>
+      <div class="rank"><span class="who">wesleytodd</span><span class="role">reviewer</span><div class="track"><div class="fill"></div></div><span class="score">8</span></div>
+    </div>
+    <div class="efarrow">↓</div>
+    <div class="efstep hl">
+      <div class="eflabel">Step 4 The suggestion</div>
+      <div class="eftitle">A security minded reviewer first, with the long time maintainer close behind</div>
+    </div>
+  </div>
+  <figcaption>How issue #7391 becomes a short list of people</figcaption>
+</figure>
+<p>The ranking took about 12 milliseconds and used no AI to order the list. The AI final choice between the top names took about 1 second.</p>
+
+<h2>A simple flow for every issue</h2>
+<p>When a new issue arrives the flow stays the same. The text is matched to the skill tree. Each profile is compared with those skills. The result is a short ranked list. A moderator reviews the label proposals. The issue finds the right eyes and the contributor finds the right task.</p>
+<blockquote>Labels make work findable. Profiles make routing fast. The issue finds the right eyes and the contributor finds the right task.</blockquote>
+
+<h2>Conclusion</h2>
+<p>This draft gives the Express organization a common language. The label tree grows with human approval. Skills stay clean with AI help. Profiles and a simple algorithm route every issue to the right person. The structure is simple enough to adopt today and strong enough to grow with the organization.</p>
+
+  <p class="colophon">Proposal for the Express organization. Based on a pilot on expressjs/express (last 3 months) and the performance working group repo (all time).</p>
+  </article>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  const weightData = [
+    { label: "Same repo", value: 1.0 },
+    { label: "Same organization", value: 0.6 },
+    { label: "Outside", value: 0.3 }
+  ];
+  const widthData = weightData.map((d) => (d.value / 1.0) * 100);
+  const bars = document.getElementById("weights");
+  let html = "";
+  for (let i = 0; i < weightData.length; i++) {
+    html +=
+      '<div class="bar-row">' +
+      '<span class="bar-label">' + weightData[i].label + '</span>' +
+      '<div class="bar-track"><div class="bar-fill"></div></div>' +
+      '<span class="bar-value">' + weightData[i].value.toFixed(1) + '</span>' +
+      '</div>';
+  }
+  bars.innerHTML = html;
+  const rankWidths = [100, 59, 59];
+  requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
+      bars.querySelectorAll(".bar-fill").forEach((el, i) => {
+        el.style.width = widthData[i] + "%";
+      });
+      document.querySelectorAll(".rank .fill").forEach((el, i) => {
+        el.style.width = rankWidths[i] + "%";
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
