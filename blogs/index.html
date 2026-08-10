@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — Murat Kirazkaya</title>
+<meta name="description" content="Articles on Express, Node.js performance, open source, and self-hosted infrastructure by Murat Kirazkaya.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog — Murat Kirazkaya">
+<meta property="og:description" content="Articles on Express, Node.js performance, open source, and self-hosted infrastructure.">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs">
+
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #0e0d0c;
+    --ink2: #3a3935;
+    --ink3: #7a7870;
+    --surface: #f5f2eb;
+    --surface2: #ede9e0;
+    --surface3: #e3dfd5;
+    --accent: #c94a1e;
+    --accent2: #1a5c3a;
+    --line: rgba(14,13,12,0.12);
+    --mono: 'DM Mono', monospace;
+    --serif: 'Instrument Serif', serif;
+    --sans: 'Geist', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-links a.active { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+  .post-top { display: flex; align-items: baseline; gap: 16px; }
+
+  .post-hero { padding: 40px 0 36px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-lead {
+    font-family: var(--serif); font-size: clamp(16px, 2.8vw, 20px);
+    color: var(--ink2); line-height: 1.45; max-width: 640px;
+    padding-left: 18px; border-left: 3px solid var(--accent);
+  }
+
+  .blog-list { display: flex; flex-direction: column; gap: 12px; padding-bottom: 72px; }
+  .blog-teaser {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 24px; flex-wrap: wrap;
+    text-decoration: none; color: inherit;
+    padding: 26px 30px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent2);
+    margin: 0;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .blog-teaser:hover {
+    background: var(--surface2);
+    border-color: rgba(14, 13, 12, 0.18);
+  }
+  .blog-teaser-eyebrow {
+    font-family: var(--mono); font-size: 10px; color: var(--accent2);
+    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .blog-teaser-title {
+    font-family: var(--serif); font-size: clamp(22px, 3.5vw, 28px); font-weight: 400;
+    color: var(--ink); margin-bottom: 6px; line-height: 1.18; max-width: 520px;
+  }
+  .blog-teaser-title em { font-style: italic; color: var(--accent2); }
+  .blog-teaser-sub { font-size: 13px; color: var(--ink3); line-height: 1.55; max-width: 520px; }
+  .blog-teaser-arrow {
+    font-family: var(--mono); font-size: 12px; color: var(--accent);
+    letter-spacing: 0.04em; flex-shrink: 0;
+    transition: transform 0.15s, color 0.15s;
+  }
+  .blog-teaser:hover .blog-teaser-arrow { transform: translateX(4px); color: var(--ink); }
+  .blog-teaser-actions { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+  .blog-teaser-btn {
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.03em;
+    text-decoration: none; color: var(--ink); background: var(--surface2);
+    border: 1px solid var(--line); padding: 8px 14px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .blog-teaser-btn:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+    .blog-teaser { padding: 22px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#services">Services</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/blogs" class="active">Blog</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="/booking" class="nav-cta" data-umami-event="blog-nav-book">Book a call →</a>
+  </nav>
+
+  <div class="post-top">
+    <a href="/" class="back-link" data-umami-event="blog-back-home">← Home</a>
+  </div>
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog</div>
+    <h1 class="post-title">Writings</h1>
+    <p class="post-lead">Express, Node.js performance, open source, and self-hosted infrastructure.</p>
+  </header>
+
+  <main class="blog-list">
+
+    <a href="/blogs/recommended-issue-pr-structure-express.html" class="blog-teaser" data-umami-event="blogs-proposal-click">
+      <div>
+        <div class="blog-teaser-eyebrow">Blog · English · Aug 10, 2026</div>
+        <div class="blog-teaser-title">Recommended Issue/PR Structure for Express</div>
+        <div class="blog-teaser-sub">A proposal: a label tree, AI-maintained skills, and a matching algorithm that connects every issue or PR to the right person.</div>
+      </div>
+      <span class="blog-teaser-arrow">Read →</span>
+    </a>
+
+    <div class="blog-teaser">
+      <div>
+        <div class="blog-teaser-eyebrow">Blog · TR / EN · Jul 31, 2026</div>
+        <div class="blog-teaser-title">Cluster and Worker threads on Express</div>
+        <div class="blog-teaser-sub">Same Express app, four concurrency setups: the light endpoint went from 2.9 to 81.8 req/s while heavy CPU work ran.</div>
+      </div>
+      <div class="blog-teaser-actions">
+        <a href="/blogs/express-cluster-ve-worker-threads.html" class="blog-teaser-btn" data-umami-event="blogs-cluster-tr-click">Türkçe oku</a>
+        <a href="/blogs/cluster-and-worker-threads-on-express.html" class="blog-teaser-btn" data-umami-event="blogs-cluster-en-click">Read in English</a>
+      </div>
+    </div>
+
+    <div class="blog-teaser">
+      <div>
+        <div class="blog-teaser-eyebrow">Blog · TR / EN · Jul 24, 2026</div>
+        <div class="blog-teaser-title">Is Express really <em>slow</em></div>
+        <div class="blog-teaser-sub">Node 18→26 bench: the real gap is your Node version, not the framework.</div>
+      </div>
+      <div class="blog-teaser-actions">
+        <a href="/blogs/express-gercekten-yavas-mi.html" class="blog-teaser-btn" data-umami-event="blogs-express-tr-click">Türkçe oku</a>
+        <a href="/blogs/is-express-really-slow.html" class="blog-teaser-btn" data-umami-event="blogs-express-en-click">Read in English</a>
+      </div>
+    </div>
+
+    <a href="/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html" class="blog-teaser" data-umami-event="blogs-stack-click">
+      <div>
+        <div class="blog-teaser-eyebrow">Blog · Türkçe</div>
+        <div class="blog-teaser-title">Nasıl <em>$10K MRR</em> yapmadan ucuz tech stack kurdum?</div>
+        <div class="blog-teaser-sub">Self-hosted Coolify, VPS, token maliyeti ve OpenRouter.</div>
+      </div>
+      <span class="blog-teaser-arrow">Okuyayım →</span>
+    </a>
+
+  </main>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

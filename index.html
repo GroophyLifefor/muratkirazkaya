@@ -465,6 +465,8 @@
     transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
   .blog-teaser-btn:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+  .blog-teaser-more { justify-content: center; padding: 16px 30px; }
+  .blog-teaser-more .blog-teaser-arrow { font-size: 14px; }
 
   @media (max-width: 600px) {
     .about-grid { grid-template-columns: 1fr; }
@@ -1207,7 +1209,7 @@
       <a href="#work">Work</a>
       <a href="#services">Services</a>
       <a href="#open-source">Open Source</a>
-      <a href="#blog">Blog</a>
+      <a href="/blogs">Blog</a>
       <a href="#about">About</a>
     </div>
     <a href="mailto:muratkirazkaya0@gmail.com" class="nav-cta" data-umami-event="nav-hire-me-click">Hire me →</a>
@@ -1490,7 +1492,7 @@
   <div id="blog">
   <div class="blog-teaser">
     <div>
-      <div class="blog-teaser-eyebrow">Blog · English</div>
+      <div class="blog-teaser-eyebrow">Blog · English · Aug 10, 2026</div>
       <div class="blog-teaser-title">Recommended Issue/PR Structure for Express</div>
       <div class="blog-teaser-sub">A proposal: a label tree, AI-maintained skills, and a matching algorithm that connects every issue or PR to the right person.</div>
     </div>
@@ -1501,7 +1503,7 @@
 
   <div class="blog-teaser">
     <div>
-      <div class="blog-teaser-eyebrow">Blog · TR / EN</div>
+      <div class="blog-teaser-eyebrow">Blog · TR / EN · Jul 31, 2026</div>
       <div class="blog-teaser-title">Cluster and Worker threads on Express</div>
       <div class="blog-teaser-sub">Same Express app, four concurrency setups: the light endpoint went from 2.9 to 81.8 req/s while heavy CPU work ran.</div>
     </div>
@@ -1511,25 +1513,8 @@
     </div>
   </div>
 
-  <div class="blog-teaser">
-    <div>
-      <div class="blog-teaser-eyebrow">Blog · TR / EN</div>
-      <div class="blog-teaser-title">Is Express really <em>slow</em></div>
-      <div class="blog-teaser-sub">Node 18→26 bench: the real gap is your Node version, not the framework.</div>
-    </div>
-    <div class="blog-teaser-actions">
-      <a href="/blogs/express-gercekten-yavas-mi.html" class="blog-teaser-btn" data-umami-event="home-blog-express-tr-click">Türkçe oku</a>
-      <a href="/blogs/is-express-really-slow.html" class="blog-teaser-btn" data-umami-event="home-blog-express-en-click">Read in English</a>
-    </div>
-  </div>
-
-  <a href="/blogs/nasil-10k-mrr-yapmadan-ucuz-tech-stack-kurdum.html" class="blog-teaser" data-umami-event="home-blog-teaser-click">
-    <div>
-      <div class="blog-teaser-eyebrow">Blog · Türkçe</div>
-      <div class="blog-teaser-title">Nasıl <em>$10K MRR</em> yapmadan ucuz tech stack kurdum?</div>
-      <div class="blog-teaser-sub">Self-hosted Coolify, VPS, token maliyeti ve OpenRouter.</div>
-    </div>
-    <span class="blog-teaser-arrow">Okuyayım →</span>
+  <a href="/blogs" class="blog-teaser blog-teaser-more" data-umami-event="home-blog-see-more-click">
+    <span class="blog-teaser-arrow">See more blog →</span>
   </a>
   </div>
 
