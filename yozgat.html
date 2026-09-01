@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yozgat: the deploy can fail, your site can't</title>
+<meta name="description" content="Self-hosted deployment platform for one VPS. Blue/green deploys that never drop a request, databases that survive your deploys, and a CLI that ships a folder without a git repo.">
+<meta property="og:title" content="Yozgat: the deploy can fail, your site can't">
+<meta property="og:description" content="Self-hosted deploys with no downtime. A broken release becomes a non-event instead of an outage.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --w:#fff; --s1:#f7f9fb; --s2:#eef2f6;
+  --bd:#e3e8ef; --bd2:#cfd8e3;
+  --ink:#0f1b2d; --tx:#3f4b5b; --tx2:#6b7a90; --tx3:#94a3b4;
+  --or:#f6821f; --or2:#e35f00; --or-s:#fff4e8;
+  --ok:#0a9d5a; --ok-s:#e8f7ef;
+  --bad:#d92d20; --bad-s:#fdeceb;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+  --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --max:1180px;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--w);color:var(--tx);font-family:var(--sans);font-size:16px;line-height:1.6;font-feature-settings:"cv02","cv03","calt";-webkit-font-smoothing:antialiased;overflow-x:hidden}
+a{color:inherit}
+h1,h2,h3{margin:0;color:var(--ink);font-weight:600;letter-spacing:-.03em;line-height:1.1}
+p{margin:0}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}}
+.rv{opacity:0;transform:translateY(12px);transition:opacity .55s cubic-bezier(.16,1,.3,1),transform .55s cubic-bezier(.16,1,.3,1)}
+.rv.in{opacity:1;transform:none}
+.rv.d1{transition-delay:.07s}.rv.d2{transition-delay:.14s}
+
+/* nav */
+nav{position:sticky;top:0;z-index:60;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd)}
+nav .wrap{display:flex;align-items:center;justify-content:space-between;height:62px;gap:24px}
+.brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px;color:var(--ink);letter-spacing:-.02em}
+.brand .bmk{width:22px;height:22px;flex:none;display:block}
+.nl{display:flex;gap:26px;font-size:14.5px;color:var(--tx)}
+.nl a{text-decoration:none}.nl a:hover{color:var(--or2)}
+@media(max-width:900px){.nl{display:none}}
+.btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 18px;border-radius:6px;border:1px solid transparent;font:inherit;font-size:14.5px;font-weight:500;cursor:pointer;text-decoration:none;transition:background .15s}
+.btn-p{background:var(--or);color:#fff;font-weight:600}
+.btn-p:hover{background:var(--or2)}
+.btn-lg{padding:13px 24px;font-size:15.5px}
+
+/* section frame */
+section{padding:96px 0}
+.tinted{background:var(--s1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd)}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--or2);margin-bottom:14px}
+h2{font-size:clamp(28px,3.8vw,44px);max-width:18ch;margin-bottom:14px}
+.lead{font-size:17px;color:var(--tx);max-width:58ch;line-height:1.6}
+.lead b{color:var(--ink);font-weight:600}
+.head{margin-bottom:44px}
+
+/* hero */
+.hero{padding:88px 0 76px}
+.hero .kick{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px;color:var(--tx2);background:var(--or-s);border:1px solid #ffddb8;padding:5px 12px;border-radius:999px;margin-bottom:26px}
+.hero .kick i{width:6px;height:6px;border-radius:50%;background:var(--or);font-style:normal}
+.hero h1{font-size:clamp(42px,6.6vw,74px);letter-spacing:-.045em;line-height:1.03;max-width:15ch;margin-bottom:22px}
+.hero h1 .m{color:var(--tx3)}
+.hero .lead{font-size:19px;max-width:54ch;margin-bottom:32px}
+.hcta{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin-bottom:64px}
+.wl{max-width:430px}
+.wlf{display:flex;gap:8px}
+.wlf input{flex:1;min-width:0;padding:12px 15px;background:#fff;border:1px solid var(--bd2);border-radius:6px;color:var(--ink);font:inherit;font-size:15px}
+.wlf input::placeholder{color:var(--tx3)}
+.wlf input:focus{outline:none;border-color:var(--or);box-shadow:0 0 0 3px var(--or-s)}
+.wlmsg{margin-top:9px;font-family:var(--mono);font-size:13px;display:none}
+.wlmsg.ok{display:block;color:var(--ok)}.wlmsg.err{display:block;color:var(--bad)}
+.hint{font-family:var(--mono);font-size:12.5px;color:var(--tx3)}
+
+/* card */
+.card{background:#fff;border:1px solid var(--bd);border-radius:12px;box-shadow:0 1px 2px rgba(15,27,45,.04),0 8px 24px -12px rgba(15,27,45,.12)}
+.ctop{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--bd)}
+.ct-l{font-family:var(--mono);font-size:12.5px;color:var(--tx2)}
+.ct-l b{color:var(--ink);font-weight:500}
+.metrics{display:flex;gap:26px}
+.met{font-family:var(--mono);font-variant-numeric:tabular-nums;text-align:right}
+.met span{display:block;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)}
+.met b{font-size:17px;font-weight:500;color:var(--ink)}
+.met.g b{color:var(--ok)}.met.b b{color:var(--bad)}
+
+/* ── uptime strip ── */
+.strip{display:flex;gap:2px;align-items:flex-end;height:44px}
+.tick{flex:1 1 0;min-width:0;height:100%;border-radius:2px;background:var(--ok);opacity:0;transform:scaleY(.35);transform-origin:bottom;transition:opacity .18s,transform .22s cubic-bezier(.2,1.4,.4,1)}
+.tick.on{opacity:1;transform:none}
+.tick.dn{background:var(--bad)}
+.striprow{padding:20px 18px}
+.strip-meta{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;color:var(--tx3);margin-top:9px}
+
+/* version chips */
+.vers{display:flex;align-items:center;gap:12px;padding:16px 18px;border-bottom:1px solid var(--bd);min-height:70px}
+.chip{display:flex;align-items:center;gap:9px;padding:9px 14px;border:1px solid var(--bd);border-radius:8px;background:#fff;font-family:var(--mono);font-size:13px;color:var(--ink);transition:all .45s cubic-bezier(.16,1,.3,1)}
+.chip .dt{width:8px;height:8px;border-radius:50%;background:var(--bd2);flex:none}
+.chip.live{border-color:var(--or);background:var(--or-s)}
+.chip.live .dt{background:var(--or)}
+.chip.build{border-style:dashed}
+.chip.dead{opacity:.34;text-decoration:line-through;text-decoration-color:var(--tx3)}
+.chip.fail{border-color:var(--bad);background:var(--bad-s);color:var(--bad)}
+.chip.fail .dt{background:var(--bad)}
+.chip .st{font-size:11px;color:var(--tx3);letter-spacing:.03em}
+.chip.live .st{color:var(--or2)}
+.chip.fail .st{color:var(--bad)}
+.chip .prog{width:52px;height:3px;border-radius:2px;background:var(--s2);overflow:hidden;display:none}
+.chip.build .prog{display:block}
+.chip .prog i{display:block;height:100%;width:0;background:var(--tx3);transition:width .3s linear}
+.pips{display:none;gap:4px}
+.chip.check .pips,.chip.fail .pips{display:flex}
+.pip{width:6px;height:6px;border-radius:50%;background:var(--s2);transition:background .3s}
+.pip.no{background:var(--bad)}.pip.yes{background:var(--ok)}
+.arrow{color:var(--tx3);font-family:var(--mono);font-size:14px;opacity:0;transition:opacity .35s}
+.arrow.on{opacity:1;color:var(--or)}
+.cfoot{padding:12px 18px;border-top:1px solid var(--bd);font-family:var(--mono);font-size:12.5px;color:var(--tx2);min-height:44px;display:flex;align-items:center;gap:8px;background:var(--s1);border-radius:0 0 12px 12px}
+.cfoot .c{color:var(--tx3)}
+.cfoot.bad{color:var(--bad);background:var(--bad-s)}
+.cfoot.good{color:var(--ok);background:var(--ok-s)}
+
+/* difference */
+.duo{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:900px){.duo{grid-template-columns:1fr}}
+.duo-h{display:flex;align-items:center;gap:9px;margin-bottom:12px;font-family:var(--mono);font-size:12.5px;color:var(--tx2)}
+.duo-h .sq{width:8px;height:8px;border-radius:2px;flex:none;background:var(--bad)}
+.duo-h.ok .sq{background:var(--or)}
+.big-n{font-size:clamp(38px,5vw,58px);font-weight:600;letter-spacing:-.04em;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+.big-n.bad{color:var(--bad)}.big-n.ok{color:var(--ok)}
+.big-l{font-size:13px;color:var(--tx2);margin-top:4px}
+.summary{display:flex;gap:36px;padding:20px 18px;border-top:1px solid var(--bd)}
+
+/* databases diagram */
+.dbwrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center}
+@media(max-width:900px){.dbwrap{grid-template-columns:1fr;gap:36px}}
+.dgm{position:relative;padding:26px;background:var(--s1);border:1px solid var(--bd);border-radius:14px}
+.dnode{display:flex;align-items:center;gap:12px;padding:16px 18px;background:#fff;border:1px solid var(--bd);border-radius:10px;font-family:var(--mono);font-size:13.5px;color:var(--ink);position:relative}
+.dnode .tagg{margin-left:auto;font-size:11px;color:var(--tx3);letter-spacing:.04em}
+.dnode .ic{width:28px;height:28px;border-radius:7px;flex:none;display:grid;place-items:center;background:#fff;border:1px solid var(--bd);padding:4px}
+.dnode .ic img{width:100%;height:100%;object-fit:contain}
+.dnode.app{transition:opacity .4s,transform .4s}
+.dnode.app.swap{opacity:0;transform:translateY(-14px)}
+.link{height:34px;margin-left:31px;border-left:2px dotted var(--bd2);position:relative}
+.link::after{content:"DATABASE_URL";position:absolute;left:12px;top:8px;font-family:var(--mono);font-size:10.5px;color:var(--tx3);letter-spacing:.04em}
+.dbadge{position:absolute;z-index:3;top:14px;right:16px;font-family:var(--mono);font-size:11px;color:var(--ok);background:var(--ok-s);border:1px solid #bfe8d3;padding:3px 9px;border-radius:999px}
+
+/* cli */
+.cliwrap{display:grid;grid-template-columns:250px 1fr;gap:20px;align-items:stretch}
+@media(max-width:860px){.cliwrap{grid-template-columns:1fr}}
+.tree{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:16px 18px;font-family:var(--mono);font-size:13px;color:var(--tx)}
+.tree .th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px}
+.tree ul{list-style:none;margin:0;padding:0}
+.tree li{padding:3.5px 0;color:var(--tx)}
+.tree li.dir{color:var(--ink);font-weight:500}
+.tree .no{margin-top:16px;padding-top:14px;border-top:1px dashed var(--bd2);display:flex;flex-wrap:wrap;gap:6px}
+.tree .nh{width:100%;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:2px}
+.tree .nx{font-size:11.5px;color:var(--tx3);background:var(--s2);border-radius:4px;padding:2px 7px;text-decoration:line-through;text-decoration-color:var(--bd2)}
+.term{background:#0f1b2d;border-radius:12px;overflow:hidden;box-shadow:0 12px 32px -14px rgba(15,27,45,.4);min-height:500px}
+.tbar{display:flex;align-items:center;gap:6px;padding:11px 15px;border-bottom:1px solid #23324a}
+.tbar i{width:9px;height:9px;border-radius:50%;background:#3a4a63;display:block}
+.tbar span{margin-left:8px;font-family:var(--mono);font-size:11.5px;color:#7d8ea6}
+.tbody{padding:18px;font-family:var(--mono);font-size:13px;line-height:1.95;min-height:340px;overflow-x:auto}
+.tbody pre{margin:0;white-space:pre-wrap;word-break:break-word;color:#c7d3e3}
+.dm{color:#657b98}.tt{color:#b6c4d6}.aa{color:#ffb45c}.gg{color:#4ade80}.rr{color:#ff8b80}.cc{color:#fff}
+.cur{display:inline-block;width:7px;height:1em;background:var(--or);vertical-align:text-bottom;animation:cur 1s steps(2) infinite}
+@keyframes cur{0%,50%{opacity:1}51%,100%{opacity:0}}
+
+/* matrix tabs */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:22px}
+.tab{position:relative;overflow:hidden;padding:11px 18px;border:1px solid var(--bd);border-radius:8px;background:#fff;font-size:14px;color:var(--tx);cursor:pointer;font-family:inherit;transition:border-color .2s,color .2s}
+.tab.on{border-color:var(--or);color:var(--ink);font-weight:500}
+.tab .fill{position:absolute;left:0;bottom:0;height:2px;width:0;background:var(--or)}
+.tab.on .fill{animation:fill var(--t,5s) linear forwards}
+@keyframes fill{to{width:100%}}
+.mx{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--bd);border-radius:12px;overflow:hidden;background:#fff}
+@media(max-width:760px){.mx{grid-template-columns:1fr}}
+.mx-l{padding:28px;border-right:1px solid var(--bd)}
+@media(max-width:760px){.mx-l{border-right:0;border-bottom:1px solid var(--bd)}}
+.mx-l h3{font-size:19px;margin-bottom:10px}
+.mx-l p{font-size:14.5px;color:var(--tx);line-height:1.6}
+.rticon{margin-bottom:16px;height:40px;display:flex;align-items:center}
+.rticon img{height:36px;width:auto;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.rticon img.on{opacity:1;transform:none}
+.mx-r{padding:28px;background:var(--s1);display:flex;flex-direction:column;justify-content:center;gap:14px}
+.mx-cmd{font-family:var(--mono);font-size:13px;color:var(--ink);background:#fff;border:1px solid var(--bd);border-radius:8px;padding:13px 15px}
+.mx-cmd .p{color:var(--tx3)}
+.srcrow{display:flex;align-items:center;gap:18px;flex-wrap:wrap;min-height:28px;opacity:0;transform:translateY(4px);transition:opacity .3s,transform .3s}
+.srcrow.on{opacity:1;transform:none}
+.srcrow img{height:22px;width:auto;display:block}
+.srcrow .bb{height:22px;width:auto;display:block;border-radius:3px}
+.srccli{display:flex;align-items:center;gap:10px}
+.srccli img{height:28px;width:28px;border-radius:7px;display:block}
+.srccli b{font-family:var(--mono);font-size:16px;color:var(--ink);letter-spacing:-.01em}
+.srccli span{font-family:var(--mono);font-size:12px;color:var(--tx3)}
+
+/* compare */
+.cmpw{overflow-x:auto}
+.cmp{width:100%;border-collapse:collapse;font-size:14.5px;background:#fff}
+@media(max-width:860px){.cmp{min-width:700px}}
+.cmp th,.cmp td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--bd)}
+.cmp thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--tx3);font-weight:400}
+.cmp thead th.me{color:var(--or2)}
+.cmp tbody th{font-weight:500;color:var(--ink);width:28%}
+.cmp td{color:var(--tx)}
+.cmp .me{background:var(--or-s)}
+.mk{font-family:var(--mono);margin-right:8px}
+.mk.y{color:var(--ok)}.mk.n{color:var(--bad)}.mk.p{color:var(--tx3)}
+.note{margin-top:18px;font-size:13px;color:var(--tx3);max-width:74ch}
+
+/* pair blocks */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media(max-width:860px){.pair{grid-template-columns:1fr}}
+.pb{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:26px}
+.pb h3{font-size:19px;margin-bottom:10px}
+.pb p{font-size:14.5px;color:var(--tx);line-height:1.6}
+.farrow{color:var(--tx3)}
+
+/* ram bar in table */
+.ram{display:flex;align-items:center;gap:9px}
+.ram .bar{height:7px;border-radius:4px;background:var(--bd2);min-width:6px}
+.ram .bar.big{background:var(--bad)}
+.ram .bar.tiny{background:var(--ok)}
+.ram b{font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--ink);white-space:nowrap}
+
+/* step flow */
+.steps{display:flex;align-items:stretch;gap:0;margin-top:22px;border:1px solid var(--bd);border-radius:10px;overflow:hidden;background:#fff}
+.step{flex:1;padding:14px 12px;text-align:center;border-right:1px solid var(--bd);transition:background .35s,color .35s}
+.step:last-child{border-right:0}
+.step .si{font-family:var(--mono);font-size:11px;color:var(--tx3);display:block;margin-bottom:5px}
+.step .sv{font-size:13.5px;color:var(--tx2);font-weight:500;transition:color .35s}
+.step.on{background:var(--or-s)}
+.step.on .sv{color:var(--ink)}
+.step.danger{background:var(--bad-s)}
+.step.danger .sv{color:var(--bad)}
+.step.done{background:var(--ok-s)}
+.step.done .sv{color:var(--ok)}
+.bkgrid{display:flex;gap:5px;margin-top:20px;align-items:center;flex-wrap:wrap}
+.bkday{width:26px;height:34px;border-radius:5px;border:1px solid var(--bd);background:var(--s1);display:grid;place-items:center;font-family:var(--mono);font-size:10px;color:var(--tx3);transition:all .3s}
+.bkday.done{background:var(--ok-s);border-color:#bfe8d3;color:var(--ok)}
+.bkoff{margin-left:8px;margin-top:8px;display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12px;color:var(--tx2)}
+.bkoff .pill{padding:5px 11px;border:1px solid var(--or);background:var(--or-s);border-radius:6px;color:var(--or2)}
+
+/* app catalog graph */
+.appgraph{background:var(--s1);border:1px solid var(--bd);border-radius:14px;padding:32px 24px}
+.ag-lbl{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin:6px 0 10px}
+.agnode{display:flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--or);border-radius:10px;padding:12px 16px;min-width:168px}
+.agnode.svc{border-color:var(--tx3)}
+.agnode img{width:26px;height:26px;object-fit:contain;flex:none}
+.agnode b{display:block;font-size:13.5px;color:var(--ink);font-weight:500}
+.agnode span{display:block;font-size:11px;color:var(--tx3);font-family:var(--mono);margin-top:1px}
+.agnode .agbadge{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10.5px;color:var(--ok);background:var(--ok-s);border:1px solid #bfe8d3;padding:2px 8px;border-radius:999px}
+.agroup{display:flex;flex-direction:column;align-items:center;border:1px dashed var(--bd2);border-radius:14px;padding:20px 18px}
+
+/* team flow */
+.flow{display:flex;flex-direction:column;align-items:center}
+.fnode{background:#fff;border:1px solid var(--bd);border-radius:10px;padding:13px 22px;font-family:var(--mono);font-size:13.5px;color:var(--ink);text-align:center;min-width:170px}
+.fnode small{display:block;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--tx3);font-weight:400;margin-bottom:3px}
+.fconn{width:1px;height:26px;background:var(--bd2);margin:2px 0;position:relative}
+.fconn::after{content:"↓";position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);color:var(--or);font-family:var(--mono);font-size:12px;background:var(--w);line-height:1;padding:0 2px}
+.frow{display:flex;gap:20px;flex-wrap:wrap;justify-content:center;margin-top:4px}
+.fcard{background:#fff;border:1px solid var(--bd);border-radius:12px;padding:20px;width:250px}
+.fcard h4{font-size:15px;color:var(--ink);margin-bottom:6px}
+.fcard p{font-size:13px;color:var(--tx2);line-height:1.55;margin-bottom:14px}
+
+/* permission chips */
+.permrow{display:flex;gap:6px;flex-wrap:wrap;justify-content:center}
+.permchip{font-family:var(--mono);font-size:11.5px;color:var(--tx2);background:#fff;border:1px solid var(--bd);border-radius:999px;padding:5px 11px}
+.permchip.on{border-color:var(--or);background:var(--or-s);color:var(--or2)}
+.permchip.off{opacity:.4}
+
+/* github pr comment mockup */
+.ghc{max-width:560px;background:#fff;border:1px solid var(--bd);border-radius:10px;overflow:hidden}
+.ghc-h{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--bd);font-size:13.5px;color:var(--tx2)}
+.ghc-h .av{width:24px;height:24px;border-radius:6px;object-fit:contain;flex:none}
+.ghc-h b{color:var(--ink);font-weight:500}
+.ghc-h .ts{margin-left:auto;color:var(--tx3);font-size:12px}
+.ghc-b{padding:18px}
+.ghc-b .row{display:flex;align-items:center;gap:9px;font-size:14px;color:var(--tx);padding:4px 0}
+.ghc-b .row.ok{color:var(--ok);font-weight:500}
+.ghc-b code{font-family:var(--mono);font-size:12.5px;background:var(--s1);border:1px solid var(--bd);border-radius:4px;padding:2px 7px;color:var(--ink)}
+.ghc-f{padding:11px 16px;border-top:1px solid var(--bd);background:var(--s1);font-family:var(--mono);font-size:11.5px;color:var(--tx3)}
+
+/* logos */
+.logos{padding:46px 0}
+.lrow{display:flex;flex-wrap:wrap;gap:24px 40px;align-items:center;justify-content:center}
+.lrow img{max-height:24px;max-width:104px;width:auto;display:block;opacity:.9}
+.lb{text-align:center;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3);margin-bottom:24px}
+
+/* cta */
+.cta{padding:100px 0;background:var(--ink);color:#c7d3e3;text-align:center}
+.cta h2{color:#fff;margin:0 auto 14px;max-width:16ch}
+.cta p{color:#9fb0c6;max-width:50ch;margin:0 auto 30px;font-size:16.5px}
+.cta .wl{margin:0 auto}
+.cta .wlf input{background:#182740;border-color:#2b3c57;color:#fff}
+.cta .wlf input::placeholder{color:#6c7f9a}
+footer{background:var(--ink);border-top:1px solid #1f2e45;padding:26px 0;color:#7d8ea6}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:18px;flex-wrap:wrap}
+footer p,footer a{font-size:13px;margin:0}
+footer a{color:#9fb0c6;text-decoration:none}
+footer a:hover{color:#fff}
+.fl{display:flex;gap:22px}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="brand"><img class="bmk" src="images/yozgat-logo-square.png" alt="">Yozgat</div>
+    <div class="nl">
+      <a href="#diff">Difference</a><a href="#db">Databases</a><a href="#team">Team</a>
+      <a href="#preview">Preview</a><a href="#cli">CLI</a><a href="#any">Anything</a><a href="#compare">Compare</a>
+    </div>
+    <a href="#waitlist" class="btn btn-p">Join waitlist</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div class="kick"><i></i>Open source · self-hosted · building v1</div>
+    <h1>The deploy can fail.<br><span class="m">Your site can't.</span></h1>
+    <p class="lead">New versions build <b>beside</b> the running one and only take traffic once they're proven healthy. A broken release becomes a non-event.</p>
+    <div class="hcta">
+      <div class="wl" id="waitlist">
+        <form class="wlf" id="wlForm">
+          <input type="email" id="wlEmail" placeholder="you@company.com" required aria-label="Email">
+          <button class="btn btn-p btn-lg">Join waitlist</button>
+        </form>
+        <p class="wlmsg" id="wlMsg" role="status"></p>
+      </div>
+      <span class="hint">one email, when v1 ships</span>
+    </div>
+
+    <div class="card rv in">
+      <div class="ctop">
+        <div class="ct-l"><b>Zero-downtime deploys</b> · built-in blue/green</div>
+        <div class="metrics">
+          <div class="met"><span>uptime</span><b id="hUp">100%</b></div>
+          <div class="met g"><span>dropped</span><b id="hDrop">0</b></div>
+        </div>
+      </div>
+      <div class="vers">
+        <div class="chip live" id="hC1"><span class="dt"></span>v1.2.0<span class="st" id="hS1">live</span></div>
+        <span class="arrow" id="hArr">→</span>
+        <div class="chip" id="hC2" style="opacity:0"><span class="dt"></span>v1.3.0<span class="st" id="hS2"></span><span class="prog"><i id="hP"></i></span><span class="pips"><span class="pip" id="hp1"></span><span class="pip" id="hp2"></span><span class="pip" id="hp3"></span></span></div>
+      </div>
+      <div class="striprow"><div class="strip" id="hStrip"></div>
+        <div class="strip-meta"><span>every request, last 60 seconds</span><span>now</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- DIFFERENCE -->
+<section id="diff" class="tinted">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">The difference</div>
+      <h2>Same broken build. Two very different nights.</h2>
+      <p class="lead">Both sides deploy a release that <b>crashes on boot</b>. One clock, same traffic.</p>
+    </div>
+    <div class="duo">
+      <div class="rv">
+        <div class="duo-h"><span class="sq"></span>stop-first · recreate</div>
+        <div class="card">
+          <div class="vers">
+            <div class="chip live" id="aC1"><span class="dt"></span>v1.2.0<span class="st" id="aS1">live</span></div>
+            <span class="arrow" id="aArr">→</span>
+            <div class="chip" id="aC2" style="opacity:0"><span class="dt"></span>v1.3.0<span class="st" id="aS2"></span></div>
+          </div>
+          <div class="striprow"><div class="strip" id="aStrip"></div>
+            <div class="strip-meta"><span>deploy starts</span><span>now</span></div></div>
+          <div class="summary">
+            <div><div class="big-n bad" id="aDrop">0</div><div class="big-l">requests dropped</div></div>
+            <div><div class="big-n" id="aDown">0s</div><div class="big-l">of downtime</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="rv d1">
+        <div class="duo-h ok"><span class="sq"></span>yozgat · blue / green</div>
+        <div class="card">
+          <div class="vers">
+            <div class="chip live" id="bC1"><span class="dt"></span>v1.2.0<span class="st" id="bS1">live</span></div>
+            <span class="arrow" id="bArr">→</span>
+            <div class="chip" id="bC2" style="opacity:0"><span class="dt"></span>v1.3.0<span class="st" id="bS2"></span><span class="pips"><span class="pip" id="bp1"></span><span class="pip" id="bp2"></span><span class="pip" id="bp3"></span></span></div>
+          </div>
+          <div class="striprow"><div class="strip" id="bStrip"></div>
+            <div class="strip-meta"><span>deploy starts</span><span>now</span></div></div>
+          <div class="summary">
+            <div><div class="big-n ok" id="bDrop">0</div><div class="big-l">requests dropped</div></div>
+            <div><div class="big-n" id="bDown">0s</div><div class="big-l">of downtime</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- DATABASES -->
+<section id="db">
+  <div class="wrap">
+    <div class="dbwrap">
+      <div class="rv">
+        <div class="dgm">
+          <span class="dbadge" id="dbUp">up 41 days</span>
+          <div class="dnode app" id="dApp"><span class="ic"><img src="images/astro.png" alt="Astro"></span><span id="dAppV">web · v1.2.0</span><span class="tagg" id="dAppT">live</span></div>
+          <div class="link"></div>
+          <div class="dnode db"><span class="ic"><img src="images/Postgresql_elephant.svg.webp" alt="PostgreSQL"></span>postgres 16<span class="tagg" id="dDbT">never restarted</span></div>
+        </div>
+      </div>
+      <div class="rv d1">
+        <div class="eyebrow">Databases</div>
+        <h2>Deploys happen around your database.</h2>
+        <p class="lead" style="margin-bottom:16px">Ship as often as you like. The database keeps running through all of it. Connect an app to it and the <b>connection details are already there</b>.</p>
+        <p class="lead">It gets backed up on its own schedule, and the copy leaves the server. You don't write a backup script.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APP CATALOG -->
+<section id="catalog">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">App catalog</div>
+      <h2>Your app and its services, drawn as they actually run.</h2>
+      <p class="lead">The app deploys and redeploys. The services underneath it don't: they're attached once, from a catalog that also has MySQL and MongoDB.</p>
+    </div>
+    <div class="appgraph rv d1">
+      <div class="flow">
+        <span class="ag-lbl">app</span>
+        <div class="agnode app"><img src="images/astro.png" alt="Astro"><div><b>web</b><span>Astro</span></div></div>
+        <div class="fconn"></div>
+        <div class="agroup">
+          <div class="agnode app"><img src="images/Node.js_logo.svg.webp" alt="Node.js"><div><b>backend</b><span>Node.js</span></div></div>
+          <div class="fconn"></div>
+          <span class="ag-lbl">backing services</span>
+          <div class="frow">
+            <div class="agnode svc"><img src="images/redis-logo.svg" alt="Redis"><div><b>Redis</b><span>backing service</span></div></div>
+            <div class="agnode svc"><img src="images/Postgresql_elephant.svg.webp" alt="PostgreSQL"><div><b>PostgreSQL</b><span>backing service</span><span class="agbadge">last backup 30m ago</span></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM & PERMISSIONS -->
+<section id="team" class="tinted">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Team & permissions</div>
+      <h2>One root account. Exactly the access everyone else needs.</h2>
+      <p class="lead">Root creates teams and accounts. Every account gets a role per team, and access to a project is granted on purpose: nothing implied, nothing inherited by accident.</p>
+    </div>
+    <div class="flow rv d1">
+      <div class="fnode"><small>account</small>Root</div>
+      <div class="fconn"></div>
+      <div class="fnode"><small>creates & manages</small>Team</div>
+      <div class="fconn"></div>
+      <div class="frow">
+        <div class="fcard">
+          <h4>Owner</h4>
+          <p>Full control: create/delete projects, add/remove people, every permission on every project.</p>
+          <div class="permrow">
+            <span class="permchip on">read</span><span class="permchip on">read-sensitive</span><span class="permchip on">write</span><span class="permchip on">deploy</span><span class="permchip on">delete</span>
+          </div>
+        </div>
+        <div class="fcard">
+          <h4>Member</h4>
+          <p>Starts with nothing. Owner grants exactly this, project by project: deploy this one, not delete it.</p>
+          <div class="permrow">
+            <span class="permchip on">read</span><span class="permchip off">read-sensitive</span><span class="permchip off">write</span><span class="permchip on">deploy</span><span class="permchip off">delete</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PREVIEW ENVIRONMENTS -->
+<section id="preview">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Preview environments</div>
+      <h2>Every pull request gets its own environment.</h2>
+      <p class="lead">Push a branch, get a URL. Close the PR and the environment, plus anything it cloned, is torn down on its own. Nothing lingers on disk waiting to be noticed.</p>
+    </div>
+    <div class="ghc rv d1">
+      <div class="ghc-h"><img class="av" src="images/yozgat-logo-square.png" alt="Yozgat"><b>yozgat[bot]</b> commented <span class="ts">just now</span></div>
+      <div class="ghc-b">
+        <div class="row ok">✅ Preview environment deployed</div>
+        <div class="row">🔗 <code>pr-42.preview.acme.app</code></div>
+        <div class="row">⏱ built in 38s from <code>a1b2c3d</code></div>
+      </div>
+      <div class="ghc-f">Torn down automatically when this PR is merged or closed.</div>
+    </div>
+  </div>
+</section>
+
+<!-- CLI -->
+<section id="cli" class="tinted">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">The CLI</div>
+      <h2>No repository. No pipeline. Just the folder.</h2>
+      <p class="lead">Git works too. It just isn't required.</p>
+    </div>
+    <div class="cliwrap rv">
+      <div class="tree">
+        <div class="th">~/my-backend</div>
+        <ul>
+          <li class="dir">src/</li><li class="dir">public/</li>
+          <li>Dockerfile</li><li>package.json</li><li>.dockerignore</li>
+        </ul>
+        <div class="no"><span class="nh">not needed</span>
+          <span class="nx">.git</span><span class="nx">.github/workflows</span><span class="nx">deploy.yml</span><span class="nx">Jenkinsfile</span></div>
+      </div>
+      <div class="term">
+        <div class="tbar"><i></i><i></i><i></i><span>~/my-backend</span></div>
+        <div class="tbody"><pre id="cliOut"></pre></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ANY SOURCE / ANY RUNTIME -->
+<section id="any">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Anything, anywhere</div>
+      <h2>Any source, shipped the same way.</h2>
+      <p class="lead">A push, a folder, or a request from CI: the deploy that runs is identical.</p>
+    </div>
+    <div class="rv">
+      <div class="tabs" id="tabs">
+        <button class="tab on" data-i="0">Push to your repo<span class="fill"></span></button>
+        <button class="tab" data-i="1">Ship a local folder<span class="fill"></span></button>
+        <button class="tab" data-i="2">Call it from CI<span class="fill"></span></button>
+      </div>
+      <div class="mx">
+        <div class="mx-l">
+          <h3 id="mxT">Connect a repository</h3>
+          <p id="mxP">Yozgat clones over SSH and builds on the server. It never calls a provider API, so GitHub, GitLab, Gitea, Forgejo and Codeberg all behave identically.</p>
+          <div class="srcrow" id="mxLogos" style="margin-top:22px"></div>
+        </div>
+        <div class="mx-r">
+          <div class="mx-cmd" id="mxC1"><span class="p">$</span> y link --repo git@github.com:acme/api.git</div>
+          <div class="mx-cmd" id="mxC2"><span class="p">$</span> y publish</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="rt">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Runtime</div>
+      <h2>Either engine. Your call, per project.</h2>
+      <p class="lead">Podman isn't a roadmap item. It works the same as Docker on day one. Pick one when you create a project, switch later if you want.</p>
+    </div>
+    <div class="rv">
+      <div class="tabs" id="rtTabs">
+        <button class="tab on" data-i="0">Docker<span class="fill"></span></button>
+        <button class="tab" data-i="1">Podman<span class="fill"></span></button>
+      </div>
+      <div class="mx">
+        <div class="mx-l">
+          <div class="rticon"><img id="rtImg" src="images/docker.png" alt=""></div>
+          <h3 id="rtT">The default</h3>
+          <p id="rtP">Battle-tested, what most tutorials assume, and most likely already on your server.</p>
+        </div>
+        <div class="mx-r">
+          <div class="mx-cmd" id="rtC1"><span class="p">$</span> y create --name api --runtime docker</div>
+          <div class="mx-cmd" id="rtC2"><span class="p"># </span>daemon-based, root socket</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- LOGOS -->
+<div class="logos">
+  <div class="wrap">
+    <div class="lb">Works the same everywhere</div>
+    <div class="lrow">
+      <img src="images/Octicons-mark-github.svg" alt="GitHub" loading="lazy">
+      <img src="images/gitlab_logo_icon_169112.webp" alt="GitLab" loading="lazy">
+      <img src="images/bitbucket-images.jpg" alt="Bitbucket" loading="lazy">
+      <img src="images/Gitea_Logo_with_Wordmark.svg" alt="Gitea" loading="lazy">
+      <img src="images/Forgejo-wordmark.svg.webp" alt="Forgejo" loading="lazy">
+      <img src="images/Codeberg_logo.svg.webp" alt="Codeberg" loading="lazy">
+      <img src="images/docker.png" alt="Docker" loading="lazy">
+      <img src="images/podman.png" alt="Podman" loading="lazy">
+    </div>
+  </div>
+</div>
+
+<!-- BACKUPS + RECOVERY -->
+<section class="tinted">
+  <div class="wrap">
+    <div class="pair">
+      <div class="pb rv">
+        <h3>A backup every night, off the server</h3>
+        <p>You don't set up a cron job or write a dump script. It runs on its own, and the copy leaves the machine. A backup on the same disk disappears with it.</p>
+        <div class="bkgrid" id="bkGrid"></div>
+        <div class="bkoff"><span>then</span><span class="pill">→ your S3 bucket</span></div>
+      </div>
+      <div class="pb rv d1">
+        <h3>The server reboots. Nothing is confused.</h3>
+        <p>Power loss in the middle of a deploy is the worst moment for it. Yozgat checks what is actually running when it starts, and puts the last working version back.</p>
+        <div class="steps" id="rcSteps">
+          <div class="step"><span class="si">01</span><span class="sv">running</span></div>
+          <div class="step"><span class="si">02</span><span class="sv">deploying</span></div>
+          <div class="step"><span class="si">03</span><span class="sv">power loss</span></div>
+          <div class="step"><span class="si">04</span><span class="sv">reboot</span></div>
+          <div class="step"><span class="si">05</span><span class="sv">running</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COMPARE -->
+<section id="compare">
+  <div class="wrap">
+    <div class="head rv">
+      <div class="eyebrow">Compare</div>
+      <h2>Where it actually matters.</h2>
+    </div>
+    <div class="cmpw rv">
+      <table class="cmp">
+        <thead><tr><th></th><th>Docker Compose</th><th>Typical PaaS</th><th class="me">Yozgat</th></tr></thead>
+        <tbody>
+          <tr><th>Normal deploy</th>
+            <td><span class="mk n">✕</span>gap = downtime</td>
+            <td><span class="mk p">~</span>often off by default</td>
+            <td class="me"><span class="mk y">✓</span>atomic swap</td></tr>
+          <tr><th>Deploy won't boot</th>
+            <td><span class="mk n">✕</span>old one already gone</td>
+            <td><span class="mk p">~</span>after traffic hit it</td>
+            <td class="me"><span class="mk y">✓</span>traffic never moved</td></tr>
+          <tr><th>Database</th>
+            <td><span class="mk n">✕</span>restarts every deploy</td>
+            <td><span class="mk p">~</span>migrate it yourself</td>
+            <td class="me"><span class="mk y">✓</span>separate + backed up</td></tr>
+          <tr><th>No git repo</th>
+            <td><span class="mk p">~</span>scp and hope</td>
+            <td><span class="mk n">✕</span>repo required</td>
+            <td class="me"><span class="mk y">✓</span><code>y publish</code></td></tr>
+          <tr><th>Team access</th>
+            <td><span class="mk n">✕</span>whoever has the server</td>
+            <td><span class="mk p">~</span>often one owner only</td>
+            <td class="me"><span class="mk y">✓</span>role + per-project grants</td></tr>
+          <tr><th>Podman</th>
+            <td><span class="mk p">~</span>on your own</td>
+            <td><span class="mk n">✕</span>Docker only</td>
+            <td class="me"><span class="mk y">✓</span>day one</td></tr>
+          <tr><th>Reboot mid-deploy</th>
+            <td><span class="mk n">✕</span>you untangle it</td>
+            <td><span class="mk p">~</span>varies</td>
+            <td class="me"><span class="mk y">✓</span>self-reconciles</td></tr>
+          <tr><th>Memory it costs you</th>
+            <td><div class="ram"><span class="bar" style="width:8px"></span><b>baseline</b></div></td>
+            <td><div class="ram"><span class="bar big" style="width:96px"></span><b>+~600 MB</b></div></td>
+            <td class="me"><div class="ram"><span class="bar tiny highl" style="width:10px"></span><b>+5 MB</b></div></td></tr>
+          <tr><th>Server dies</th>
+            <td><span class="mk n">✕</span>config gone too</td>
+            <td><span class="mk p">~</span>app data only</td>
+            <td class="me"><span class="mk y">✓</span>platform backs itself up</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">The middle column describes common defaults, not any one product. Self-hosted platforms differ and improve fast. Everything here is open source; check it yourself.</p>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="wrap">
+    <h2>Be there for v1.</h2>
+    <p>Built in the open. One email, when it's ready to run something you care about.</p>
+    <div class="wl">
+      <form class="wlf" id="wlForm2">
+        <input type="email" id="wlEmail2" placeholder="you@company.com" required aria-label="Email">
+        <button class="btn btn-p btn-lg">Join waitlist</button>
+      </form>
+      <p class="wlmsg" id="wlMsg2" role="status"></p>
+    </div>
+  </div>
+</section>
+
+<footer><div class="wrap">
+  <p>© <span id="yr">2026</span> Yozgat · open source</p>
+  <div class="fl"><a href="https://github.com/GroophyLifefor/yozgat-go">GitHub</a><a href="#waitlist">Waitlist</a></div>
+</div></footer>
+
+<script>
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const el = i => document.getElementById(i);
+const fmt = n => n.toLocaleString();
+
+/* waitlist: set to your collector; null = local confirm only */
+const WAITLIST_ENDPOINT = null;
+function wire(f,i,m){const F=el(f);if(!F)return;const I=el(i),M=el(m);
+  F.addEventListener('submit',async e=>{e.preventDefault();
+    const v=I.value.trim(),b=F.querySelector('button');M.className='wlmsg';
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)){M.textContent='that address looks off';M.className='wlmsg err';return}
+    b.disabled=true;const t=b.textContent;b.textContent='sending…';
+    try{if(WAITLIST_ENDPOINT){const r=await fetch(WAITLIST_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({email:v})});if(!r.ok)throw 0}
+      M.textContent="you're on the list";M.className='wlmsg ok';F.reset();
+    }catch(_){M.textContent="couldn't reach the server";M.className='wlmsg err'}
+    finally{b.disabled=false;b.textContent=t}});}
+wire('wlForm','wlEmail','wlMsg');wire('wlForm2','wlEmail2','wlMsg2');
+el('yr').textContent=new Date().getFullYear();
+
+if(!RM&&'IntersectionObserver'in window){
+  const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}}),{threshold:.1,rootMargin:'0px 0px -30px 0px'});
+  document.querySelectorAll('.rv').forEach(n=>io.observe(n));
+}else document.querySelectorAll('.rv').forEach(n=>n.classList.add('in'));
+
+/* ── uptime strip helper ── */
+function makeStrip(node,count){
+  node.innerHTML='';
+  const t=[];for(let i=0;i<count;i++){const d=document.createElement('div');d.className='tick';node.appendChild(d);t.push(d)}
+  let i=0;
+  return {reset(){i=0;t.forEach(x=>x.className='tick')},
+          push(down){if(i>=t.length)return;const x=t[i++];x.className='tick on'+(down?' dn':'')},
+          get idx(){return i}};
+}
+
+/* -- hero: state is shown on the chips, not narrated -- */
+(function(){
+  const S=makeStrip(el('hStrip'),52);
+  const c1=el('hC1'),c2=el('hC2'),s1=el('hS1'),s2=el('hS2'),pr=el('hP');
+  const pips=[el('hp1'),el('hp2'),el('hp3')];
+  const set=(n,c)=>n.className='chip'+(c?' '+c:'');
+  if(RM){for(let i=0;i<52;i++)S.push(false);c2.style.opacity=1;set(c2,'live');s2.textContent='live';set(c1,'dead');s1.textContent='retired';el('hArr').className='arrow on';return}
+  let T=[],tick=null;const at=(m,f)=>T.push(setTimeout(f,m));
+  function run(){
+    T.forEach(clearTimeout);T=[];clearInterval(tick);
+    S.reset();c2.style.opacity=0;set(c1,'live');s1.textContent='live';set(c2,'');s2.textContent='';
+    pr.style.width='0';pips.forEach(x=>x.className='pip');el('hArr').className='arrow';
+    tick=setInterval(()=>{S.idx>=52?clearInterval(tick):S.push(false)},230);
+    at(2400,()=>{c2.style.opacity=1;set(c2,'build');s2.textContent='building';
+      let w=0;const gg=setInterval(()=>{w+=8;pr.style.width=Math.min(w,100)+'%';if(w>=100)clearInterval(gg)},260);T.push(gg)});
+    at(6200,()=>{set(c2,'check');s2.textContent='checking'});
+    at(7000,()=>pips[0].className='pip no');
+    at(7900,()=>pips[1].className='pip no');
+    at(8800,()=>pips[2].className='pip yes');
+    at(9600,()=>{set(c2,'live');s2.textContent='live';el('hArr').className='arrow on';set(c1,'dead');s1.textContent='retired'});
+    at(14200,run);
+  }
+  if('IntersectionObserver'in window){let g=0;const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&!g){g=1;run();io.disconnect()}}),{threshold:.2});io.observe(el('hStrip'))}else run();
+})();
+
+/* -- the difference: same failing build, side by side -- */
+(function(){
+  const N=46;
+  const A=makeStrip(el('aStrip'),N), B=makeStrip(el('bStrip'),N);
+  const set=(n,c)=>el(n).className='chip'+(c?' '+c:'');
+  const bp=[el('bp1'),el('bp2'),el('bp3')];
+  let T=[],iv=null,down=false,drop=0,sec=0;
+  if(RM){
+    for(let i=0;i<N;i++){A.push(i>10&&i<32);B.push(false)}
+    el('aDrop').textContent='1,970';el('aDown').textContent='41s';
+    set('aC1','dead');el('aS1').textContent='stopped';el('aC2').style.opacity=1;set('aC2','fail');el('aS2').textContent='crashed';
+    el('bC2').style.opacity=1;set('bC2','fail');el('bS2').textContent='rejected';bp.forEach(x=>x.className='pip no');
+    return;
+  }
+  const at=(m,f)=>T.push(setTimeout(f,m));
+  function run(){
+    T.forEach(clearTimeout);T=[];clearInterval(iv);
+    A.reset();B.reset();down=false;drop=0;sec=0;
+    el('aDrop').textContent='0';el('aDown').textContent='0s';
+    el('bDrop').textContent='0';el('bDown').textContent='0s';
+    set('aC1','live');el('aS1').textContent='live';set('aC2','');el('aS2').textContent='';el('aC2').style.opacity=0;el('aArr').className='arrow';
+    set('bC1','live');el('bS1').textContent='live';set('bC2','');el('bS2').textContent='';el('bC2').style.opacity=0;el('bArr').className='arrow';
+    bp.forEach(x=>x.className='pip');
+    iv=setInterval(()=>{
+      if(A.idx>=N){clearInterval(iv);return}
+      A.push(down);B.push(false);
+      if(down){drop+=47+Math.floor(Math.random()*9);sec+=2;el('aDrop').textContent=fmt(drop);el('aDown').textContent=sec+'s'}
+    },250);
+    at(2400,()=>{el('aC2').style.opacity=1;set('aC2','build');el('aS2').textContent='starting';
+                 el('bC2').style.opacity=1;set('bC2','build');el('bS2').textContent='building'});
+    at(3300,()=>{down=true;set('aC1','dead');el('aS1').textContent='stopped'});
+    at(5000,()=>{set('aC2','fail');el('aS2').textContent='crashed'});
+    at(5600,()=>{set('bC2','check');el('bS2').textContent='checking'});
+    at(6300,()=>bp[0].className='pip no');
+    at(7100,()=>bp[1].className='pip no');
+    at(7900,()=>{bp[2].className='pip no';set('bC2','fail');el('bS2').textContent='rejected'});
+    at(9000,()=>{el('bC2').style.opacity=.35});
+    at(15000,run);
+  }
+  if('IntersectionObserver'in window){let g=0;const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&!g){g=1;run();io.disconnect()}}),{threshold:.2});io.observe(el('diff'))}else run();
+})();
+
+/* -- database: the app swaps, the database never moves -- */
+(function(){
+  if(RM)return;
+  const app=el('dApp'),v=el('dAppV');let n=2;
+  setInterval(()=>{
+    app.classList.add('swap');
+    setTimeout(()=>{n++;v.textContent='web \u00b7 v1.'+n+'.0';app.classList.remove('swap')},420);
+  },3400);
+})();
+
+/* ── cli: typed session ── */
+(function(){
+  const out=el('cliOut');
+  const S=[
+    {p:'$ ',c:'dm',i:1},{k:'y login --url yozgat.acme.dev',c:'cc'},
+    {l:'open yozgat.acme.dev/v1/auth/cli and paste the code',c:'tt'},
+    {l:'code › FK29-7TQD',c:'dm'},{l:'welcome, Murat',c:'gg'},{l:'',c:'tt'},
+    {p:'$ ',c:'dm',i:1},{k:'y create --name api',c:'cc'},
+    {l:'project created · environment: production',c:'tt'},{l:'',c:'tt'},
+    {p:'$ ',c:'dm',i:1},{k:'y domain add api.acme.dev',c:'cc'},
+    {l:'certificate issued · routing live',c:'tt'},{l:'',c:'tt'},
+    {p:'$ ',c:'dm',i:1},{k:'y publish',c:'cc'},
+    {l:'uploading 3.1 MB ████████████ 100%',c:'tt'},
+    {l:'build · health check · atomic cutover',c:'tt'},
+    {l:'live → https://api.acme.dev',c:'gg'}
+  ];
+  if(RM){out.innerHTML=S.map(s=>`<span class="${s.c}">${s.p||s.k||s.l||''}</span>${s.i?'':'\n'}`).join('');return}
+  let i=0,buf='';
+  function next(){
+    if(i>=S.length){setTimeout(()=>{buf='';i=0;out.innerHTML='';next()},5000);return}
+    const s=S[i++];
+    if(s.l!==undefined){buf+=`<span class="${s.c}">${s.l}</span>\n`;out.innerHTML=buf+'<span class="cur"></span>';setTimeout(next,s.l===''?110:330);return}
+    if(s.i){buf+=`<span class="${s.c}">${s.p}</span>`;out.innerHTML=buf+'<span class="cur"></span>';setTimeout(next,170);return}
+    let n=0;(function ty(){
+      if(n>s.k.length){buf+=`<span class="${s.c}">${s.k}</span>\n`;out.innerHTML=buf+'<span class="cur"></span>';setTimeout(next,480);return}
+      out.innerHTML=buf+`<span class="${s.c}">${s.k.slice(0,n)}</span><span class="cur"></span>`;n++;setTimeout(ty,32+Math.random()*34);
+    })();
+  }
+  if('IntersectionObserver'in window){let s=0;const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&!s){s=1;next();io.disconnect()}}),{threshold:.25});io.observe(el('cli'))}else next();
+})();
+
+/* ── auto-advancing source tabs ── */
+(function(){
+  const GIT_LOGOS='<img src="images/Octicons-mark-github.svg" alt="GitHub">'+
+    '<img src="images/gitlab_logo_icon_169112.webp" alt="GitLab">'+
+    '<img class="bb" src="images/bitbucket-images.jpg" alt="Bitbucket">'+
+    '<img src="images/Gitea_Logo_with_Wordmark.svg" alt="Gitea">'+
+    '<img src="images/Forgejo-wordmark.svg.webp" alt="Forgejo">'+
+    '<img src="images/Codeberg_logo.svg.webp" alt="Codeberg">';
+  const CLI_LOGO='<span class="srccli"><img src="images/yozgat-logo-square.png" alt="Yozgat"><b>y</b><span>CLI</span></span>';
+
+  const DATA=[
+    {t:'Push to your repo',
+     p:'Add one webhook in your repository settings. Every push to the branch you chose triggers a deploy \u2014 no app to install, no provider API involved, so every host behaves the same.',
+     c:['git push origin main','# yozgat takes it from here'],logos:GIT_LOGOS},
+    {t:'Ship a local folder',
+     p:'No repository at all. The CLI packages the directory you are standing in and the server builds it exactly the same way.',
+     c:['cd ~/my-backend','y publish'],logos:CLI_LOGO},
+    {t:'Call it from CI',
+     p:'Your pipeline runs its own tests, then sends a deploy request to your Yozgat with a scoped token. Works with any CI, because it is just an authenticated HTTP call.',
+     c:['curl -X POST https://yozgat.acme.dev/v1/deploy','  -H "Authorization: Bearer $YOZGAT_TOKEN"'],logos:GIT_LOGOS}
+  ];
+  const tabs=[...document.querySelectorAll('#tabs .tab')];
+  const T=el('mxT'),P=el('mxP'),C1=el('mxC1'),C2=el('mxC2'),L=el('mxLogos');
+  let cur=0,timer=null;
+  const DUR=5000;
+  function paint(i){
+    cur=i;
+    tabs.forEach((b,x)=>{b.classList.toggle('on',x===i);const f=b.querySelector('.fill');f.style.animation='none';void f.offsetWidth;if(x===i)f.style.animation='';});
+    T.textContent=DATA[i].t;P.textContent=DATA[i].p;
+    C1.innerHTML='<span class="p">$</span> '+DATA[i].c[0];
+    C2.innerHTML='<span class="p">$</span> '+DATA[i].c[1];
+    L.classList.remove('on');
+    L.innerHTML=DATA[i].logos;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>L.classList.add('on')));
+  }
+  function loop(){clearTimeout(timer);timer=setTimeout(()=>{paint((cur+1)%DATA.length);loop()},DUR)}
+  tabs.forEach(b=>b.addEventListener('click',()=>{paint(+b.dataset.i);loop()}));
+  document.documentElement.style.setProperty('--t',DUR+'ms');
+  paint(0);
+  if(!RM){
+    if('IntersectionObserver'in window){let s=0;const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&!s){s=1;loop();io.disconnect()}}),{threshold:.3});io.observe(el('any'))}else loop();
+  }
+})();
+
+/* ── auto-advancing runtime tabs: docker / podman, freely chosen per project ── */
+(function(){
+  const DATA=[
+    {img:'images/docker.png',t:'The default',
+     p:'Battle-tested, what most tutorials assume, and most likely already on your server.',
+     c1:'y create --name api --runtime docker',c2:'daemon-based, root socket'},
+    {img:'images/podman.png',t:'Fully supported, not "coming later"',
+     p:'Same commands, same guarantees, no root daemon required. A good fit if that matters to you.',
+     c1:'y create --name api --runtime podman',c2:'daemonless, rootless by default'}
+  ];
+  const tabs=[...document.querySelectorAll('#rtTabs .tab')];
+  const T=el('rtT'),P=el('rtP'),C1=el('rtC1'),C2=el('rtC2'),IMG=el('rtImg');
+  let cur=0,timer=null;
+  const DUR=4200;
+  function paint(i){
+    cur=i;
+    tabs.forEach((b,x)=>{b.classList.toggle('on',x===i);const f=b.querySelector('.fill');f.style.animation='none';void f.offsetWidth;if(x===i)f.style.animation=`fill ${DUR}ms linear forwards`;});
+    T.textContent=DATA[i].t;P.textContent=DATA[i].p;
+    C1.innerHTML='<span class="p">$</span> '+DATA[i].c1;
+    C2.innerHTML='<span class="p"># </span>'+DATA[i].c2;
+    IMG.classList.remove('on');
+    setTimeout(()=>{IMG.src=DATA[i].img;requestAnimationFrame(()=>IMG.classList.add('on'));},RM?0:180);
+  }
+  function loop(){clearTimeout(timer);timer=setTimeout(()=>{paint((cur+1)%DATA.length);loop()},DUR)}
+  tabs.forEach(b=>b.addEventListener('click',()=>{paint(+b.dataset.i);loop()}));
+  paint(0);
+  if(!RM){
+    if('IntersectionObserver'in window){let s=0;const io=new IntersectionObserver(e=>e.forEach(x=>{if(x.isIntersecting&&!s){s=1;loop();io.disconnect()}}),{threshold:.3});io.observe(el('rt'))}else loop();
+  }
+})();
+
+/* -- backup calendar + recovery steps -- */
+(function(){
+  const g=el('bkGrid');
+  const days=['M','T','W','T','F','S','S','M','T','W','T','F','S','S'];
+  days.forEach((dd,i)=>{const n=document.createElement('div');n.className='bkday';n.textContent=dd;g.appendChild(n);
+    if(RM)n.classList.add('done');else setTimeout(()=>n.classList.add('done'),200+i*90)});
+  const steps=[...el('rcSteps').children];
+  if(RM){steps[2].classList.add('danger');steps[4].classList.add('done');return}
+  let i=0;
+  setInterval(()=>{
+    steps.forEach(x=>x.className='step');
+    steps[i].classList.add(i===2?'danger':i===4?'done':'on');
+    i=(i+1)%steps.length;
+  },1100);
+})();
+</script>
+</body>
+</html>
