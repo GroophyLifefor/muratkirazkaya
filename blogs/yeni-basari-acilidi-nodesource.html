@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Yeni başarım: NodeSource</title>
+<meta name="description" content="Teknik bir yazı değil. Express’e katkıdan NodeSource’a uzanan kısa kariyer hikayem.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0" data-performance="true"></script>
+<script defer src="https://umami.ordu.dev/recorder.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Yeni başarım: NodeSource">
+<meta property="og:description" content="Express’e katkıdan NodeSource’a uzanan kısa kariyer hikayem.">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/yeni-basari-acilidi-nodesource.html">
+<meta property="og:image" content="https://muratkirazkaya.com/img/blog-5-tr-og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="900">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://muratkirazkaya.com/img/blog-5-tr-og.png">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/yeni-basari-acilidi-nodesource.html">
+<link rel="alternate" hreflang="en" href="/blogs/new-achievement-unlocked-nodesource.html">
+
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #222222;
+    --ink2: #444444;
+    --ink3: #888888;
+    --surface: #fdfcf9;
+    --surface2: #f4f1ea;
+    --surface3: #ebe6dc;
+    --accent: #2c5d8f;
+    --accent2: #5c574e;
+    --line: rgba(34, 34, 34, 0.12);
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+    --sans: 'Source Sans 3', system-ui, sans-serif;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .lang-switch {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; margin-left: auto;
+    padding: 20px 0 0;
+  }
+  .lang-switch:hover { color: var(--ink); }
+  .post-top { display: flex; align-items: baseline; gap: 16px; }
+
+  .post-cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    margin: 20px 0 0;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .post-hero { padding: 28px 0 36px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-lead {
+    font-family: var(--serif); font-size: clamp(16px, 2.8vw, 20px);
+    color: var(--ink2); line-height: 1.45; max-width: 640px;
+    padding-left: 18px; border-left: 3px solid var(--accent);
+  }
+
+  .post-main { padding-bottom: 72px; max-width: 640px; }
+
+  .post-main h2 {
+    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 400; color: var(--ink); margin: 48px 0 14px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .post-main h2:first-of-type { margin-top: 8px; }
+
+  .post-main p {
+    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
+  }
+  .post-main p strong { color: var(--ink); font-weight: 500; }
+  .post-main a {
+    color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .post-main a:hover { color: var(--ink); }
+
+  .post-main blockquote {
+    margin: 1.25em 0 1.5em; padding: 16px 20px;
+    background: var(--surface2); border: 1px solid var(--line);
+    border-left: 3px solid var(--accent2);
+  }
+  .post-main blockquote p {
+    margin-bottom: 0.4em; font-family: var(--serif); font-size: 18px; font-style: italic;
+    color: var(--ink2);
+  }
+  .post-main blockquote p:last-child { margin-bottom: 0; }
+  .post-main blockquote cite {
+    display: block; margin-top: 10px; font-family: var(--mono); font-size: 11px;
+    font-style: normal; color: var(--ink3); letter-spacing: 0.04em;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/blogs">Blogs</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="nav-cta" data-umami-event="blog-nav-github">GitHub</a>
+  </nav>
+
+  <div class="post-top">
+    <a href="/blogs" class="back-link" data-umami-event="blog-back-blogs">← Blogs</a>
+    <a href="/blogs/new-achievement-unlocked-nodesource.html" class="lang-switch" data-umami-event="blog-lang-switch">English →</a>
+  </div>
+
+  <img class="post-cover" src="/img/blog-5-tr-og.png" alt="" width="1600" height="900">
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog · Türkçe · 7 Eyl 2026</div>
+    <h1 class="post-title">Yeni başarım: NodeSource</h1>
+    <p class="post-lead">Bu bir teknik yazı değil. Kariyerimde bir kırılma noktası olan NodeSource’a girişimin hikayesi.<br>
+      <kbd style="font-size: 13px;" title="Ortalama bir N|Solid log'u, key:value|type. Types, (c)ounter, (g)auge.">nodesource.prod.employees.tr.mmdd0907.employeeCount:1|c</kbd></p>
+  </header>
+
+  <article class="post-main">
+
+<p>Ben 19 yaşındayım. Yazılımda kendini geliştirmiş, bunu etkinliklerle birleştirmiş ve açık kaynakla yayılmış birisiyim. 19 yaşıma kadar birçok ekosistemde denemeler yaptım ama hiçbiri JavaScript ekosistemi kadar tatmin etmemişti. Herkes bilir ki bu çok büyük ve sağlam bir ekosistem.</p>
+
+<h2>Başlangıç: Node.js ve JavaScript ekosistemine girdiğim zamanlar</h2>
+
+<p>2023’ün başlarında C# ile programlar geliştirirken küçük bir şey fark ettim: C# yazarken özellikle ASP.NET’ten uzak duruyordum. Sebebi web dünyasından epey uzakta olmamdı.</p>
+<p>Sonrasında HTML, CSS ve JavaScript öğrenmek için denemeler yapmaya başladım ve algoritma karşıma bir bootcamp çıkardı. Insider Code Academy. Hayatım boyunca başvurduğum elliden fazla bootcamp’ten tek kabul edildiğim yer burasıydı.</p>
+<p>Bootcamp sürecinde web temellerini öğrendik. 700 kişi arasından elemeler sonucunda staja kabul edilen 10 kişiden biriydim. 2 ay staj yaptım. Stajım bittikten sonra da öğrenmeye ve kendimi geliştirmeye devam ettim. Collective Idea ve Valentura’da da staj yaptım, bu süreçte birçok teknoloji öğrendim. 18 yaşıma girmemle birlikte hem üniversiteye başladım hem de tam zamanlı olarak Valentura’da çalışmaya başladım.</p>
+<p>Halihazırda aşina olduğum açık kaynak ekosistemine daha da fazla odaklandım ve sürekli katkıda bulunmaya devam ettim. Zamanla en çok ilgimi çeken üç şeyin şunlar olduğunu fark ettim: <strong>performans</strong>, <strong>gözlemlenebilirlik</strong> (observability), <strong>güvenilirlik</strong> (reliability).</p>
+
+<h2>Express Performance Working Group ve Express Triage</h2>
+
+<p>28 Nisan 2025’te Mert Şişmanoğlu’nun bana yazdığı mesajla her şey başladı:</p>
+<blockquote>
+  <p>Bi de ben diğerleri ne konuşuyor diye de bakmaya çalışıyorum, express bi performans ekibi kurmuş mesela.</p>
+  <p>Belki bi perspektif olur</p>
+  <cite>Mert Şişmanoğlu</cite>
+</blockquote>
+<p>İlgimi çekti, hemen araştırdım. <a href="https://github.com/expressjs/perf-wg" target="_blank" rel="noreferrer">Çalışma grubunun</a> önce ilk toplantısı, sonra ikinci, üçüncü… derken o günden beri bu grupla birlikte çalışıyorum. Birçok kişiyle tanıştım ve çalıştım. Yayınlanmamış ve yayınlanmış sürümler arasındaki performans farkını grupça analiz ettik. Farklı altyapılarda, farklı Node sürümlerinde GitHub Actions veya self hosted runner ile çalışabilen bir aracı grupça yazdık. İlk toplantılarda NSolid, uygulamaya ekstra kod sıkıştırmadan sürecin ne yaptığını görmek için konuşuldu. NodeSource o odada zaten vardı.</p>
+<p>Bu süreçte kendimi sadece perf wg reposuyla sınırlamamaya çalıştım, diğer repolara da katkıda bulundum. Bu sayede 7 ay önce, gelen Express issue ve pull request’leri ayıklayan Express Triage ekibine uygun görüldüm.</p>
+
+<h2>NodeSource’a giriş</h2>
+
+<p>Tabii ki tüm bunlar kabaca bir anlatım. Ama olduğum yerden çok mutluyum. Şuna da eminim: NodeSource’a girebilecek kadar kendimi geliştirebildiysem, en büyük sebebi arkadaş seçimlerimdir. Her nerede olursam olayım, arkadaşlık yapabileceğim insanları çok iyi seçtim. Ben onları desteklerken onlar da beni desteklediler.</p>
+<p>Bir süredir NodeSource’da çalışan insanlarla çalışma grupları üzerinden beraber çalışmış oldum. Bu ortamlar onların da beni gözlemlemesine imkan verdi. NodeSource’a Software Engineer olarak girdim. Bu yazı, Express’e katkı sağlamaktan NodeSource’a girmeye uzanan kısa hikayem.</p>
+
+<h2>Bundan sonrası?</h2>
+
+<p>Kendimi geliştirmeye, yeni şeyler öğrenmeye, yeni arkadaşlar edinirken halihazırda dostum olanların değerini bilmeye ve açık kaynağa katkı vermeye devam edeceğim.</p>
+
+  </article>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>

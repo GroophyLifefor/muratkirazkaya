@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New achievement unlocked: NodeSource</title>
+  <meta name="description"
+    content="Not a technical post. The short story of how contributing to Express led me to NodeSource.">
+  <meta name="author" content="Murat Kirazkaya">
+  <link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+  <script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"
+    data-performance="true"></script>
+  <script defer src="https://umami.ordu.dev/recorder.js"
+    data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'AW-18026929077');
+  </script>
+
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="New achievement unlocked: NodeSource">
+  <meta property="og:description" content="The short story of how contributing to Express led me to NodeSource.">
+  <meta property="og:url" content="https://muratkirazkaya.com/blogs/new-achievement-unlocked-nodesource.html">
+  <meta property="og:image" content="https://muratkirazkaya.com/img/blog-5-en-og.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1600">
+  <meta property="og:image:height" content="900">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://muratkirazkaya.com/img/blog-5-en-og.png">
+
+  <link rel="canonical" href="https://muratkirazkaya.com/blogs/new-achievement-unlocked-nodesource.html">
+  <link rel="alternate" hreflang="tr" href="/blogs/yeni-basari-acilidi-nodesource.html">
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* experimental EN skin: classic blog paper, charcoal, quiet link blue */
+    :root {
+      --ink: #222222;
+      --ink2: #444444;
+      --ink3: #888888;
+      --surface: #fdfcf9;
+      --surface2: #f4f1ea;
+      --surface3: #ebe6dc;
+      --accent: #2c5d8f;
+      --accent2: #5c574e;
+      --line: rgba(34, 34, 34, 0.12);
+      --mono: 'IBM Plex Mono', monospace;
+      --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+      --sans: 'Source Sans 3', system-ui, sans-serif;
+    }
+
+    html {
+      font-family: var(--sans);
+      background: var(--surface);
+      color: var(--ink);
+      font-size: 16px;
+      line-height: 1.62;
+      scroll-behavior: smooth;
+    }
+
+    .site {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 0 28px;
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 22px 0;
+      border-bottom: 1px solid var(--line);
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      z-index: 10;
+    }
+
+    .nav-logo {
+      font-family: var(--mono);
+      font-size: 13px;
+      letter-spacing: 0.02em;
+      color: var(--ink2);
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      color: var(--ink3);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--ink);
+    }
+
+    .nav-cta {
+      font-family: var(--mono);
+      font-size: 12px;
+      padding: 7px 16px;
+      background: var(--ink);
+      color: var(--surface);
+      text-decoration: none;
+      display: inline-block;
+      letter-spacing: 0.03em;
+      transition: background 0.15s;
+    }
+
+    .nav-cta:hover {
+      background: var(--accent);
+    }
+
+    .back-link {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink3);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 20px 0 0;
+    }
+
+    .back-link:hover {
+      color: var(--ink);
+    }
+
+    .lang-switch {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink3);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      margin-left: auto;
+      padding: 20px 0 0;
+    }
+
+    .lang-switch:hover {
+      color: var(--ink);
+    }
+
+    .post-top {
+      display: flex;
+      align-items: baseline;
+      gap: 16px;
+    }
+
+    .post-cover {
+      display: block;
+      width: 100%;
+      height: auto;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      margin: 20px 0 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+    }
+
+    .post-hero {
+      padding: 28px 0 36px;
+    }
+
+    .post-eyebrow {
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--accent);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 18px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .post-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--accent);
+    }
+
+    .post-title {
+      font-family: var(--serif);
+      font-size: clamp(32px, 5.2vw, 48px);
+      line-height: 1.08;
+      font-weight: 400;
+      color: var(--ink);
+      margin-bottom: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .post-lead {
+      font-family: var(--serif);
+      font-size: clamp(16px, 2.8vw, 20px);
+      color: var(--ink2);
+      line-height: 1.45;
+      max-width: 640px;
+      padding-left: 18px;
+      border-left: 3px solid var(--accent);
+    }
+
+    .post-main {
+      padding-bottom: 72px;
+      max-width: 640px;
+    }
+
+    .post-main h2 {
+      font-family: var(--serif);
+      font-size: clamp(24px, 3.2vw, 32px);
+      font-weight: 400;
+      color: var(--ink);
+      margin: 48px 0 14px;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+    }
+
+    .post-main h2:first-of-type {
+      margin-top: 8px;
+    }
+
+    .post-main p {
+      font-size: 1.02rem;
+      color: var(--ink2);
+      line-height: 1.72;
+      margin-bottom: 1.05em;
+    }
+
+    .post-main p strong {
+      color: var(--ink);
+      font-weight: 500;
+    }
+
+    .post-main a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+
+    .post-main a:hover {
+      color: var(--ink);
+    }
+
+    .post-main blockquote {
+      margin: 1.25em 0 1.5em;
+      padding: 16px 20px;
+      background: var(--surface2);
+      border: 1px solid var(--line);
+      border-left: 3px solid var(--accent2);
+    }
+
+    .post-main blockquote p {
+      margin-bottom: 0.4em;
+      font-family: var(--serif);
+      font-size: 18px;
+      font-style: italic;
+      color: var(--ink2);
+    }
+
+    .post-main blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    .post-main blockquote cite {
+      display: block;
+      margin-top: 10px;
+      font-family: var(--mono);
+      font-size: 11px;
+      font-style: normal;
+      color: var(--ink3);
+      letter-spacing: 0.04em;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 28px 0;
+      font-family: var(--mono);
+      font-size: 11px;
+      color: var(--ink3);
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .footer-links a {
+      color: var(--ink3);
+      text-decoration: none;
+      transition: color 0.15s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .footer-links a:hover {
+      color: var(--ink);
+    }
+
+    .footer-links .ci {
+      font-size: 18px;
+      opacity: 0.7;
+      transition: opacity 0.15s;
+    }
+
+    .footer-links a:hover .ci {
+      opacity: 1;
+    }
+
+    @media (max-width: 600px) {
+      .nav-links {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="site">
+
+    <nav>
+      <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+      <div class="nav-links">
+        <a href="/#work">Work</a>
+        <a href="/#open-source">Open Source</a>
+        <a href="/blogs">Blogs</a>
+        <a href="/#about">About</a>
+      </div>
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="nav-cta"
+        data-umami-event="blog-nav-github">GitHub</a>
+    </nav>
+
+    <div class="post-top">
+      <a href="/blogs" class="back-link" data-umami-event="blog-back-blogs">← Blogs</a>
+      <a href="/blogs/yeni-basari-acilidi-nodesource.html" class="lang-switch"
+        data-umami-event="blog-lang-switch">Türkçe →</a>
+    </div>
+
+    <img class="post-cover" src="/img/blog-5-en-og.png" alt="" width="1600" height="900">
+
+    <header class="post-hero">
+      <div class="post-eyebrow">Blog · English · Sep 7, 2026</div>
+      <h1 class="post-title">New achievement unlocked: NodeSource</h1>
+      <p class="post-lead">This is not a technical post. It is the story of joining NodeSource, a turning point in my
+        career.<br>
+        <kbd style="font-size: 13px;" title="A typical N|Solid log entry consists of key:value|type. Types include (c)ounter and (g)auge.">nodesource.prod.employees.tr.mmdd0907.employeeCount:1|c</kbd>
+      </p>
+    </header>
+
+    <article class="post-main">
+
+      <p>I am 19. I grew by doing the work, showing up at events, and contributing to open source. Before I turned 19 I
+        tried a lot of ecosystems. None of them held me the way JavaScript did. It is a huge, solid ecosystem. Everybody
+        already knows that.</p>
+
+      <h2>The beginning: when I entered Node.js and JavaScript</h2>
+
+      <p>In early 2023 I was building programs in C# when I noticed something small: I was especially avoiding ASP.NET.
+        The reason was simple. I was still far from the web.</p>
+      <p>After that I started trying HTML, CSS, and JavaScript. Then an algorithm put a bootcamp in front of me: Insider
+        Code Academy. Out of the more than fifty bootcamps I had applied to in my life, this was the only one that
+        accepted me.</p>
+      <p>During the bootcamp we learned web fundamentals. Out of 700 people, I was one of the 10 who made it through the
+        cuts into an internship. I interned for two months, and after it ended I kept learning. I also interned at
+        Collective Idea and Valentura, and picked up a lot of technologies along the way. When I turned 18 I started
+        university and also started working full time at Valentura.</p>
+      <p>I already knew the open source ecosystem a bit. I leaned into it harder and kept contributing. Over time I
+        noticed three things pulling me the most: <strong>performance</strong>, <strong>observability</strong>, and
+        <strong>reliability</strong>.</p>
+
+      <h2>Express Performance Working Group and Express Triage</h2>
+
+      <p>On 28 April 2025, a message from my friend Mert Şişmanoğlu started everything:</p>
+      <blockquote>
+        <p>I've also been trying to see what others are talking about. Express started a performance team, for example.
+        </p>
+        <p>Maybe it would give you a perspective</p>
+        <cite>Mert Şişmanoğlu</cite>
+      </blockquote>
+      <p>It caught my interest. I looked it up right away. First meeting of the <a
+          href="https://github.com/expressjs/perf-wg" target="_blank" rel="noreferrer">working group</a>, then the
+        second, then the third… and I have been with that group since then. I met a lot of people and worked with them.
+        We analyzed performance differences between unpublished and published versions. As a group we wrote a tool that
+        can run on GitHub Actions or a self hosted runner, across different infrastructures and Node versions. In those
+        first meetings NSolid came up as a way to see what the process is doing without stuffing extra code into the
+        app. NodeSource was already in that room.</p>
+      <p>I tried not to stay inside the perf wg repo only. I contributed to other repos too. That is how, seven months
+        ago, I was invited onto the Express Triage team, the people who sort incoming Express issues and pull requests.
+      </p>
+
+      <h2>Joining NodeSource</h2>
+
+      <p>All of this is a rough sketch, of course. But I am very happy with where I am. I am also sure of this: if I
+        grew enough to join NodeSource, the biggest reason is the friends I chose. Wherever I have been, I picked the
+        people I could be friends with carefully. I supported them, and they supported me.</p>
+      <p>For a while I had already been working with people at NodeSource through working groups. Those rooms also let
+        them watch how I work. I joined NodeSource as a Software Engineer. This post is the short story of going from
+        contributing to Express to joining NodeSource.</p>
+
+      <h2>What comes next?</h2>
+
+      <p>I will keep growing, keep learning new things, keep making new friends while remembering the value of the ones
+        I already have, and keep contributing to open source.</p>
+
+    </article>
+
+    <footer>
+      <span>© 2026 Murat Kirazkaya</span>
+      <div class="footer-links">
+        <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer"
+          data-umami-event="blog-footer-github">
+          <i class="ci ci-github"></i> GitHub
+        </a>
+        <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer"
+          data-umami-event="blog-footer-linkedin">
+          <i class="ci ci-linkedin"></i> LinkedIn
+        </a>
+        <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>

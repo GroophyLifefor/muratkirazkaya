@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Murat Kirazkaya - Full Stack Developer | Open Source Contributor</title>
-<meta name="description" content="Full Stack Developer specializing in operational backends, workflow engines, and CMS-driven platforms. Open-source contributor to ExpressJS. Ranked #68 in Turkey for open-source. Founded Ordu Bilişim Topluluğu.">
-<meta name="keywords" content="Murat Kirazkaya, Full Stack Developer, Web Developer, Open Source, Next.js, React, Deno, TypeScript, JavaScript, Türkiye Developer">
+<title>Murat Kirazkaya | Software Engineer at NodeSource</title>
+<meta name="description" content="Software Engineer at NodeSource. ExpressJS triager, Performance WG, open source. Based in İstanbul, Türkiye.">
+<meta name="keywords" content="Murat Kirazkaya, NodeSource, Software Engineer, Open Source, Express, Node.js, TypeScript, JavaScript">
 <meta name="author" content="Murat Kirazkaya">
 <link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
 
@@ -24,15 +24,15 @@
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="Murat Kirazkaya - Full Stack Developer">
-<meta property="og:description" content="Full Stack Developer specializing in operational backends, workflow engines, and CMS-driven platforms. Ranked #68 in Turkey for open-source contributions.">
+<meta property="og:title" content="Murat Kirazkaya | Software Engineer at NodeSource">
+<meta property="og:description" content="Software Engineer at NodeSource. ExpressJS triager, Performance WG, open source.">
 <meta property="og:image" content="/img/pp.jpeg">
 <meta property="og:url" content="https://muratkirazkaya.com/">
 
 <!-- Twitter Card -->
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Murat Kirazkaya - Full Stack Developer">
-<meta name="twitter:description" content="Full Stack Developer specializing in operational backends, workflow engines, and CMS-driven platforms. Ranked #68 in Turkey for open-source contributions.">
+<meta name="twitter:title" content="Murat Kirazkaya | Software Engineer at NodeSource">
+<meta name="twitter:description" content="Software Engineer at NodeSource. ExpressJS triager, Performance WG, open source.">
 <meta name="twitter:image" content="/img/pp.jpeg">
 
 <!-- Canonical -->
@@ -44,7 +44,12 @@
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Murat Kirazkaya",
-  "jobTitle": "Software Developer",
+  "jobTitle": "Software Engineer",
+  "worksFor": {
+    "@type": "Organization",
+    "name": "NodeSource",
+    "url": "https://nodesource.com"
+  },
   "url": "https://muratkirazkaya.com",
   "email": "muratkirazkaya0@gmail.com",
   "image": "/img/pp.jpeg",
@@ -60,24 +65,24 @@
 }
 </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --ink: #0e0d0c;
-    --ink2: #3a3935;
-    --ink3: #7a7870;
-    --surface: #f5f2eb;
-    --surface2: #ede9e0;
-    --surface3: #e3dfd5;
-    --accent: #c94a1e;
-    --accent2: #1a5c3a;
-    --line: rgba(14,13,12,0.12);
-    --mono: 'DM Mono', monospace;
-    --serif: 'Instrument Serif', serif;
-    --sans: 'Geist', system-ui, sans-serif;
+    --ink: #222222;
+    --ink2: #444444;
+    --ink3: #888888;
+    --surface: #fdfcf9;
+    --surface2: #f4f1ea;
+    --surface3: #ebe6dc;
+    --accent: #2c5d8f;
+    --accent2: #5c574e;
+    --line: rgba(34, 34, 34, 0.12);
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+    --sans: 'Source Sans 3', system-ui, sans-serif;
   }
 
   html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; }
@@ -103,6 +108,24 @@
 
   /* HERO */
   .hero { padding: 72px 0 60px; }
+  .hero-intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 40px;
+    align-items: start;
+    transition: gap 0.35s ease;
+  }
+  .hero-copy { min-width: 0; }
+  .hero-photo {
+    width: 300px;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    object-position: center 20%;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    transition: width 0.35s ease;
+  }
   .hero-eyebrow {
     font-family: var(--mono); font-size: 11px; color: var(--accent);
     letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;
@@ -193,27 +216,24 @@
     margin-top: 10px; display: block; letter-spacing: 0.03em;
   }
 
-  /* SERVICES */
-  .services-list {
-    display: flex; flex-direction: column;
-    border-top: 1px solid var(--line); margin-bottom: 8px;
-  }
-  .service-item {
-    display: grid; grid-template-columns: 28px 1fr;
-    gap: 16px; padding: 20px 0;
-    border-bottom: 1px solid var(--line);
-    align-items: baseline;
-  }
-  .service-num { font-family: var(--mono); font-size: 10px; color: var(--ink3); }
-  .service-title { font-size: 14px; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
-  .service-desc { font-size: 13px; color: var(--ink3); line-height: 1.65; }
-
   /* EXPERIENCE */
   .exp-list { display: flex; flex-direction: column; gap: 0; border-top: 1px solid var(--line); margin-bottom: 8px; }
-  .exp-item { padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 44px 1fr;
+    column-gap: 14px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .exp-logo {
+    grid-row: 1 / 3;
+    width: 44px; height: 44px;
+    object-fit: contain;
+    border-radius: 6px;
+  }
   .exp-role { font-size: 14px; font-weight: 500; color: var(--ink); }
   .exp-meta { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin-top: 3px; }
-  .exp-desc { font-size: 13px; color: var(--ink2); margin-top: 6px; line-height: 1.6; }
+  .exp-desc { grid-column: 2; font-size: 13px; color: var(--ink2); margin-top: 6px; line-height: 1.6; }
 
   /* ABOUT / SPLIT */
   .about-grid {
@@ -248,35 +268,6 @@
   .oss-title { font-size: 13px; color: var(--ink); font-weight: 500; margin-bottom: 4px; }
   .oss-detail { font-size: 12px; color: var(--ink3); line-height: 1.5; }
 
-  /* CTA STRIP */
-  .cta-strip {
-    background: var(--ink); padding: 48px; margin: 0 -28px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap;
-  }
-  .cta-headline { font-family: var(--serif); font-size: 28px; color: var(--surface); font-weight: 400; }
-  .cta-headline em { font-style: italic; color: #e8a07a; }
-  .cta-actions { display: flex; gap: 12px; flex-wrap: wrap; }
-  .btn-inv {
-    font-family: var(--mono); font-size: 12px; padding: 12px 22px;
-    background: var(--surface); color: var(--ink); text-decoration: none; display: inline-block;
-    letter-spacing: 0.04em; transition: background 0.15s;
-  }
-  .btn-inv:hover { background: #e8a07a; }
-  .btn-inv-ghost {
-    font-family: var(--mono); font-size: 12px; padding: 12px 22px;
-    background: transparent; color: var(--surface); text-decoration: none; display: inline-block;
-    border: 1px solid rgba(255,255,255,0.25);
-    letter-spacing: 0.04em; transition: border-color 0.15s;
-  }
-  .btn-inv-ghost:hover { border-color: rgba(255,255,255,0.6); }
-  .cta-upwork-note {
-    display: flex; align-items: center; gap: 6px;
-    margin-top: 16px; width: 100%;
-    font-family: var(--mono); font-size: 11px; color: rgba(245,242,235,0.45);
-    letter-spacing: 0.03em;
-  }
-
   /* FOOTER */
   footer {
     display: flex; justify-content: space-between; align-items: center;
@@ -295,7 +286,7 @@
   /* BADGE */
   .badge {
     display: inline-block; font-family: var(--mono); font-size: 9px;
-    padding: 2px 6px; background: var(--accent2); color: #d4f0e0;
+    padding: 2px 6px; background: var(--accent2); color: var(--surface);
     letter-spacing: 0.05em; text-transform: uppercase; vertical-align: middle; margin-left: 6px;
   }
 
@@ -404,32 +395,11 @@
     color: var(--ink2);
   }
 
-  /* MIGRATION BANNER */
-  .migration-banner {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap;
-    padding: 28px 32px;
-    background: var(--surface2);
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--accent);
-    margin: 0 -28px;
-  }
-  .migration-eyebrow {
-    font-family: var(--mono); font-size: 10px; color: var(--accent);
-    letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px;
-  }
-  .migration-title {
-    font-family: var(--serif); font-size: 26px; font-weight: 400; color: var(--ink);
-    margin-bottom: 6px; line-height: 1.15;
-  }
-  .migration-title em { font-style: italic; color: var(--accent); }
-  .migration-sub { font-size: 13px; color: var(--ink3); line-height: 1.5; }
-
   /* BLOG TEASER */
   #blog { margin-top: 20px; margin-bottom: 12px; display: flex; flex-direction: column; gap: 10px; }
   .blog-teaser {
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 24px; flex-wrap: wrap;
+    display: flex; flex-direction: column; align-items: stretch;
+    gap: 16px;
     text-decoration: none; color: inherit;
     padding: 26px 30px;
     background: var(--surface);
@@ -440,7 +410,7 @@
   }
   .blog-teaser:hover {
     background: var(--surface2);
-    border-color: rgba(14, 13, 12, 0.18);
+    border-color: rgba(34, 34, 34, 0.18);
   }
   .blog-teaser-eyebrow {
     font-family: var(--mono); font-size: 10px; color: var(--accent2);
@@ -448,26 +418,40 @@
   }
   .blog-teaser-title {
     font-family: var(--serif); font-size: clamp(22px, 3.5vw, 28px); font-weight: 400;
-    color: var(--ink); margin-bottom: 6px; line-height: 1.18; max-width: 520px;
+    color: var(--ink); margin-bottom: 6px; line-height: 1.18;
   }
   .blog-teaser-title em { font-style: italic; color: var(--accent2); }
-  .blog-teaser-sub { font-size: 13px; color: var(--ink3); line-height: 1.55; max-width: 520px; }
-  .blog-teaser-arrow {
-    font-family: var(--mono); font-size: 12px; color: var(--accent);
-    letter-spacing: 0.04em; flex-shrink: 0;
-    transition: transform 0.15s, color 0.15s;
+  .blog-teaser-sub { font-size: 13px; color: var(--ink3); line-height: 1.55; }
+  .blog-teaser-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .blog-teaser-head {
+    display: grid;
+    grid-template-columns: 52px 1fr;
+    column-gap: 14px;
+    align-items: start;
   }
-  .blog-teaser:hover .blog-teaser-arrow { transform: translateX(4px); color: var(--ink); }
-  .blog-teaser-actions { display: flex; flex-wrap: wrap; gap: 8px; flex-shrink: 0; }
+  .blog-teaser-logo {
+    grid-row: 1 / 3;
+    width: 52px; height: 52px;
+    object-fit: contain;
+    border-radius: 8px;
+  }
+  .blog-teaser-head .blog-teaser-eyebrow,
+  .blog-teaser-head .blog-teaser-title,
+  .blog-teaser-head .blog-teaser-sub { grid-column: 2; }
   .blog-teaser-btn {
     font-family: var(--mono); font-size: 12px; letter-spacing: 0.03em;
     text-decoration: none; color: var(--ink); background: var(--surface2);
     border: 1px solid var(--line); padding: 8px 14px;
+    display: inline-block;
     transition: background 0.15s, border-color 0.15s, color 0.15s;
   }
   .blog-teaser-btn:hover { background: var(--ink); color: var(--surface); border-color: var(--ink); }
-  .blog-teaser-more { justify-content: center; padding: 16px 30px; }
-  .blog-teaser-more .blog-teaser-arrow { font-size: 14px; }
+  .blog-teaser-more { align-items: flex-start; padding: 20px 30px; }
+
+  @media (max-width: 800px) {
+    .hero-intro { grid-template-columns: minmax(0, 1fr) 220px; gap: 28px; }
+    .hero-photo { width: 220px; }
+  }
 
   @media (max-width: 600px) {
     .about-grid { grid-template-columns: 1fr; }
@@ -475,7 +459,8 @@
     .oss-item { border-right: none; border-bottom: 1px solid var(--line) !important; }
     .oss-item:last-child { border-bottom: none !important; }
     .project-item { grid-template-columns: 1fr; }
-    .cta-strip { flex-direction: column; text-align: left; }
+    .hero-intro { grid-template-columns: 1fr; gap: 20px; }
+    .hero-photo { width: 100%; height: auto; order: -1; }
     .nav-links { display: none; }
     .blog-teaser { padding: 22px 20px; }
     .modal-overlay { padding: 0; align-items: flex-end; }
@@ -490,12 +475,111 @@
 
 <!-- ==================== MODALS ==================== -->
 
+<div class="modal-overlay" id="modal-fitsync">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">FitSync</div>
+        <div class="modal-subtitle">04 — PT + DT marketplace · Production API</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('fitsync')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">The hard problem</div>
+        <p class="modal-section-text">
+          This is not an expert-only panel. Discovery marketplace and operations live on the same data model.
+          A member is tied to one live expert at a time. Request approval is locked inside a transaction with
+          <code style="font-family:var(--mono);font-size:12px;">SELECT FOR UPDATE</code>.
+          A second expert gets <code style="font-family:var(--mono);font-size:12px;">409 MEMBER_HAS_ACTIVE_EXPERT</code>.
+          A library template is deep-cloned onto the member. Catalog exercises are shared.
+          A package ends on date only. Running out of sessions does not expire it.
+          The subscription row is updated in place on renewal, so accounting keeps a separate
+          <code style="font-family:var(--mono);font-size:12px;">subscription_sales</code> ledger.
+          Program archive is not deleted. Restore is locked to <code style="font-family:var(--mono);font-size:12px;">expert_id</code>.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>No external migration tool.</strong> Numbered SQL at boot plus
+          <code style="font-family:var(--mono);font-size:12px;">_fitsync_migrations</code>. Each file is one transaction.<br><br>
+          <strong>No Stripe or İyzico for member-expert money.</strong> Snapshot price plus
+          <code style="font-family:var(--mono);font-size:12px;">subscription_payments</code>, remaining via SUM. Default currency TRY.<br><br>
+          <strong>Chat writes over REST. An open screen uses one-way WebSocket.</strong> Fan-out is an in-process Map (single-instance note in the code).
+          Conversation UUID pair is unique with <code style="font-family:var(--mono);font-size:12px;">user_id_a &lt; user_id_b</code>.<br><br>
+          <strong>Push is not fire-and-forget.</strong> A notifications outbox row, minute dispatch cron.
+          Tests do not call FCM, Resend, or S3.<br><br>
+          <strong>Discover does not look at platform subscription.</strong> Active onboarded experts with a published price.
+          Rank: 0.6 conversion count + 0.4 conversion recency (365/180 days).
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key Features</div>
+        <p class="modal-section-text">
+          • <strong>Expert signup.</strong> Password reset via 6-digit email OTP (Resend). No refresh rotation. Login drops the old refresh<br>
+          • <strong>Discover and requests.</strong> Plan request, accept/reject, synthetic renewal (hidden from the member, EXPERT_RENEWAL_IN_PROGRESS)<br>
+          • <strong>Library.</strong> PT/DT composite ref/new, assign to member, measurements, feed, session calendar, ledger/debtors<br>
+          • <strong>1:1 chat.</strong> Text + image. Conversation stays open after the package ends. Expert starts it<br>
+          • <strong>Deno.cron.</strong> Reminders, outbox, İstanbul 15:00 water reminder (12:00 UTC), orphan chat images, hourly package expire, 15 min session complete<br>
+          • <strong>OpenAPI + Scalar /docs.</strong> OpenTelemetry. System metrics in production
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Technical Implementation</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr>
+                <th>Component</th>
+                <th>Technology</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>API</td><td>Deno 2.8, Hono, Yelix, Zod, jose JWT</td><td>/v1 resources, Bearer, 60s timeout</td></tr>
+              <tr><td>Web</td><td>Astro 6, Node adapter standalone, Tailwind 4</td><td>Expert UI (member UI for E2E), TR default, /en</td></tr>
+              <tr><td>DB</td><td>PostgreSQL 18, postgres.js, uuidv7</td><td>Schema 0001–0057</td></tr>
+              <tr><td>Files</td><td>AWS S3 SDK, Hetzner-compatible, path-style</td><td>Avatar, feed, catalog, chat. Uploads go through the API</td></tr>
+              <tr><td>Push / mail</td><td>FCM v1, Resend</td><td>Outbox + cron. Stubbed in tests</td></tr>
+              <tr><td>Realtime</td><td>Deno.serve + WebSocket /ws/chat</td><td>Before app.fetch so Hono timeout does not break 101</td></tr>
+              <tr><td>Test</td><td>Throwaway Postgres, Playwright (FITSYNC_E2E serial)</td><td>~51 backend specs, ~29 e2e specs</td></tr>
+              <tr><td>Deploy</td><td>be/fe Dockerfile, OpenAPI Production server</td><td>fitsync-web.mambaapps.com · /docs on the API host. No K8s/Fly</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">Running today</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">API</span>
+            <span class="modal-metric-label">OpenAPI /docs</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">6</span>
+            <span class="modal-metric-label">Deno.cron jobs</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">57</span>
+            <span class="modal-metric-label">SQL migrations</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://fitsync-web.mambaapps.com" target="_blank" rel="noreferrer" class="modal-visit" data-umami-event="modal-fitsync-web-click">fitsync-web.mambaapps.com ↗</a>
+      <a href="https://fitsync-api.mambaapps.com/docs" target="_blank" rel="noreferrer" class="modal-visit" data-umami-event="modal-fitsync-docs-click">OpenAPI /docs ↗</a>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-ogid">
   <div class="modal wide">
     <div class="modal-header">
       <div>
         <div class="modal-title">OGİD</div>
-        <div class="modal-subtitle">04 — Association platform · Invite only · Mobile API</div>
+        <div class="modal-subtitle">05 — Association platform · Invite only · Mobile API</div>
       </div>
       <button class="modal-close" onclick="closeModal('ogid')">×</button>
     </div>
@@ -521,7 +605,7 @@
           announcements never merge in the API. Different schemas, paths, and notification targets.<br><br>
           <strong>Deno + Yelix/Hono + MongoDB.</strong> OpenAPI first REST for a Flutter client,
           Zod validation end to end, Coolify self hosting, R2 for media, FCM with retry cron,
-          Istanbul aware dues jobs.<br><br>
+          İstanbul aware dues jobs.<br><br>
           <strong>Root Admin Ask with read only Mongo.</strong> OpenRouter chat can query association
           data only through a readonly URI, so ops Q&amp;A cannot mutate production state.
         </p>
@@ -595,7 +679,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Kumru Kuymak v1.1 2B</div>
-        <div class="modal-subtitle">08 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
+        <div class="modal-subtitle">09 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
       </div>
       <button class="modal-close" onclick="closeModal('kumrukuymak')">×</button>
     </div>
@@ -686,7 +770,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Ordu Benim</div>
-        <div class="modal-subtitle">06 — Location-based AI chat platform · Full-stack · Live</div>
+        <div class="modal-subtitle">07 — Location-based AI chat platform · Full-stack · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('ordubenim')">×</button>
     </div>
@@ -694,7 +778,7 @@
       <div>
         <div class="modal-section-label">What it is</div>
         <p class="modal-section-text">
-          A location-based chat application and information platform specifically designed for the Ordu province in Turkey. 
+          A location-based chat application and information platform specifically designed for the Ordu province in Türkiye. 
           The project provides local services including transportation, news, places search, and regional information through 
           an AI-powered chat interface. Built as a full-stack application with separate backend and frontend components.
         </p>
@@ -1002,7 +1086,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">PELS</div>
-        <div class="modal-subtitle">09 — CMS platform · Bilingual · Live</div>
+        <div class="modal-subtitle">10 — CMS platform · Bilingual · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('pels')">×</button>
     </div>
@@ -1052,7 +1136,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Yelix</div>
-        <div class="modal-subtitle">07 — Framework · 🥇 National award · Open source</div>
+        <div class="modal-subtitle">08 — Framework · 🥇 National award · Open source</div>
       </div>
       <button class="modal-close" onclick="closeModal('yelix')">×</button>
     </div>
@@ -1103,7 +1187,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Ordu IT Community</div>
-        <div class="modal-subtitle">05 — Community platform · Self-hosted · Live</div>
+        <div class="modal-subtitle">06 — Community platform · Self-hosted · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('ordudev')">×</button>
     </div>
@@ -1208,30 +1292,32 @@
     <a href="/" class="nav-logo" data-umami-event="nav-logo-click">Murat Kirazkaya</a>
     <div class="nav-links">
       <a href="#work">Work</a>
-      <a href="#services">Services</a>
       <a href="#open-source">Open Source</a>
-      <a href="/blogs">Blog</a>
+      <a href="/blogs">Blogs</a>
       <a href="#about">About</a>
     </div>
-    <a href="mailto:muratkirazkaya0@gmail.com" class="nav-cta" data-umami-event="nav-hire-me-click">Hire me →</a>
+    <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="nav-cta" data-umami-event="nav-github-click">GitHub</a>
   </nav>
 
   <!-- HERO -->
   <section class="hero">
-    <div class="hero-eyebrow">Available for freelance · Ordu, Turkey</div>
-    <h1 class="hero-headline">
-      I build systems<br>
-      that <em>actually run</em><br>
-      businesses. 
-    </h1>
-    <p class="hero-sub">
-      Full-stack developer specialising in operational backends, workflow engines, and CMS-driven platforms.
-      I write code, ship self-hosted infrastructure, and contribute to the tools the rest of the web runs on.
-      Ranked #68 in Turkey and #11,851 globally for open-source contributions.
-    </p>
-    <div class="hero-actions">
-      <a href="#work" class="btn-primary" data-umami-event="hero-see-work-click">See my work ↓</a>
-      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="btn-ghost" data-umami-event="hero-github-click">GitHub / Open Source</a>
+    <div class="hero-intro">
+      <div class="hero-copy">
+        <div class="hero-eyebrow">Software Engineer at NodeSource · İstanbul, Türkiye</div>
+        <h1 class="hero-headline">
+          I work on <em>Node.js</em><br>
+          and the tools <span style="text-wrap: nowrap;">around it.</span>
+        </h1>
+        <p class="hero-sub">
+          Software Engineer at NodeSource. I contribute to Express, the Node.js HTTP stack, and open source.
+          This site is my writing, work, and notes.
+        </p>
+        <div class="hero-actions">
+          <a href="#work" class="btn-primary" data-umami-event="hero-see-work-click">See my work ↓</a>
+          <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="btn-ghost" data-umami-event="hero-github-click">GitHub / Open Source</a>
+        </div>
+      </div>
+      <img src="/img/pp.jpeg" alt="Murat Kirazkaya" class="hero-photo" width="300" height="300">
     </div>
     <div class="hero-tech">
       <span class="hero-tech-label">Stack</span>
@@ -1246,16 +1332,6 @@
       <i class="ci ci-docker ci-2x" title="Docker"></i>
     </div>
   </section>
-
-  <!-- MIGRATION BANNER -->
-  <div class="migration-banner">
-    <div>
-      <div class="migration-eyebrow">New service</div>
-      <div class="migration-title">Migrate your Cloud Deployment<br>to <em>Self-Hosted</em></div>
-      <div class="migration-sub">Think about it before you get hit with sky-high bills.</div>
-    </div>
-    <a href="/self-hosted-migration" class="btn-primary" style="flex-shrink:0" data-umami-event="migration-banner-click">See the full service →</a>
-  </div>
 
   <!-- WORK -->
   <div id="work" class="sec-header">
@@ -1341,13 +1417,44 @@
       </div>
     </div>
 
+    <div class="project-item" onclick="openModal('fitsync')">
+      <div>
+        <div class="proj-number">04 — PT / DT platform</div>
+        <div class="proj-title">FitSync</div>
+        <div class="proj-desc">
+          İstanbul-based SaaS that keeps dietitian, personal trainer, and member in one product.
+          Expert web panel (Astro, TR default) plus REST and WebSocket API for mobile.
+          The hard part is discovery, request approval, program library, package expiry, and the ledger
+          running on the same member-expert relation without colliding. Member-expert money does not
+          go through a payment gateway. Sales and installment rows track it.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-deno"></i> Deno + Hono</span>
+          <span class="tag">Yelix OpenAPI</span>
+          <span class="tag"><i class="ci ci-postgresql"></i> PostgreSQL 18</span>
+          <span class="tag"><i class="ci ci-astro"></i> Astro</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag">Playwright</span>
+          <span class="tag"><i class="ci ci-firebase"></i> FCM</span>
+          <span class="tag">S3</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">176</span>
+        <span class="proj-stat-label">exercise catalog</span>
+        <div class="proj-stat-secondary">8 categories · Hetzner Object Storage (fsn1)</div>
+        <a href="https://fitsync-web.mambaapps.com" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-fitsync-web-click">Web ↗</a>
+        <a href="https://fitsync-api.mambaapps.com/docs" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-fitsync-docs-click">OpenAPI ↗</a>
+      </div>
+    </div>
+
     <div class="project-item" onclick="openModal('ogid')">
       <div>
-        <div class="proj-number">04 — Association platform</div>
+        <div class="proj-number">05 — Association platform</div>
         <div class="proj-title">OGİD</div>
         <div class="proj-desc">
           Invite only member platform for Ordu Genç İş İnsanları Derneği. Role based board approvals,
-          separate share and purchase feeds, dues with Istanbul aware cron, FCM notifications, and a
+          separate share and purchase feeds, dues with İstanbul aware cron, FCM notifications, and a
           read only Admin Ask over Mongo. Flutter client on a Deno/Yelix API.
         </div>
         <div class="proj-tags">
@@ -1370,7 +1477,7 @@
 
     <div class="project-item" onclick="openModal('ordudev')">
       <div>
-        <div class="proj-number">05 — Community platform</div>
+        <div class="proj-number">06 — Community platform</div>
         <div class="proj-title">Ordu IT Community</div>
         <div class="proj-desc">
           Platform for Ordu Bilişim Topluluğu — blog, events, docs, and daily cafeteria menu.
@@ -1396,7 +1503,7 @@
 
     <div class="project-item" onclick="openModal('ordubenim')">
       <div>
-        <div class="proj-number">06 — Location-based AI platform</div>
+        <div class="proj-number">07 — Location-based AI platform</div>
         <div class="proj-title">Ordu Benim</div>
         <div class="proj-desc">
           Location-based chat application and information platform for Ordu province. AI-powered interface with local services 
@@ -1423,7 +1530,7 @@
 
     <div class="project-item" onclick="openModal('yelix')">
       <div>
-        <div class="proj-number">07 — Framework</div>
+        <div class="proj-number">08 — Framework</div>
         <div class="proj-title">Yelix <span class="badge">🥇 National</span></div>
         <div class="proj-desc">
           A Deno-native web framework built around the runtime's actual strengths — not a Node.js port.
@@ -1444,7 +1551,7 @@
 
     <div class="project-item" onclick="openModal('kumrukuymak')">
       <div>
-        <div class="proj-number">08 — Fine-tuned adapter</div>
+        <div class="proj-number">09 — Fine-tuned adapter</div>
         <div class="proj-title">Kumru Kuymak v1.1 2B</div>
         <div class="proj-desc">
           LoRA-style adapter on Kara Kumru for tool-vs-direct routing. Curated TR benchmark subset (218 examples):
@@ -1469,7 +1576,7 @@
 
     <div class="project-item" onclick="openModal('pels')">
       <div>
-        <div class="proj-number">09 — CMS platform</div>
+        <div class="proj-number">10 — CMS platform</div>
         <div class="proj-title">PELS</div>
         <div class="proj-desc">
           Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with
@@ -1491,6 +1598,19 @@
   </div>
 
   <div id="blog">
+  <div class="blog-teaser">
+    <div class="blog-teaser-head">
+      <img src="/img/nodesource-logo-2.jpg" alt="NodeSource" class="blog-teaser-logo" width="52" height="52">
+      <div class="blog-teaser-eyebrow">Blog · TR / EN · Sep 7, 2026</div>
+      <div class="blog-teaser-title">New achievement unlocked: <em>NodeSource</em></div>
+      <div class="blog-teaser-sub">Not a technical post. The short story of how contributing to Express led me to NodeSource.</div>
+    </div>
+    <div class="blog-teaser-actions">
+      <a href="/blogs/yeni-basari-acilidi-nodesource.html" class="blog-teaser-btn" data-umami-event="home-blog-nodesource-tr-click">Türkçe oku</a>
+      <a href="/blogs/new-achievement-unlocked-nodesource.html" class="blog-teaser-btn" data-umami-event="home-blog-nodesource-en-click">Read in English</a>
+    </div>
+  </div>
+
   <div class="blog-teaser">
     <div>
       <div class="blog-teaser-eyebrow">Blog · English · Aug 10, 2026</div>
@@ -1514,46 +1634,11 @@
     </div>
   </div>
 
-  <a href="/blogs" class="blog-teaser blog-teaser-more" data-umami-event="home-blog-see-more-click">
-    <span class="blog-teaser-arrow">See more blog →</span>
-  </a>
+  <div class="blog-teaser blog-teaser-more">
+    <div class="blog-teaser-actions">
+      <a href="/blogs" class="blog-teaser-btn" data-umami-event="home-blog-see-more-click">See more blog</a>
+    </div>
   </div>
-
-  <!-- SERVICES -->
-  <div id="services" class="sec-header">
-    <span class="sec-title">What I can do for you</span>
-    <div class="sec-line"></div>
-  </div>
-
-  <div class="services-list">
-    <div class="service-item">
-      <span class="service-num">01</span>
-      <div>
-        <div class="service-title">Migrate a Node.js backend to Deno</div>
-        <div class="service-desc">Without rewriting your business logic. I've built production Deno backends, contributed to the Deno runtime itself, and I'm on the ExpressJS Performance WG — I know exactly what moves cleanly and what doesn't.</div>
-      </div>
-    </div>
-    <div class="service-item">
-      <span class="service-num">02</span>
-      <div>
-        <div class="service-title">Build a multi-role workflow system from scratch</div>
-        <div class="service-desc">State-machine approval pipelines, document handling (storage, PDF generation), and automated notifications. I've shipped this for universities and it's handling thousands of applications today.</div>
-      </div>
-    </div>
-    <div class="service-item">
-      <span class="service-num">03</span>
-      <div>
-        <div class="service-title">Set up a CMS-driven multilingual site your team can maintain</div>
-        <div class="service-desc">Astro + Contentful (or similar), TR/EN content, zero-JS-by-default output. The client's non-technical team is editing content independently — no agency needed after handoff.</div>
-      </div>
-    </div>
-    <div class="service-item">
-      <span class="service-num">04</span>
-      <div>
-        <div class="service-title">Audit and improve your Node.js HTTP stack</div>
-        <div class="service-desc">I contribute to jshttp/on-finished, jshttp/mime-db, and sit on the ExpressJS Performance WG. I understand the stack at the package level, not just the framework surface.</div>
-      </div>
-    </div>
   </div>
 
   <!-- EXPERIENCE -->
@@ -1564,26 +1649,36 @@
 
   <div class="exp-list">
     <div class="exp-item">
+      <img src="/img/nodesource-logo-2.jpg" alt="" class="exp-logo" width="44" height="44">
+      <div class="exp-role">Software Engineer at NodeSource</div>
+      <div class="exp-meta">Sep 2026 – Present · Remote</div>
+    </div>
+    <div class="exp-item">
+      <img src="/img/valentura.png" alt="" class="exp-logo" width="44" height="44">
       <div class="exp-role">Tech Operations — Valentura</div>
       <div class="exp-meta">Sep 2024 – Sep 2025 · Remote</div>
       <div class="exp-desc">Switched from an internship to a full-time role after demonstrating sufficient knowledge and maturity.</div>
     </div>
     <div class="exp-item">
+      <img src="/img/valentura.png" alt="" class="exp-logo" width="44" height="44">
       <div class="exp-role">Frontend Developer — Valentura</div>
       <div class="exp-meta">Mar 2024 – Sep 2024 · Hybrid</div>
       <div class="exp-desc">Internship in frontend development.</div>
     </div>
     <div class="exp-item">
+      <img src="/img/collective-idea.jpg" alt="" class="exp-logo" width="44" height="44">
       <div class="exp-role">Web Developer — Collective Idea TR</div>
-      <div class="exp-meta">Jan 2024 – Mar 2024 · Kadıköy, Istanbul · Hybrid</div>
+      <div class="exp-meta">Jan 2024 – Mar 2024 · Kadıköy, İstanbul · Hybrid</div>
       <div class="exp-desc">Web development internship.</div>
     </div>
     <div class="exp-item">
+      <img src="/img/insider.png" alt="" class="exp-logo" width="44" height="44">
       <div class="exp-role">Frontend Developer — Insider</div>
-      <div class="exp-meta">Jul 2023 – Sep 2023 · Istanbul · On-site</div>
+      <div class="exp-meta">Jul 2023 – Sep 2023 · İstanbul · On-site</div>
       <div class="exp-desc">Selected for an in-person phase at Insider's office, showcasing adaptability and commitment to personal growth.</div>
     </div>
     <div class="exp-item">
+      <img src="/img/insider.png" alt="" class="exp-logo" width="44" height="44">
       <div class="exp-role">Trainee — Insider</div>
       <div class="exp-meta">Apr 2023 – Jul 2023</div>
       <div class="exp-desc">Proactively encouraged peers to apply, fostering a team-oriented learning environment. Collaborated on a final project focused on earthquake preparedness.</div>
@@ -1598,19 +1693,22 @@
 
   <div class="about-grid">
     <div class="about-left">
-      <h2 class="about-title">Not just a developer.<br><em>A builder</em> who ships.</h2>
+      <h2 class="about-title">Software Engineer<br>at <em>NodeSource</em></h2>
       <p class="about-body">
-        I'm a software developer based in Ordu, Turkey, currently studying at Ordu University while working full-time.
-        I care about systems that work at 3am without me watching them — so I self-host, monitor, and
-        design for reliability from the start.<br><br>
-        I'm part of the ExpressJS organisation (Triagers team, Performance WG) and have been contributing
-        to the Node.js HTTP stack. I also founded <a href="https://ordu.dev" target="_blank" rel="noreferrer">Ordu Bilişim Topluluğu</a>,
-        a regional dev community, and co-organised <a href="https://winterbytes.ordu.dev" target="_blank" rel="noreferrer">Winterbytes 2026</a>
-        — a 3-day technical camp for 230+ students from across the Black Sea region.
+        I'm based in İstanbul, Türkiye. I study at Ordu University and work at NodeSource as a Software Engineer.
+        I care about performance, observability, and reliability. I self-host things I run, and I try to leave systems in a state I can sleep on.<br><br>
+        I'm on the ExpressJS Triagers team and the Performance WG. I also founded <a href="https://ordu.dev" target="_blank" rel="noreferrer">Ordu Bilişim Topluluğu</a>
+        and co-organised <a href="https://winterbytes.ordu.dev" target="_blank" rel="noreferrer">Winterbytes 2026</a>,
+        a 3-day technical camp for 230+ students from the Black Sea region.
       </p>
     </div>
     <div class="about-right">
       <div class="cred-list">
+        <div class="cred-item">
+          <span class="cred-org">NodeSource</span>
+          <span class="cred-role">Software Engineer</span>
+          <span class="cred-detail">Aug 2026 – Present</span>
+        </div>
         <div class="cred-item">
           <span class="cred-org">ExpressJS</span>
           <span class="cred-role">Triager + Performance WG</span>
@@ -1653,7 +1751,7 @@
     <div style="display: flex; gap: 32px; flex-wrap: wrap;">
       <div>
         <div style="font-family: var(--serif); font-size: 28px; color: var(--ink); font-weight: 400;">#68</div>
-        <div style="font-family: var(--mono); font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em;">in Turkey (300K devs)</div>
+        <div style="font-family: var(--mono); font-size: 10px; color: var(--ink3); text-transform: uppercase; letter-spacing: 0.05em;">in Türkiye (300K devs)</div>
       </div>
       <div>
         <div style="font-family: var(--serif); font-size: 28px; color: var(--ink); font-weight: 400;">#11,851</div>
@@ -1712,21 +1810,6 @@
       <div class="oss-org">f/prompts.chat</div>
       <div class="oss-title">Prompt community</div>
       <div class="oss-detail">Contributed UX-focused improvements to the f/prompts.chat open-source project.</div>
-    </div>
-  </div>
-
-  <!-- CTA -->
-  <div class="cta-strip">
-    <div class="cta-headline">
-      Have something <em>that needs to work</em>?<br>Let's talk.
-    </div>
-    <div class="cta-actions">
-      <a href="/booking" class="btn-inv" data-umami-event="cta-book-call-click">Book a call →</a>
-      <a href="mailto:muratkirazkaya0@gmail.com" class="btn-inv-ghost" data-umami-event="cta-email-click">muratkirazkaya0@gmail.com</a>
-    </div>
-    <div class="cta-upwork-note">
-      <svg width="11" height="11" viewBox="0 0 24 24" fill="#6dbf67" aria-hidden="true"><path d="M18.56 13.16c-1.1 0-2.13-.47-3.07-1.23l.23-1.08c.21-1.14.85-3.06 2.84-3.06 1.49 0 2.7 1.21 2.7 2.7s-1.21 2.67-2.7 2.67zm0-8.14c-2.54 0-4.51 1.65-5.31 4.37-1.22-1.83-2.15-4.04-2.69-5.89H8.56v7.11c0 1.41-1.14 2.55-2.55 2.55S3.46 12.02 3.46 10.61V3.5H1.19v7.11c0 2.92 2.37 5.28 5.28 5.28s5.28-2.36 5.28-5.28V9.42c.53 1.11 1.18 2.23 1.97 3.22l-1.67 7.87h2.43l1.21-5.71c1.06.68 2.28 1.11 3.67 1.11 3.82 0 6.37-2.55 6.37-6.12 0-3.32-2.55-6.03-6.37-6.03z"/></svg>
-      Payments secured via Upwork Direct Contracts
     </div>
   </div>
 
