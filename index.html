@@ -679,7 +679,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Kumru Kuymak v1.1 2B</div>
-        <div class="modal-subtitle">09 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
+        <div class="modal-subtitle">12 — Fine-tuned adapter · Tool routing · Apache-2.0</div>
       </div>
       <button class="modal-close" onclick="closeModal('kumrukuymak')">×</button>
     </div>
@@ -769,7 +769,7 @@
   <div class="modal wide">
     <div class="modal-header">
       <div>
-        <div class="modal-title">Ordu Benim</div>
+        <div class="modal-title">OrduBenim</div>
         <div class="modal-subtitle">07 — Location-based AI chat platform · Full-stack · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('ordubenim')">×</button>
@@ -855,6 +855,315 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="modal-co-maintainer">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">co-maintainer</div>
+        <div class="modal-subtitle">08 — Developer tools · AI-assisted code review · CLI</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('co-maintainer')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">What it is</div>
+        <p class="modal-section-text">
+          A repository-aware maintainer assistant for GitHub projects. <strong>co-maintainer</strong>
+          analyzes a repository's code, workflows, commits, pull requests, discussions, and diffs to
+          generate contribution guidance and surface likely review issues before human review.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">The problem</div>
+        <p class="modal-section-text">
+          Repository-specific contribution rules, review expectations, testing requirements, and
+          workflows are difficult to discover and apply consistently. Generic coding rules miss the
+          conventions that make a particular codebase maintainable.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Key decisions</div>
+        <p class="modal-section-text">
+          <strong>Repository-aware analysis</strong> — guidance is derived from the project's own code,
+          workflows, history, pull requests, and review discussions.<br><br>
+          <strong>Low/high model separation</strong> — extraction and synthesis use different model
+          paths so repository analysis can stay focused and composable.<br><br>
+          <strong>Incremental cache</strong> — SQLite tracks codebase and PR revisions, avoiding
+          unnecessary reprocessing while keeping later reviews current.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Technical implementation</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Component</th><th>Technology</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Runtime</td><td>Deno · TypeScript</td><td>Modular CLI and analysis pipeline</td></tr>
+              <tr><td>GitHub access</td><td>GitHub CLI · PAT</td><td>Repository, commit, PR, discussion, and diff data</td></tr>
+              <tr><td>AI providers</td><td>OpenRouter · Hetzner AI</td><td>Provider abstraction for extraction and synthesis</td></tr>
+              <tr><td>Cache</td><td>SQLite</td><td>Incremental codebase and PR revision tracking</td></tr>
+              <tr><td>Distribution</td><td>JSR</td><td>Publishable Deno package and CLI</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">Workflow</div>
+        <p class="modal-section-text">
+          The CLI collects repository context, extracts patterns and expectations, synthesizes a
+          repository-specific <code style="font-family:var(--mono);font-size:12px;">SKILL.md</code>,
+          and can use that guidance to review an individual pull request. Optional review guides,
+          improvement passes, and detailed token, cost, timing, heartbeat, and debug logs make the
+          process inspectable.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Current result</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">78s</span>
+            <span class="modal-metric-label">PR review</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">9.5K</span>
+            <span class="modal-metric-label">input tokens</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">7.6K</span>
+            <span class="modal-metric-label">output tokens</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">$0.0115</span>
+            <span class="modal-metric-label">review cost</span>
+          </div>
+        </div>
+        <p class="modal-section-text" style="margin-top:16px;">
+          A second-pass review used approximately 38.9K input tokens, 11.4K output tokens, and cost
+          $0.0234.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Next evaluation area</div>
+        <p class="modal-section-text">
+          The CLI has reached a working stage and produces actionable pre-review findings. The main
+          remaining evaluation area is measuring finding accuracy with feedback from engineers familiar
+          with the target codebase.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://jsr.io/@murat/co-maintainer" target="_blank" rel="noreferrer" class="modal-visit">View on JSR ↗</a>
+      <a href="https://github.com/GroophyLifefor/co-maintainer" target="_blank" rel="noreferrer" class="modal-visit">View on GitHub ↗</a>
+      <a href="https://github.com/GroophyLifefor/co-maintainer/tree/main/docs" target="_blank" rel="noreferrer" class="modal-visit">Documentation ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-express-trace-cli">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">Express Tracing CLI</div>
+        <div class="modal-subtitle">09 — Developer tools · Observability · Express 5</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('express-trace-cli')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">What it is</div>
+        <p class="modal-section-text">
+          A live terminal tracer for Express 5. Run a collector, attach a reporter, and watch requests,
+          middleware timelines, and logs in a three-pane TUI. The instrumentation layer lives separately
+          in <strong>express-emits</strong>, so measurement and presentation stay independent.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">The problem</div>
+        <p class="modal-section-text">
+          Express middleware is often a black box during local development. When a request is slow or
+          incorrect, it is difficult to see which middleware ran, in what order, how long each one took,
+          or which log line belongs to that request. Full APM and OpenTelemetry setups are too heavy for
+          this kind of feedback loop.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Two packages, split on purpose</div>
+        <p class="modal-section-text">
+          <strong>express-emits</strong> instruments the app by wrapping <code style="font-family:var(--mono);font-size:12px;">app.use</code>
+          and emitting typed start/end events with real durations. <strong>express-trace-cli</strong>
+          consumes those events, batches them over HTTP to a local collector, and renders sessions,
+          requests, middleware trees, and logs in Ink. If the CLI is not running, events are dropped:
+          this is a development tool, not a durable pipeline.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Technical implementation</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Component</th><th>Technology</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Instrumentation</td><td>Node.js EventEmitter</td><td>Typed request, middleware, and log events</td></tr>
+              <tr><td>CLI / TUI</td><td>Ink · React</td><td>Three-pane live terminal interface</td></tr>
+              <tr><td>Runtime</td><td>TypeScript · Express 5</td><td>Express-compatible tracing semantics</td></tr>
+              <tr><td>Transport</td><td>HTTP · 200ms batching</td><td>Fire-and-forget local event delivery</td></tr>
+              <tr><td>Testing</td><td>Node test runner · autocannon</td><td>Semantic guarantees and overhead measurement</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">Correct timing semantics</div>
+        <p class="modal-section-text">
+          Request timing ends on <code style="font-family:var(--mono);font-size:12px;">res</code>
+          <code style="font-family:var(--mono);font-size:12px;">finish</code> or
+          <code style="font-family:var(--mono);font-size:12px;">close</code>, not when
+          <code style="font-family:var(--mono);font-size:12px;">next()</code> returns. Middleware
+          duration is self-time until handoff, not the downstream chain. Every
+          <code style="font-family:var(--mono);font-size:12px;">middleware.start</code> has exactly one
+          end event, including sync throws, rejected async middleware, and early responses.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Events &amp; performance</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">5</span>
+            <span class="modal-metric-label">typed events</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">~2–12%</span>
+            <span class="modal-metric-label">RPS overhead</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">30s</span>
+            <span class="modal-metric-label">per scenario</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">50</span>
+            <span class="modal-metric-label">connections</span>
+          </div>
+        </div>
+        <p class="modal-section-text" style="margin-top:16px;">
+          Five local autocannon scenarios compared tracing against vanilla Express. Counter-based IDs
+          with zero listeners stayed around 16.5–16.9k req/s against a roughly 17–18k baseline; silent
+          listeners and UUID IDs added somewhat more overhead.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://github.com/GroophyLifefor/express-trace-cli" target="_blank" rel="noreferrer" class="modal-visit">CLI on GitHub ↗</a>
+      <a href="https://github.com/GroophyLifefor/express-emits" target="_blank" rel="noreferrer" class="modal-visit">express-emits ↗</a>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-vfx-player">
+  <div class="modal wide">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">VFX Player</div>
+        <div class="modal-subtitle">10 — Desktop app · VFX review tool · Windows</div>
+      </div>
+      <button class="modal-close" onclick="closeModal('vfx-player')">×</button>
+    </div>
+    <div class="modal-body">
+      <div>
+        <div class="modal-section-label">What it is</div>
+        <p class="modal-section-text">
+          A frame-accurate Windows video player built for VFX review. Drop in a file or the portable
+          executable, paste a URL, step through frames, inspect the waveform, set in/out points, loop,
+          trim, and compare A/B versions without opening a full NLE.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">The problem</div>
+        <p class="modal-section-text">
+          Consumer players are not designed for precise VFX review. Their playheads are difficult to
+          trust, single-frame stepping is inconsistent, and local checks often turn into a codec,
+          installer, or GPU-tool hunt. VFX Player keeps the review loop in one small Windows tool.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">In-app visual</div>
+        <figure class="modal-figure">
+          <img src="https://groophylifefor.github.io/vfx-editor/screenshot.png" alt="VFX Player Windows desktop interface" loading="lazy" decoding="async">
+          <figcaption class="modal-figure-caption">VFX Player review interface</figcaption>
+        </figure>
+      </div>
+      <div>
+        <div class="modal-section-label">Key features</div>
+        <p class="modal-section-text">
+          <strong>Frame stepping</strong> — move by ±1 or ±10 frames while seeing seconds, milliseconds,
+          source FPS, and playback FPS to two decimals.<br><br>
+          <strong>Review controls</strong> — zoom to pixels, waveform, volume from 0–125%, in/out loop,
+          trim in the source format, and A/B wipe or side-by-side comparison.<br><br>
+          <strong>Ingest and updates</strong> — FFmpeg and yt-dlp are bundled into the executable;
+          the in-app updater replaces the binary from GitHub Releases.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Technical implementation</div>
+        <div class="modal-table-wrap">
+          <table class="modal-table">
+            <thead>
+              <tr><th>Component</th><th>Technology</th><th>Purpose</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Application</td><td>Rust · egui / eframe 0.34</td><td>Native Windows desktop UI</td></tr>
+              <tr><td>Decode</td><td>FFmpeg · raw RGB pipe</td><td>Seeking and stepping on real frames</td></tr>
+              <tr><td>URL ingest</td><td>yt-dlp</td><td>Open video URLs from inside the player</td></tr>
+              <tr><td>Upscale</td><td>Video2X 6.4 · Vulkan</td><td>Optional upscale/interpolation as A/B output</td></tr>
+              <tr><td>Release</td><td>GitHub Actions</td><td>Windows x64 builds and release publishing</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <div class="modal-section-label">One file to download</div>
+        <p class="modal-section-text">
+          FFmpeg and yt-dlp are compressed into the binary with zstd and extracted on first run.
+          Video2X remains optional: it downloads once after consent, lists available GPU devices, and
+          opens the result as the B layer. The current release is <strong>v0.1.8</strong>.
+        </p>
+      </div>
+      <div>
+        <div class="modal-section-label">Accuracy &amp; result</div>
+        <div class="modal-metrics">
+          <div class="modal-metric">
+            <span class="modal-metric-val">Frame by Frame</span>
+            <span class="modal-metric-label">stepping accuracy</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">1</span>
+            <span class="modal-metric-label">portable exe</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">0–125%</span>
+            <span class="modal-metric-label">volume range</span>
+          </div>
+          <div class="modal-metric">
+            <span class="modal-metric-val">v0.1.8</span>
+            <span class="modal-metric-label">current release</span>
+          </div>
+        </div>
+        <p class="modal-section-text" style="margin-top:16px;">
+          A free, no-setup review player used as a daily tool: open, step, mark, loop, and send.
+        </p>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="https://groophylifefor.github.io/vfx-editor/" target="_blank" rel="noreferrer" class="modal-visit">VFX Player site ↗</a>
+      <a href="https://github.com/GroophyLifefor/vfx-editor" target="_blank" rel="noreferrer" class="modal-visit">View on GitHub ↗</a>
+      <a href="https://github.com/GroophyLifefor/vfx-editor#readme" target="_blank" rel="noreferrer" class="modal-visit">README ↗</a>
+      <a href="https://groophylifefor.github.io/vfx-editor/screenshot.png" target="_blank" rel="noreferrer" class="modal-visit">Screenshot ↗</a>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="modal-sportyluxe">
   <div class="modal">
     <div class="modal-header">
@@ -921,7 +1230,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Dijital Staj</div>
-        <div class="modal-subtitle">02 — Staj workflow · Ordu Üniversitesi · Live</div>
+        <div class="modal-subtitle">02 — Internship workflow · Ordu University · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('dijitalstaj')">×</button>
     </div>
@@ -931,144 +1240,144 @@
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>Katman</th><th>Teknoloji</th><th>Ne için</th></tr>
+              <tr><th>Layer</th><th>Technology</th><th>Purpose</th></tr>
             </thead>
             <tbody>
-              <tr><td>Frontend</td><td>Next.js 16 · React 19 · Tailwind 4</td><td>Rollere göre dashboard, formlar, PDF önizleme</td></tr>
-              <tr><td>Backend</td><td>Deno · Hono · Yelix · Zod</td><td>API, OpenAPI, şema doğrulama</td></tr>
-              <tr><td>DB</td><td>PostgreSQL · DrizzleORM</td><td>Başvuru state, belgeler, audit</td></tr>
-              <tr><td>Object storage</td><td>MinIO (S3 API)</td><td>PDF, sağlık provizyonu, günlük görselleri, paketler</td></tr>
-              <tr><td>PDF</td><td>pdf-lib · fontkit</td><td>Resmi form üretimi (D0 to D4, SB2/4/5, muafiyet)</td></tr>
-              <tr><td>Auth session</td><td>OIDB login → JWT (jose)</td><td>Üniversite kimliğiyle giriş</td></tr>
-              <tr><td>Monitoring</td><td>Sentry</td><td>FE + BE hata takibi</td></tr>
-              <tr><td>Rich text</td><td>TipTap · TinyMCE</td><td>Staj günlüğü / form alanları</td></tr>
+              <tr><td>Frontend</td><td>Next.js 16 · React 19 · Tailwind 4</td><td>Role-based dashboards, forms, PDF preview</td></tr>
+              <tr><td>Backend</td><td>Deno · Hono · Yelix · Zod</td><td>API, OpenAPI, schema validation</td></tr>
+              <tr><td>DB</td><td>PostgreSQL · DrizzleORM</td><td>Application state, documents, audit</td></tr>
+              <tr><td>Object storage</td><td>MinIO (S3 API)</td><td>PDFs, insurance records, journal images, packages</td></tr>
+              <tr><td>PDF</td><td>pdf-lib · fontkit</td><td>Official form generation (D0 to D4, SB2/4/5, exemption)</td></tr>
+              <tr><td>Auth session</td><td>OIDB login → JWT (jose)</td><td>University identity login</td></tr>
+              <tr><td>Monitoring</td><td>Sentry</td><td>Frontend and backend error tracking</td></tr>
+              <tr><td>Rich text</td><td>TipTap · TinyMCE</td><td>Internship journal and form fields</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Entegrasyonlar</div>
+        <div class="modal-section-label">Integrations</div>
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>Sistem</th><th>Ne yapıyor</th></tr>
+              <tr><th>System</th><th>Purpose</th></tr>
             </thead>
             <tbody>
-              <tr><td>OIDB / UniPA</td><td>Login, oturum, transkript çekme</td></tr>
-              <tr><td>Transkript parser</td><td>Staj 1 / Staj 2 geçti mi, planlanan iş günü (20/40), İSG uygunluğu</td></tr>
-              <tr><td>Resend + SMTP</td><td>Çift mail yolu. Ofis tek mailde hangisini kullanacağını seçebilir</td></tr>
-              <tr><td>OpenRouter</td><td>Ofis AI sohbeti (tool calling)</td></tr>
-              <tr><td>SSH + read only Postgres</td><td>AI’nin sorguladığı salt okunur DB tüneli</td></tr>
-              <tr><td>CUPS / drop folder print</td><td>Üretilen PDF’leri otomatik yazıcı kuyruğuna</td></tr>
-              <tr><td>MinIO presigned URL</td><td>Private bucket’tan güvenli dosya erişimi</td></tr>
+              <tr><td>OIDB / UniPA</td><td>Login, sessions, transcript retrieval</td></tr>
+              <tr><td>Transcript parser</td><td>Internship 1 / 2 completion, planned workdays (20/40), OHS eligibility</td></tr>
+              <tr><td>Resend + SMTP</td><td>Dual email delivery; the office can choose the route per email</td></tr>
+              <tr><td>OpenRouter</td><td>Office AI chat with tool calling</td></tr>
+              <tr><td>SSH + read-only Postgres</td><td>Read-only database tunnel queried by the AI</td></tr>
+              <tr><td>CUPS / drop folder print</td><td>Automatically queues generated PDFs for printing</td></tr>
+              <tr><td>MinIO presigned URL</td><td>Secure access to files in a private bucket</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Roller &amp; workflow</div>
+        <div class="modal-section-label">Roles &amp; workflow</div>
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>Aktör</th><th>Ne biliyor / ne yapıyor</th></tr>
+              <tr><th>Role</th><th>Responsibilities</th></tr>
             </thead>
             <tbody>
-              <tr><td>Öğrenci</td><td>Talep → başvuru → belgeler → günlük → düzeltme. Durumunu görür</td></tr>
-              <tr><td>Danışman</td><td>Talep/başvuru onayı, değerlendirme, düzeltme isteği, staj kurulu üyeliği</td></tr>
-              <tr><td>İşyeri</td><td>Hesapsız token link ile onay, imza, D3/SB4/SB5, SB5 teslim</td></tr>
-              <tr><td>Staj ofisi</td><td>Sağlık provizyonu (22/43/eksi 1), takvim, e posta yeniden gönder, paket, istatistik, CSV</td></tr>
-              <tr><td>Staj kurulu</td><td>Bitmiş dosyayı onay / red / düzeltmeye geri gönder (öğrenci veya danışman)</td></tr>
-              <tr><td>Admin</td><td>Sistem yönetimi</td></tr>
+              <tr><td>Student</td><td>Request → application → documents → journal → corrections; tracks status</td></tr>
+              <tr><td>Advisor</td><td>Request/application approval, evaluation, correction requests, board membership</td></tr>
+              <tr><td>Workplace</td><td>Approval and signatures through an accountless token link; D3/SB4/SB5 delivery</td></tr>
+              <tr><td>Internship office</td><td>Insurance approval (22/43/-1), calendar, email resend, packages, statistics, CSV</td></tr>
+              <tr><td>Internship board</td><td>Approves, rejects, or returns completed files for correction</td></tr>
+              <tr><td>Admin</td><td>System administration</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Başvuru durumları</div>
+        <div class="modal-section-label">Application statuses</div>
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>#</th><th>Status</th><th>Anlamı</th></tr>
+              <tr><th>#</th><th>Status</th><th>Meaning</th></tr>
             </thead>
             <tbody>
-              <tr><td>1</td><td>PENDING</td><td>Başvuru açıldı, işyeri bekleniyor</td></tr>
-              <tr><td>2</td><td>COMPANY_APPROVED</td><td>İşyeri onayladı</td></tr>
-              <tr><td>3</td><td>ADVISOR_APPROVED</td><td>Danışman onayladı</td></tr>
-              <tr><td>4</td><td>INTERNSHIP_IN_PROGRESS</td><td>Ofis sağlık provizyonunu onayladı → staj başladı</td></tr>
-              <tr><td>5</td><td>WORKPLACE_SIGNED</td><td>İşyeri bitiş imzaları (D3 + SB4)</td></tr>
-              <tr><td>6</td><td>ADVISOR_EVALUATED</td><td>Danışman notlandırdı</td></tr>
-              <tr><td>7</td><td>STAJ_KURULU_APPROVED</td><td>Kurul onayladı</td></tr>
-              <tr><td>8</td><td>COMPLETED</td><td>Süreç bitti</td></tr>
-              <tr><td>·</td><td>REJECTED</td><td>Kaynak: COMPANY / ADVISOR / STAJ_KURULU (+ sebep)</td></tr>
+              <tr><td>1</td><td>PENDING</td><td>Application opened; workplace approval pending</td></tr>
+              <tr><td>2</td><td>COMPANY_APPROVED</td><td>Workplace approved</td></tr>
+              <tr><td>3</td><td>ADVISOR_APPROVED</td><td>Advisor approved</td></tr>
+              <tr><td>4</td><td>INTERNSHIP_IN_PROGRESS</td><td>Office approved insurance; internship started</td></tr>
+              <tr><td>5</td><td>WORKPLACE_SIGNED</td><td>Workplace completion signatures (D3 + SB4)</td></tr>
+              <tr><td>6</td><td>ADVISOR_EVALUATED</td><td>Advisor evaluated the internship</td></tr>
+              <tr><td>7</td><td>STAJ_KURULU_APPROVED</td><td>Board approved</td></tr>
+              <tr><td>8</td><td>COMPLETED</td><td>Process completed</td></tr>
+              <tr><td>·</td><td>REJECTED</td><td>Source: COMPANY / ADVISOR / STAJ_KURULU (+ reason)</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Üretilen belgeler</div>
+        <div class="modal-section-label">Generated documents</div>
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>Kod</th><th>Belge</th></tr>
+              <tr><th>Code</th><th>Document</th></tr>
             </thead>
             <tbody>
-              <tr><td>SB2</td><td>Zorunlu staj başvuru formu</td></tr>
-              <tr><td>D0</td><td>Öğrenci staj dosyası kapağı</td></tr>
-              <tr><td>D1</td><td>Staj dosyası sayfa 1</td></tr>
-              <tr><td>D2</td><td>Staj iş takip çizelgesi (günlükten)</td></tr>
-              <tr><td>D3</td><td>Devam kontrol çizelgesi + işyeri imza</td></tr>
-              <tr><td>D4</td><td>Staj dosyası / günlük (görseller gömülü)</td></tr>
-              <tr><td>SB4</td><td>İşyeri değerlendirme formu</td></tr>
-              <tr><td>SB5</td><td>Staj bitiş onay belgesi</td></tr>
-              <tr><td>Muafiyet</td><td>Muafiyet sertifikası PDF</td></tr>
-              <tr><td>Paket</td><td>Başvuru/bitiş paketi + MD5 hash manifest</td></tr>
+              <tr><td>SB2</td><td>Mandatory internship application form</td></tr>
+              <tr><td>D0</td><td>Student internship file cover</td></tr>
+              <tr><td>D1</td><td>Internship file page 1</td></tr>
+              <tr><td>D2</td><td>Internship work tracking sheet from the journal</td></tr>
+              <tr><td>D3</td><td>Attendance sheet + workplace signature</td></tr>
+              <tr><td>D4</td><td>Internship file / journal with embedded images</td></tr>
+              <tr><td>SB4</td><td>Workplace evaluation form</td></tr>
+              <tr><td>SB5</td><td>Internship completion approval document</td></tr>
+              <tr><td>Exemption</td><td>Exemption certificate PDF</td></tr>
+              <tr><td>Package</td><td>Application/completion package + MD5 hash manifest</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Sistem ne biliyor / ne zorluyor</div>
+        <div class="modal-section-label">Rules &amp; constraints</div>
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>Kural</th><th>Sonuç</th></tr>
+              <tr><th>Rule</th><th>Result</th></tr>
             </thead>
             <tbody>
-              <tr><td>Transkript → Staj 1/2</td><td>Hangi stajın alınabileceğini ve geçilip geçilmediğini bilir</td></tr>
-              <tr><td>İSG dersi</td><td>Uygunluk kapısı (bypass kurallı)</td></tr>
-              <tr><td>Planlanan iş günü</td><td>20 / 40 gün. 20+20 split (iki işyeri) destekli</td></tr>
-              <tr><td>Başvuru penceresi + takvim</td><td>Resmi başlangıç/bitiş, dosya teslim, not giriş tarihleri</td></tr>
-              <tr><td>Sağlık provizyonu</td><td>Onaysız günlük doldurulamaz. Kod 22/43 başlatır, eksi 1 reddeder</td></tr>
-              <tr><td>Token imza</td><td>İşyeri / bölüm başkanı hesap açmadan imzalar</td></tr>
-              <tr><td>Red + düzeltme</td><td>Kime gideceği ve sebep saklanır. Bağlam kaybolmaz</td></tr>
+              <tr><td>Transcript → Internship 1/2</td><td>Determines which internship is available and whether it was completed</td></tr>
+              <tr><td>OHS course</td><td>Eligibility gate with bypass rules</td></tr>
+              <tr><td>Planned workdays</td><td>20 / 40 days; supports a 20+20 split across two workplaces</td></tr>
+              <tr><td>Application window + calendar</td><td>Official start/end, file submission, and grading dates</td></tr>
+              <tr><td>Insurance approval</td><td>Journal stays locked until approval; codes 22/43 start it, -1 rejects it</td></tr>
+              <tr><td>Token signature</td><td>Workplace / department head signs without creating an account</td></tr>
+              <tr><td>Rejection + correction</td><td>Stores the recipient and reason without losing context</td></tr>
               <tr><td>Audit log</td><td>INSERT/UPDATE/DELETE + actor + old/new data</td></tr>
-              <tr><td>SB5 teslim</td><td>Sistem upload veya öğrenciye fiziksel teslim kaydı</td></tr>
-              <tr><td>Program / danışman atama</td><td>Program eşleme, danışman öğrenci ağacı, danışman değiştirme</td></tr>
+              <tr><td>SB5 delivery</td><td>Records system upload or physical delivery to the student</td></tr>
+              <tr><td>Program / advisor assignment</td><td>Program mapping, advisor-student tree, advisor changes</td></tr>
             </tbody>
           </table>
         </div>
       </div>
 
       <div>
-        <div class="modal-section-label">Modüller</div>
+        <div class="modal-section-label">Modules</div>
         <div class="modal-table-wrap">
           <table class="modal-table">
             <thead>
-              <tr><th>Modül</th><th>Kapsam</th></tr>
+              <tr><th>Module</th><th>Scope</th></tr>
             </thead>
             <tbody>
-              <tr><td>Staj talebi</td><td>Öğrenci → danışman ön onayı</td></tr>
-              <tr><td>Staj başvurusu</td><td>Tam onay zinciri + belgeler</td></tr>
-              <tr><td>Staj günlüğü</td><td>Günlük kayıt, fotoğraf/DOCX, D3 tetikleme</td></tr>
-              <tr><td>Muafiyet</td><td>İşyeri onayı → staj kurulu → sertifika</td></tr>
-              <tr><td>Değerlendirme</td><td>Danışman notlandırma / kısmi / red</td></tr>
-              <tr><td>Ofis AI</td><td>Read only SQL tool’larıyla soru cevap</td></tr>
-              <tr><td>İstatistik / export</td><td>Ofis dashboard, sağlık provizyonu CSV</td></tr>
+              <tr><td>Internship request</td><td>Student → advisor pre-approval</td></tr>
+              <tr><td>Internship application</td><td>Complete approval chain + documents</td></tr>
+              <tr><td>Internship journal</td><td>Daily entries, photos/DOCX, D3 trigger</td></tr>
+              <tr><td>Exemption</td><td>Workplace approval → board → certificate</td></tr>
+              <tr><td>Evaluation</td><td>Advisor grading / partial approval / rejection</td></tr>
+              <tr><td>Office AI</td><td>Question answering through read-only SQL tools</td></tr>
+              <tr><td>Statistics / export</td><td>Office dashboard, insurance approval CSV</td></tr>
             </tbody>
           </table>
         </div>
@@ -1076,7 +1385,7 @@
     </div>
     <div class="modal-footer">
       <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="modal-visit">Visit Dijital Staj ↗</a>
-      <span style="font-family: var(--mono); font-size: 11px; color: var(--ink3);">Ordu Üniversitesi · Live</span>
+      <span style="font-family: var(--mono); font-size: 11px; color: var(--ink3);">Ordu University · Live</span>
     </div>
   </div>
 </div>
@@ -1086,7 +1395,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">PELS</div>
-        <div class="modal-subtitle">10 — CMS platform · Bilingual · Live</div>
+        <div class="modal-subtitle">13 — CMS platform · Bilingual · Live</div>
       </div>
       <button class="modal-close" onclick="closeModal('pels')">×</button>
     </div>
@@ -1136,7 +1445,7 @@
     <div class="modal-header">
       <div>
         <div class="modal-title">Yelix</div>
-        <div class="modal-subtitle">08 — Framework · 🥇 National award · Open source</div>
+        <div class="modal-subtitle">11 — Framework · 🥇 National award · Open source</div>
       </div>
       <button class="modal-close" onclick="closeModal('yelix')">×</button>
     </div>
@@ -1367,12 +1676,12 @@
 
     <div class="project-item" onclick="openModal('dijitalstaj')">
       <div>
-        <div class="proj-number">02 — Staj workflow</div>
+        <div class="proj-number">02 — Internship workflow</div>
         <div class="proj-title">Dijital Staj</div>
         <div class="proj-desc">
-          Ordu Üniversitesi staj yönetim sistemi. Öğrenci, danışman, işyeri, ofis ve staj kurulu
-          için rol bazlı onay zinciri. Transkript entegrasyonu, resmi PDF üretimi, sağlık provizyonu,
-          günlük takibi ve ofis AI.
+          Internship management system for Ordu University. Role-based approval chain for students,
+          advisors, workplaces, the internship office, and the board. Transcript integration, official
+          PDF generation, insurance approval, journal tracking, and office AI.
         </div>
         <div class="proj-tags">
           <span class="tag"><i class="ci ci-nextjs"></i> Next.js</span>
@@ -1385,9 +1694,9 @@
         </div>
       </div>
       <div class="proj-stat">
-        <span class="proj-stat-val">6 roller</span>
-        <span class="proj-stat-label">onay zinciri</span>
-        <div class="proj-stat-secondary">Ordu Üniversitesi · Live</div>
+        <span class="proj-stat-val">Edu.</span>
+        <span class="proj-stat-label">used at Ordu University</span>
+        <div class="proj-stat-secondary">Ordu University · Live</div>
         <a href="https://dijitalstaj.online" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Visit ↗</a>
       </div>
     </div>
@@ -1442,7 +1751,7 @@
       <div class="proj-stat">
         <span class="proj-stat-val">176</span>
         <span class="proj-stat-label">exercise catalog</span>
-        <div class="proj-stat-secondary">8 categories · Hetzner Object Storage (fsn1)</div>
+        
         <a href="https://fitsync-web.mambaapps.com" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-fitsync-web-click">Web ↗</a>
         <a href="https://fitsync-api.mambaapps.com/docs" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-fitsync-docs-click">OpenAPI ↗</a>
       </div>
@@ -1470,7 +1779,7 @@
       <div class="proj-stat">
         <span class="proj-stat-val">~180</span>
         <span class="proj-stat-label">invite only members</span>
-        <div class="proj-stat-secondary">6 roles · 50+ API tests</div>
+        <div class="proj-stat-secondary">6 roles</div>
         <a href="https://ogid.com.tr/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()" data-umami-event="work-ogid-site-click">Visit ↗</a>
       </div>
     </div>
@@ -1504,7 +1813,7 @@
     <div class="project-item" onclick="openModal('ordubenim')">
       <div>
         <div class="proj-number">07 — Location-based AI platform</div>
-        <div class="proj-title">Ordu Benim</div>
+        <div class="proj-title">OrduBenim</div>
         <div class="proj-desc">
           Location-based chat application and information platform for Ordu province. AI-powered interface with local services 
           including transportation, news, places search, and regional information. Full-stack with mobile app support.
@@ -1528,9 +1837,90 @@
       </div>
     </div>
 
+    <div class="project-item" onclick="openModal('co-maintainer')">
+      <div>
+        <div class="proj-number">08 — Developer tools / AI-assisted code review</div>
+        <div class="proj-title">co-maintainer</div>
+        <div class="proj-desc">
+          Repository-aware maintainer assistant for GitHub projects. It analyzes code, workflows, history,
+          pull requests, and review discussions to generate repository-specific contribution guidance and
+          surface likely review issues before human review.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-deno"></i> Deno</span>
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag"><i class="ci ci-github"></i> GitHub CLI</span>
+          <span class="tag">OpenRouter</span>
+          <span class="tag">Hetzner AI</span>
+          <span class="tag">SQLite</span>
+          <span class="tag">JSR</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">+20$</span>
+        <span class="proj-stat-label">spend with co-maintainer</span>
+        
+        <a href="https://jsr.io/@murat/co-maintainer" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">JSR ↗</a>
+        <a href="https://github.com/GroophyLifefor/co-maintainer" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">GitHub ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('express-trace-cli')">
+      <div>
+        <div class="proj-number">09 — Developer tools / observability</div>
+        <div class="proj-title">Express Tracing CLI</div>
+        <div class="proj-desc">
+          Live terminal tracer for Express 5. Run a collector, attach a reporter, and watch requests,
+          middleware timelines, and logs in a three-pane TUI. Instrumentation lives separately in
+          <code style="font-family:var(--mono);font-size:12px;">express-emits</code>.
+        </div>
+        <div class="proj-tags">
+          <span class="tag"><i class="ci ci-typescript"></i> TypeScript</span>
+          <span class="tag"><i class="ci ci-nodejs"></i> Express 5</span>
+          <span class="tag">Ink</span>
+          <span class="tag">EventEmitter</span>
+          <span class="tag">Node test runner</span>
+          <span class="tag">autocannon</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">~2–12%</span>
+        <span class="proj-stat-label">RPS overhead</span>
+        <div class="proj-stat-secondary">5 typed events · local bench</div>
+        <a href="https://github.com/GroophyLifefor/express-trace-cli" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">CLI ↗</a>
+        <a href="https://github.com/GroophyLifefor/express-emits" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">express-emits ↗</a>
+      </div>
+    </div>
+
+    <div class="project-item" onclick="openModal('vfx-player')">
+      <div>
+        <div class="proj-number">10 — Desktop app / VFX review tool</div>
+        <div class="proj-title">VFX Player</div>
+        <div class="proj-desc">
+          Frame-accurate Windows video player for VFX review. A portable, no-install executable with
+          frame stepping, waveform, looping, trimming, A/B comparison, and optional Video2X support.
+        </div>
+        <div class="proj-tags">
+          <span class="tag">Rust</span>
+          <span class="tag">egui / eframe</span>
+          <span class="tag">FFmpeg</span>
+          <span class="tag">yt-dlp</span>
+          <span class="tag">Video2X</span>
+          <span class="tag">GitHub Actions</span>
+        </div>
+      </div>
+      <div class="proj-stat">
+        <span class="proj-stat-val">Frame by Frame</span>
+        <span class="proj-stat-label">frame accuracy</span>
+        <div class="proj-stat-secondary">1 portable exe · Windows</div>
+        <a href="https://groophylifefor.github.io/vfx-editor/" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">Site ↗</a>
+        <a href="https://github.com/GroophyLifefor/vfx-editor" target="_blank" rel="noreferrer" class="proj-visit" onclick="event.stopPropagation()">GitHub ↗</a>
+      </div>
+    </div>
+
     <div class="project-item" onclick="openModal('yelix')">
       <div>
-        <div class="proj-number">08 — Framework</div>
+        <div class="proj-number">11 — Framework</div>
         <div class="proj-title">Yelix <span class="badge">🥇 National</span></div>
         <div class="proj-desc">
           A Deno-native web framework built around the runtime's actual strengths — not a Node.js port.
@@ -1551,7 +1941,7 @@
 
     <div class="project-item" onclick="openModal('kumrukuymak')">
       <div>
-        <div class="proj-number">09 — Fine-tuned adapter</div>
+        <div class="proj-number">12 — Fine-tuned adapter</div>
         <div class="proj-title">Kumru Kuymak v1.1 2B</div>
         <div class="proj-desc">
           LoRA-style adapter on Kara Kumru for tool-vs-direct routing. Curated TR benchmark subset (218 examples):
@@ -1576,7 +1966,7 @@
 
     <div class="project-item" onclick="openModal('pels')">
       <div>
-        <div class="proj-number">10 — CMS platform</div>
+        <div class="proj-number">13 — CMS platform</div>
         <div class="proj-title">PELS</div>
         <div class="proj-desc">
           Company website for PELS (Sustainability, Management Systems & Engineering Consulting). Built with
