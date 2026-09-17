@@ -1,0 +1,1102 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>co-maintainer, an imitator of yours - Murat Kirazkaya</title>
+<meta name="description" content="AI code review quality is bounded by the context the reviewer holds, not by the model. How co-maintainer turns a repository into guides an agent reads before it reads your patch.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0" data-performance="true"></script>
+<script defer src="https://umami.ordu.dev/recorder.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="co-maintainer, an imitator of yours">
+<meta property="og:description" content="AI code review quality is bounded by the context the reviewer holds, not by the model.">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/co-maintainer-an-imitator-of-yours.html">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/co-maintainer-an-imitator-of-yours.html">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #222222;
+    --ink2: #444444;
+    --ink3: #888888;
+    --surface: #fdfcf9;
+    --surface2: #f4f1ea;
+    --surface3: #ebe6dc;
+    --accent: #2c5d8f;
+    --accent2: #5c574e;
+    --line: rgba(34, 34, 34, 0.12);
+    --mono: 'IBM Plex Mono', monospace;
+    --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+    --sans: 'Source Sans 3', system-ui, sans-serif;
+    --chart-blue: #2a6bb0;
+    --chart-orange: #c94a1e;
+    --chart-aqua: #1a5c3a;
+    --chart-yellow: #a67c1a;
+    --rui-bg: #ffffff;
+    --rui-row-bg: #f6f8fa;
+    --rui-border: #d0d7de;
+    --rui-border-subtle: #d8dee4;
+    --rui-fg: #1f2328;
+    --rui-fg-muted: #59636e;
+    --rui-accent: #0969da;
+    --rui-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+    --rui-avatar-bg: #f6f8fa;
+    --rui-add-bg: #dafbe1;
+    --rui-add-fg: #1a7f37;
+    --rui-del-bg: #ffebe9;
+    --rui-del-fg: #cf222e;
+    --rui-tan-bg: #fff8c5;
+    --rui-tan-border: #d4a72c;
+    --rui-tan-fg: #9a6700;
+    --rui-btn-bg: #f6f8fa;
+    --rui-btn-border: #d0d7de;
+  }
+
+  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+
+  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: var(--surface); z-index: 10;
+  }
+  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-family: var(--mono); font-size: 12px; padding: 7px 16px;
+    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    letter-spacing: 0.03em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+
+  .back-link {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 20px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .lang-switch {
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    text-decoration: none; letter-spacing: 0.04em; margin-left: auto;
+    padding: 20px 0 0;
+  }
+  .lang-switch:hover { color: var(--ink); }
+  .post-top { display: flex; align-items: baseline; gap: 16px; }
+
+  /* SCROLL CUE */
+  .scroll-cue {
+    position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
+    z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink3);
+    pointer-events: none; opacity: 1; transition: opacity 400ms ease;
+  }
+  .scroll-cue.done { opacity: 0; }
+  .scroll-cue .sc-rail {
+    position: relative; width: 1px; height: 32px;
+    background: var(--line); overflow: hidden;
+  }
+  .scroll-cue .sc-rail::after {
+    content: ''; position: absolute; left: 0; top: -16px;
+    width: 1px; height: 16px; background: var(--ink3);
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .scroll-cue .sc-rail::after { animation: scDrop 2s cubic-bezier(.55, 0, .45, 1) infinite; }
+    @keyframes scDrop {
+      0%        { top: -16px; }
+      65%, 100% { top: 32px; }
+    }
+  }
+  @media (max-width: 767px) {
+    .scroll-cue { bottom: 12px; gap: 6px; }
+    .scroll-cue .sc-rail { height: 24px; }
+  }
+
+  .post-hero { padding: 40px 0 36px; }
+  .post-eyebrow {
+    font-family: var(--mono); font-size: 11px; color: var(--accent);
+    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
+  .post-title {
+    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
+    line-height: 1.08; font-weight: 400; color: var(--ink);
+    margin-bottom: 22px; letter-spacing: -0.02em;
+  }
+  .post-main { padding-bottom: 0; max-width: 640px; }
+  .post-main h2 {
+    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
+    font-weight: 400; color: var(--ink); margin: 48px 0 8px;
+    letter-spacing: -0.02em; line-height: 1.15;
+  }
+  .post-main h2:first-of-type { margin-top: 8px; }
+  .post-main .lede {
+    font-size: 14px; color: var(--ink3); margin-bottom: 1.2em; line-height: 1.55;
+  }
+
+  .post-main p {
+    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
+  }
+  .post-main p strong { color: var(--ink); font-weight: 500; }
+  .post-main a {
+    color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
+  }
+  .post-main a:hover { color: var(--ink); }
+
+  .post-main ul {
+    margin: 0 0 1.15em; padding: 0; list-style: none;
+    color: var(--ink2); font-size: 15px; line-height: 1.7;
+  }
+  .post-main ul li {
+    position: relative; padding-left: 22px; margin-bottom: 0.55em;
+  }
+  .post-main ul li::before {
+    content: ''; position: absolute; left: 0; top: 0.55em;
+    width: 8px; height: 8px; background: var(--accent2);
+  }
+
+  .post-main code {
+    font-family: var(--mono); font-size: 0.9em;
+    background: var(--surface3); padding: 0.12em 0.35em;
+  }
+
+  /* OPENING - token cost, drawn to scale */
+  .open { width: 100%; height: auto; display: block; margin: 16px 0 4px; overflow: visible; }
+  .open-base { stroke: var(--line); stroke-width: 1; }
+  .open-sq { stroke-width: 1.5; }
+  .open-sq.small { stroke: var(--chart-aqua); fill: rgba(26, 92, 58, 0.09); }
+  .open-sq.big { stroke: var(--chart-orange); fill: rgba(201, 74, 30, 0.075); }
+  .open-lbl { font-family: var(--mono); font-size: 14px; fill: var(--ink); }
+  .open-sub { font-family: var(--mono); font-size: 10.5px; fill: var(--ink3); letter-spacing: 0.04em; }
+  .open-ratio { font-family: var(--serif); font-size: 44px; fill: var(--ink); letter-spacing: -0.02em; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .open .open-sq, .open .open-lbl, .open .open-sub,
+    .open .open-ratio, .open .open-base {
+      opacity: 0; transform: scale(0.88);
+      transform-box: fill-box; transform-origin: center;
+    }
+    .open.in .open-sq, .open.in .open-lbl, .open.in .open-sub,
+    .open.in .open-ratio, .open.in .open-base {
+      opacity: 1; transform: none;
+      transition: opacity 480ms ease var(--d, 0ms),
+                  transform 540ms cubic-bezier(.2, 1.25, .4, 1) var(--d, 0ms);
+    }
+  }
+
+  /* DIFF VS REPOSITORY */
+  .gap { width: 100%; height: auto; display: block; margin: 12px 0 4px; overflow: visible; }
+  .gap-frame { fill: var(--surface); stroke: var(--line); }
+  .gap-hd { font-family: var(--mono); font-size: 11px; fill: var(--ink3); letter-spacing: 0.06em; }
+  .gap-ln { fill: var(--surface3); }
+  .gap-add { fill: var(--chart-aqua); opacity: 0.34; }
+  .gap-del { fill: var(--chart-orange); opacity: 0.3; }
+  .gap-edge { stroke: var(--ink3); stroke-width: 1; opacity: 0.3; fill: none; }
+  .gap-node { fill: var(--surface); stroke: var(--ink3); stroke-width: 1; opacity: 0.75; }
+  .gap-node.hot { fill: rgba(42, 107, 176, 0.13); stroke: var(--chart-blue); stroke-width: 1.4; opacity: 1; }
+  .gap-cap { font-family: var(--mono); font-size: 11.5px; fill: var(--ink2); }
+  .gap-num { font-family: var(--mono); font-size: 10.5px; fill: var(--ink3); }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .gap .gap-node, .gap .gap-edge { opacity: 0; }
+    .gap .gap-frame, .gap .gap-hd, .gap .gap-ln, .gap .gap-cap, .gap .gap-num {
+      opacity: 0; transform: translateX(-6px);
+    }
+    .gap.in .gap-frame, .gap.in .gap-hd, .gap.in .gap-ln,
+    .gap.in .gap-cap, .gap.in .gap-num {
+      opacity: 1; transform: none;
+      transition: opacity 460ms ease var(--d, 0ms), transform 460ms ease var(--d, 0ms);
+    }
+    .gap.in .gap-edge {
+      opacity: 0.3;
+      transition: opacity 520ms ease var(--d, 0ms);
+    }
+    .gap.in .gap-node {
+      opacity: 0.75;
+      transition: opacity 420ms ease var(--d, 0ms);
+    }
+    .gap.in .gap-node.hot { opacity: 1; }
+  }
+
+  /* SCENES / SCROLL SNAP */
+  .scene, .post-hero {
+    display: flex; flex-direction: column; justify-content: center;
+    min-height: 100vh; min-height: 100svh;
+    padding: 96px 0 64px; margin: 0;
+    scroll-snap-align: start; scroll-snap-stop: always;
+  }
+  .post-hero { padding: 120px 0 64px; }
+
+  .scene-step {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink3); margin-bottom: 12px;
+  }
+  .scene-step::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .scene-claim {
+    font-family: var(--serif); font-size: clamp(19px, 3.1vw, 25px);
+    line-height: 1.34; letter-spacing: -0.018em; color: var(--ink);
+    margin: 0 0 20px; max-width: 42ch;
+  }
+  .scene-note {
+    font-size: 14px; color: var(--ink3); line-height: 1.65;
+    margin: 0; max-width: 56ch;
+  }
+  .scene p { max-width: 60ch; }
+
+  /* INIT VISUALISATION */
+  .iviz {
+    width: 100%; height: auto; display: block;
+    overflow: visible; margin: 8px 0 4px;
+  }
+  .iviz text { dominant-baseline: middle; }
+  .iv-box { fill: var(--surface); stroke: var(--line); }
+  .iv-tint { fill: var(--c); opacity: 0.1; }
+  .iv-edge { fill: var(--c); }
+  .iv-dot { fill: var(--c); opacity: 0.28; }
+  .iv-label { font-family: var(--mono); font-size: 11px; fill: var(--ink2); }
+  .iv-core-box { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
+  .iv-core-txt { font-family: var(--mono); font-size: 13px; fill: var(--ink); }
+  .iv-wire { fill: none; stroke: var(--ink3); stroke-width: 1.1; opacity: 0.45; }
+  .iv-name { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
+  .iv-size { font-family: var(--mono); font-size: 10px; fill: var(--ink3); }
+  .iv-track { fill: var(--surface3); }
+  .iv-fill { fill: var(--c); }
+  .iv-div { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; }
+  .iv-mbar { fill: var(--surface); stroke: var(--line); }
+  .iv-mfill { fill: var(--c); }
+  .iv-mstat { font-family: var(--mono); font-size: 9.5px; fill: var(--ink3); }
+  .iv-mstat.up { font-weight: 500; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .scene [data-reveal] { opacity: 0; transform: translateY(12px); }
+    .scene.in [data-reveal] {
+      opacity: 1; transform: none;
+      transition: opacity 560ms ease var(--d, 0ms),
+                  transform 560ms cubic-bezier(.2, .8, .3, 1) var(--d, 0ms);
+    }
+    .iviz .iv-chip, .iviz .iv-core, .iviz .iv-doc, .iviz .iv-mini, .iviz .iv-div, .iviz .iv-mstat {
+      opacity: 0; transform: translateX(-8px);
+    }
+    .iviz .iv-doc { transform: translateX(8px); }
+    .iviz.in .iv-chip, .iviz.in .iv-core, .iviz.in .iv-doc, .iviz.in .iv-mini, .iviz.in .iv-div, .iviz.in .iv-mstat {
+      opacity: 1; transform: none;
+      transition: opacity 480ms ease var(--d, 0ms), transform 480ms ease var(--d, 0ms);
+    }
+    .iviz .iv-wire { stroke-dasharray: var(--len, 200); stroke-dashoffset: var(--len, 200); }
+    .iviz.in .iv-wire {
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 620ms ease var(--d, 0ms);
+    }
+    .iviz .iv-fill, .iviz .iv-mfill { transform: scaleX(0); transform-box: fill-box; transform-origin: left center; }
+    .iviz.in .iv-fill, .iviz.in .iv-mfill {
+      transform: scaleX(1);
+      transition: transform 780ms cubic-bezier(.3, .8, .3, 1) var(--d, 0ms);
+    }
+    .iviz.in .iv-mfill { transition-duration: 420ms; }
+  }
+
+  @media (max-width: 767px) {
+    html { scroll-snap-type: y proximity; }
+    .scene, .post-hero { min-height: 100vh; min-height: 100svh; padding: 68px 0 36px; }
+    .post-hero { padding: 90px 0 40px; }
+    .scene-claim { font-size: 17px; margin-bottom: 14px; }
+    .scene-note { font-size: 13px; }
+    .iviz { margin: 4px 0; }
+  }
+
+  /* DIAGRAM */
+  .diagram-card {
+    background: var(--surface2); border: 1px solid var(--line);
+    padding: 20px 18px 14px; margin: 1.5em 0;
+  }
+  .diagram-title { font-size: 14px; font-weight: 500; color: var(--ink); margin: 0 0 2px; }
+  .diagram-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin: 0 0 14px; }
+  .diagram { width: 100%; height: auto; display: block; overflow: visible; }
+  .diagram .node rect {
+    fill: var(--surface); stroke: var(--line); stroke-width: 1;
+  }
+  .diagram .node.accent rect { stroke: rgba(44, 93, 143, 0.42); }
+  .diagram .node text { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
+  .diagram .node text.sub { font-family: var(--sans); font-size: 10.5px; fill: var(--ink3); }
+  .diagram .node text.files { font-family: var(--mono); font-size: 10px; fill: var(--ink2); }
+  .diagram .node.accent text.label { fill: var(--accent); }
+  .diagram .link { stroke: var(--ink3); stroke-width: 1.2; fill: none; }
+  .diagram .link.flow { stroke: var(--accent); }
+  .diagram .link.feedback { stroke: var(--ink3); stroke-dasharray: 4 4; }
+  .diagram .dot { fill: var(--accent); }
+  .diagram .dot.muted { fill: var(--ink3); }
+  .diagram .col-label {
+    font-family: var(--mono); font-size: 10px; fill: var(--ink3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .diagram-legend {
+    display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px;
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+  }
+  .diagram-legend .item { display: flex; align-items: center; gap: 6px; }
+  .diagram-legend .swatch { width: 14px; height: 0; border-top: 1.2px solid var(--ink3); display: inline-block; }
+  .diagram-legend .swatch.flow { border-color: var(--accent); }
+  .diagram-legend .swatch.feedback { border-top-style: dashed; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .diagram .node,
+    .diagram .link,
+    .diagram .dot,
+    .diagram .col-label {
+      opacity: 0;
+    }
+    .diagram.in .node,
+    .diagram.in .dot,
+    .diagram.in .col-label {
+      opacity: 1;
+      transition: opacity 420ms ease var(--d, 0ms);
+    }
+    .diagram .link { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
+    .diagram .link.feedback { stroke-dasharray: 4 4; stroke-dashoffset: 0; }
+    .diagram.in .link:not(.feedback) {
+      opacity: 1;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset 620ms cubic-bezier(.4, .1, .2, 1) var(--d, 0ms),
+                  opacity 120ms linear var(--d, 0ms);
+    }
+    .diagram.in .link.feedback {
+      opacity: 1;
+      transition: opacity 420ms ease var(--d, 0ms);
+    }
+  }
+
+  /* GITHUB PR + CHECKS */
+  .ghi {
+    margin: 1.6em 0 2em;
+    border: 1px solid var(--rui-border);
+    background: var(--rui-bg);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
+    font-size: 12px; line-height: 1.5;
+  }
+  .ghi * { box-sizing: border-box; }
+
+  .ghi-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--rui-border-subtle);
+  }
+  .ghi-icon { position: relative; width: 16px; height: 16px; flex: 0 0 16px; }
+  .ghi-icon svg { position: absolute; inset: 0; width: 16px; height: 16px; }
+  .ghi-open-ic { fill: #1a7f37; }
+  .ghi-merged-ic { fill: #8250df; opacity: 0; }
+  .ghi-title { color: var(--rui-fg); font-weight: 600; }
+  .ghi-num { color: var(--rui-fg-muted); }
+  .ghi-branch {
+    font-family: var(--rui-mono); font-size: 11px;
+    background: #ddf4ff; color: #0969da;
+    padding: 1px 6px; border-radius: 2em;
+  }
+  .ghi-state {
+    margin-left: auto; position: relative;
+    display: inline-grid; place-items: center;
+    font-size: 11.5px; font-weight: 500;
+    padding: 1px 10px; border-radius: 2em;
+    border: 1px solid #1a7f37; color: #1a7f37;
+  }
+  .ghi-state span { grid-area: 1 / 1; }
+  .ghi-state-b { opacity: 0; }
+
+  .ghi-checks-head {
+    display: flex; align-items: center; gap: 8px;
+    padding: 9px 16px; background: var(--rui-row-bg);
+    border-bottom: 1px solid var(--rui-border-subtle);
+    font-weight: 600; color: var(--rui-fg);
+  }
+  .ghi-caret-down {
+    width: 0; height: 0; border-top: 4px solid var(--rui-fg-muted);
+    border-left: 3px solid transparent; border-right: 3px solid transparent;
+  }
+  .ghi-count { margin-left: auto; font-weight: 400; color: var(--rui-fg-muted); font-size: 11.5px; }
+
+  .ghi-check {
+    display: flex; align-items: center; gap: 8px;
+    padding: 7px 16px; color: var(--rui-fg);
+    border-bottom: 1px solid var(--rui-border-subtle);
+  }
+  .ghi-check:last-child { border-bottom: 0; }
+  .ghi-tick { width: 15px; height: 15px; flex: 0 0 15px; }
+  .ghi-tick circle { fill: #1f883d; }
+  .ghi-tick path {
+    fill: none; stroke: #fff; stroke-width: 2;
+    stroke-linecap: round; stroke-linejoin: round;
+  }
+  .ghi-work { color: var(--rui-fg-muted); }
+  .ghi-time-run, .ghi-time-done {
+    margin-left: auto; font-size: 11.5px;
+  }
+  .ghi-time-run { color: #9a6700; }
+  .ghi-time-done { color: var(--rui-fg-muted); }
+  .ghi-time { margin-left: auto; display: inline-grid; place-items: center end; }
+  .ghi-time > span { grid-area: 1 / 1; }
+  .ghi-srv-msg { display: inline-grid; place-items: center start; }
+  .ghi-srv-msg > span { grid-area: 1 / 1; }
+  .ghi-chk, .ghi-count { display: inline-grid; place-items: center start; }
+  .ghi-chk > span, .ghi-count > span { grid-area: 1 / 1; white-space: nowrap; }
+
+  .ghi-ind { position: relative; width: 15px; height: 15px; flex: 0 0 15px; }
+  .ghi-ind svg { position: absolute; inset: 0; width: 15px; height: 15px; }
+  .ghi-spin-arc { transform-origin: 8px 8px; }
+  .ghi-spin-bg { fill: none; stroke: #d4a72c; stroke-width: 2; }
+  .ghi-spin-arc {
+    fill: none; stroke: #9a6700; stroke-width: 2; stroke-linecap: round;
+  }
+
+  /* webhook link */
+  .ghi-link { position: relative; height: 42px; }
+  .ghi-wire { position: absolute; left: 23px; top: 0; width: 1px; height: 100%; }
+  .ghi-wire::before {
+    content: ''; position: absolute; inset: 0;
+    background: var(--rui-border); transform: scaleY(0); transform-origin: top;
+  }
+  .ghi-packet {
+    position: absolute; left: 20.5px; top: -3px;
+    width: 6px; height: 6px; border-radius: 50%; opacity: 0;
+  }
+  .ghi-packet.down { background: #8250df; }
+  .ghi-packet.up { background: #1f883d; }
+
+  .ghi-server {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 16px; color: var(--rui-fg);
+    border-top: 1px solid var(--rui-border-subtle);
+  }
+  .ghi-srv-dot {
+    width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%;
+    background: #8250df; margin-left: 3.5px;
+  }
+  .ghi-srv-name { font-weight: 600; }
+  .ghi-srv-msg { color: var(--rui-fg-muted); font-size: 11.5px; }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* stage 1 · the PR opens */
+    .ghi .ghi-head { opacity: 0; transform: translateY(4px); }
+    .ghi.in .ghi-head { opacity: 1; transform: none; transition: opacity 340ms ease, transform 340ms ease; }
+
+    /* stage 2 · webhook travels to your server */
+    .ghi .ghi-wire::before { transform: scaleY(0); transform-origin: top; }
+    .ghi.in .ghi-wire::before { transform: scaleY(1); transition: transform 420ms ease 700ms; }
+
+    @keyframes ghiDown {
+      0%   { transform: translateY(0); opacity: 0; }
+      14%  { opacity: 1; }
+      82%  { opacity: 1; }
+      100% { transform: translateY(42px); opacity: 0; }
+    }
+    @keyframes ghiUp {
+      0%   { transform: translateY(42px); opacity: 0; }
+      14%  { opacity: 1; }
+      82%  { opacity: 1; }
+      100% { transform: translateY(0); opacity: 0; }
+    }
+    .ghi.in .ghi-packet.down { animation: ghiDown 850ms cubic-bezier(.45, 0, .55, 1) 1000ms both; }
+    .ghi.in .ghi-packet.up { animation: ghiUp 850ms cubic-bezier(.45, 0, .55, 1) 4700ms both; }
+
+    /* stage 3 · your server acknowledges */
+    .ghi .ghi-server { opacity: 0; transform: translateY(4px); }
+    .ghi.in .ghi-server { opacity: 1; transform: none; transition: opacity 320ms ease 1800ms, transform 320ms ease 1800ms; }
+    .ghi .ghi-srv-done { opacity: 0; }
+    .ghi.in .ghi-srv-done { opacity: 1; transition: opacity 300ms ease 4000ms; }
+    .ghi.in .ghi-srv-run { opacity: 0; transition: opacity 300ms ease 4000ms; }
+
+    /* stage 4 · the check starts running */
+    .ghi .ghi-checks-head, .ghi .ghi-check { opacity: 0; transform: translateY(4px); }
+    .ghi.in .ghi-checks-head { opacity: 1; transform: none; transition: opacity 300ms ease 2400ms, transform 300ms ease 2400ms; }
+    .ghi.in .ghi-check { opacity: 1; transform: none; transition: opacity 300ms ease 2400ms, transform 300ms ease 2400ms; }
+
+    .ghi .ghi-spin { opacity: 0; }
+    @keyframes ghiSpinLife {
+      0%   { opacity: 0; transform: rotate(0deg); }
+      10%  { opacity: 1; }
+      90%  { opacity: 1; }
+      100% { opacity: 0; transform: rotate(900deg); }
+    }
+    .ghi.in .ghi-spin { animation: ghiSpinLife 2200ms linear 2400ms both; }
+
+    /* stage 5 · it passes */
+    .ghi .ghi-tick { transform: scale(0.4); opacity: 0; }
+    .ghi.in .ghi-tick {
+      transform: none; opacity: 1;
+      transition: transform 360ms cubic-bezier(.2, 1.5, .4, 1) 4600ms,
+                  opacity 200ms ease 4600ms;
+    }
+    .ghi .ghi-time-done { opacity: 0; }
+    .ghi.in .ghi-time-done { opacity: 1; transition: opacity 260ms ease 4700ms; }
+    .ghi.in .ghi-time-run { opacity: 0; transition: opacity 260ms ease 4700ms; }
+    .ghi .ghi-chk-done { opacity: 0; }
+    .ghi.in .ghi-chk-done { opacity: 1; transition: opacity 300ms ease 5000ms; }
+    .ghi.in .ghi-chk-run { opacity: 0; transition: opacity 300ms ease 5000ms; }
+
+    /* stage 6 · it merges */
+    .ghi .ghi-open-ic,
+    .ghi .ghi-merged-ic,
+    .ghi-state,
+    .ghi-state-b { transition-property: opacity, color, border-color; transition-duration: 380ms; transition-timing-function: ease; }
+    .ghi .ghi-open-ic { transition-delay: 5600ms; }
+    .ghi .ghi-merged-ic { transition-delay: 5600ms; }
+    .ghi-state { transition-delay: 5600ms; }
+    .ghi-state-b { transition-delay: 5600ms; }
+    .ghi.in .ghi-open-ic { opacity: 0; }
+    .ghi.in .ghi-merged-ic { opacity: 1; }
+    .ghi.in .ghi-state { color: #8250df; border-color: #8250df; }
+    .ghi.in .ghi-state-a { opacity: 0; }
+    .ghi.in .ghi-state-b { opacity: 1; }
+  }
+
+  @media (max-width: 560px) {
+    .ghi-branch { display: none; }
+    .ghi-count { display: none; }
+    .ghi-time { font-size: 11px; }
+  }
+
+  .colophon {
+    margin-top: 2em; padding-top: 1.2em; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--ink3); line-height: 1.55;
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a {
+    color: var(--ink3); text-decoration: none; transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  /* PR FILES + COMMENT, continuing #4128 */
+  .prw {
+    margin-top: 18px; border: 1px solid var(--rui-border);
+    background: var(--rui-bg); font-family: var(--rui-mono); color: var(--rui-fg);
+    overflow: hidden;
+  }
+  .prw-bar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; background: var(--rui-row-bg);
+    border-bottom: 1px solid var(--rui-border);
+    font-size: 11.5px; color: var(--rui-fg-muted);
+  }
+  .prw-bar b { color: var(--rui-fg); font-weight: 600; }
+  .prw-file { padding: 0; }
+  .prw-file + .prw-file { border-top: 1px solid var(--rui-border); }
+  .prw-path {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 7px 12px; font-size: 12px; color: var(--rui-fg);
+    background: #ffffff;
+  }
+  .prw-path em {
+    font-style: normal; font-size: 10px; letter-spacing: .04em;
+    text-transform: uppercase; color: var(--rui-fg-muted);
+  }
+  .prw-ln {
+    display: grid; grid-template-columns: 22px 1fr;
+    padding: 0 12px; line-height: 2.05; font-size: 12px;
+  }
+  .prw-ln.add { background: var(--rui-add-bg); color: var(--rui-add-fg); }
+  .prw-tool {
+    border-top: 1px solid var(--rui-border);
+    background: #f6f8fa; padding: 9px 12px 10px;
+  }
+  .prw-cmd {
+    font-size: 11.5px; color: var(--rui-fg);
+    display: flex; gap: 8px; align-items: baseline;
+  }
+  .prw-cmd b {
+    font-weight: 600; color: var(--rui-accent); font-size: 10.5px;
+    letter-spacing: .02em;
+  }
+  .prw-out {
+    margin-top: 4px; font-size: 11.5px; color: #9a6700;
+  }
+  .prw-out span { color: var(--rui-fg-muted); }
+  .prw-note {
+    border-top: 1px solid var(--rui-border);
+    padding: 12px 14px 13px; background: #fff;
+  }
+  .prw-who {
+    font-size: 12px; font-weight: 600; color: var(--rui-fg);
+    font-family: var(--sans);
+  }
+  .prw-who span { font-weight: 400; color: var(--rui-fg-muted); font-size: 11.5px; }
+  .prw-note p {
+    font-family: var(--sans); font-size: 14px; line-height: 1.5;
+    color: var(--rui-fg); margin: 6px 0 0; max-width: 52ch;
+  }
+  .prw-pair {
+    display: grid; grid-template-columns: 1fr auto 1fr;
+    gap: 10px; align-items: center; padding: 14px;
+  }
+  .prw-end {
+    border: 1px solid var(--rui-border); background: var(--rui-row-bg);
+    padding: 10px 12px; font-size: 11.5px; color: var(--rui-fg);
+  }
+  .prw-end small {
+    display: block; font-size: 10px; letter-spacing: .06em;
+    text-transform: uppercase; color: var(--rui-fg-muted); margin-bottom: 4px;
+  }
+  .prw-end.live { background: #dafbe1; border-color: #4ac26b; color: #0f5132; }
+  .prw-end.live small { color: #0f5132; }
+  .prw-arrow {
+    width: 48px; height: 1px; background: var(--rui-border); position: relative;
+  }
+  .prw-arrow::after {
+    content: ''; position: absolute; right: -1px; top: -3px;
+    border: 4px solid transparent; border-left-color: var(--rui-border);
+    border-right: 0;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .prw .prw-file, .prw .prw-tool, .prw .prw-note, .prw .prw-end, .prw .prw-arrow {
+      opacity: 0; transform: translateY(8px);
+    }
+    .scene.in .prw-file.shown { opacity: 1; transform: none; transition: opacity 380ms ease 80ms, transform 380ms ease 80ms; }
+    .scene.in .prw-tool { opacity: 1; transform: none; transition: opacity 380ms ease 520ms, transform 380ms ease 520ms; }
+    .scene.in .prw-note { opacity: 1; transform: none; transition: opacity 420ms ease 1100ms, transform 420ms ease 1100ms; }
+    .scene.in .prw-end.a { opacity: 1; transform: none; transition: opacity 360ms ease 160ms, transform 360ms ease 160ms; }
+    .scene.in .prw-arrow { opacity: 1; transform: none; transition: opacity 360ms ease 520ms, transform 360ms ease 520ms; }
+    .scene.in .prw-end.live { opacity: 1; transform: none; transition: opacity 420ms ease 860ms, transform 420ms ease 860ms; }
+    .prw .prw-ln.add { clip-path: inset(0 100% 0 0); }
+    .scene.in .prw-ln.add { clip-path: inset(0 0 0 0); transition: clip-path 600ms ease 160ms; }
+    .prw .prw-out { clip-path: inset(0 100% 0 0); }
+    .scene.in .prw-out { clip-path: inset(0 0 0 0); transition: clip-path 500ms ease 820ms; }
+  }
+
+  @media (max-width: 767px) {
+    .prw-ln { font-size: 11px; }
+    .prw-note p { font-size: 13px; }
+    .prw-pair { grid-template-columns: 1fr; gap: 8px; }
+    .prw-arrow { width: 1px; height: 18px; margin: 0 auto; }
+    .prw-arrow::after {
+      right: auto; left: -3px; top: auto; bottom: -1px;
+      border: 4px solid transparent; border-top-color: var(--rui-border); border-left-color: transparent; border-bottom: 0;
+    }
+  }
+  @media (max-width: 600px) {
+    .nav-links { display: none; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+</head>
+<body>
+
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/#work">Work</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/blogs">Blogs</a>
+      <a href="/#about">About</a>
+    </div>
+    <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="nav-cta" data-umami-event="blog-nav-github">GitHub</a>
+  </nav>
+
+  <div class="post-top">
+    <a href="/blogs" class="back-link" data-umami-event="blog-back-blogs">← Blogs</a>
+    <a href="/blogs/ajan-gordugunu-inceler.html" class="lang-switch" data-umami-event="blog-lang-switch">Türkçe →</a>
+  </div>
+
+  <header class="post-hero">
+    <div class="post-eyebrow">Blog · English</div>
+    <h1 class="post-title">co-maintainer, an imitator of yours</h1>
+  </header>
+  <article class="post-main">
+<section class="scene" id="scene-hook">
+<p class="scene-claim" data-reveal style="--d:0ms">One agent writes the change. Another agent reviews it. Neither one has read your repository.</p>
+
+<svg class="open" id="open" viewBox="0 0 640 440" role="img" aria-label="Token cost drawn to scale: repository context costs 18.9 thousand tokens, patch-only context costs 1.35 million, 71 times more">
+  <line class="open-base" x1="0" y1="352" x2="640" y2="352" style="--d:0ms"/>
+
+  <rect class="open-sq small" x="150" y="341" width="11" height="11" style="--d:120ms"/>
+  <text class="open-lbl" x="150" y="330" text-anchor="middle" style="--d:200ms">18.9K</text>
+  <text class="open-sub" x="150" y="380" text-anchor="middle" style="--d:240ms">reused repository context</text>
+
+  <rect class="open-sq big" x="300" y="84" width="268" height="268" style="--d:380ms"/>
+  <text class="open-lbl" x="434" y="72" text-anchor="middle" style="--d:460ms">1.35M</text>
+  <text class="open-sub" x="434" y="380" text-anchor="middle" style="--d:500ms">heavy context to understand PR</text>
+
+  <text class="open-ratio" x="640" y="404" text-anchor="end" style="--d:600ms">71x</text>
+  <text class="open-sub" x="0" y="404" style="--d:600ms">same pull requests, same model</text>
+</svg>
+</section>
+
+<section class="scene" id="scene-diff">
+<p class="scene-claim" data-reveal style="--d:0ms">An AI reviewer sees a diff. <strong>A human reviewer sees a diff plus everything they learned here over the past years.</strong></p>
+
+<svg class="gap" id="gap" viewBox="0 0 640 344" role="img" aria-label="The diff is a small slice of the repository, and the rules, callers, tests and conventions a review depends on sit outside it">
+  <defs>
+    <linearGradient id="gapFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f4f1ea" stop-opacity="0"/>
+      <stop offset="1" stop-color="#f4f1ea" stop-opacity="1"/>
+    </linearGradient>
+  </defs>
+  <text class="gap-hd" x="16" y="26" style="--d:0ms">WHAT AN AI REVIEWER IS SHOWN</text>
+  <rect class="gap-frame" x="14" y="40" width="252" height="300" rx="4" style="--d:0ms"/>
+  <rect class="gap-ln" x="30" y="66" width="176" height="9" rx="2" style="--d:80ms"/>
+  <rect class="gap-ln" x="30" y="86" width="210" height="9" rx="2" style="--d:100ms"/>
+  <rect class="gap-add" x="30" y="112" width="196" height="9" rx="2" style="--d:160ms"/>
+  <rect class="gap-add" x="30" y="132" width="150" height="9" rx="2" style="--d:180ms"/>
+  <rect class="gap-ln" x="30" y="158" width="204" height="9" rx="2" style="--d:240ms"/>
+  <rect class="gap-del" x="30" y="184" width="126" height="9" rx="2" style="--d:300ms"/>
+  <rect class="gap-ln" x="30" y="210" width="188" height="9" rx="2" style="--d:340ms"/>
+  <rect class="gap-ln" x="30" y="236" width="160" height="9" rx="2" style="--d:380ms"/>
+  <rect class="gap-add" x="30" y="262" width="178" height="9" rx="2" style="--d:420ms"/>
+  <rect class="gap-ln" x="30" y="288" width="140" height="9" rx="2" style="--d:460ms"/>
+  <text class="gap-num" x="30" y="324" style="--d:520ms">+184  -37 lines</text>
+
+  <text class="gap-hd" x="330" y="26" style="--d:0ms">WHAT DECIDES IF IT IS RIGHT</text>
+
+  <path class="gap-edge" style="--d:560ms" d="M266 96 C 300 96, 302 96, 330 96"/>
+  <rect class="gap-node" x="330" y="86" width="294" height="22" rx="3" style="--d:600ms"/>
+  <text class="gap-cap" x="344" y="101" style="--d:640ms">which module already owns this rule</text>
+
+  <path class="gap-edge" style="--d:680ms" d="M266 140 C 300 140, 302 140, 330 140"/>
+  <rect class="gap-node" x="330" y="130" width="294" height="22" rx="3" style="--d:720ms"/>
+  <text class="gap-cap" x="344" y="145" style="--d:760ms">which callers depend on this behavior</text>
+
+  <path class="gap-edge" style="--d:800ms" d="M266 184 C 300 184, 302 184, 330 184"/>
+  <rect class="gap-node" x="330" y="174" width="294" height="22" rx="3" style="--d:840ms"/>
+  <text class="gap-cap" x="344" y="189" style="--d:880ms">which tests assert the old contract</text>
+
+  <path class="gap-edge" style="--d:920ms" d="M266 228 C 300 228, 302 228, 330 228"/>
+  <rect class="gap-node" x="330" y="218" width="294" height="22" rx="3" style="--d:960ms"/>
+  <text class="gap-cap" x="344" y="233" style="--d:1000ms">what this codebase does by convention</text>
+
+  <path class="gap-edge" style="--d:1040ms" d="M266 272 C 300 272, 302 272, 330 272"/>
+  <rect class="gap-node hot" x="330" y="262" width="294" height="22" rx="3" style="--d:1080ms"/>
+  <text class="gap-cap" x="344" y="277" style="--d:1120ms">the field the client never checks</text>
+
+  <text class="gap-num" x="640" y="324" text-anchor="end" style="--d:1180ms">none of it is in the diff</text>
+</svg>
+
+<p class="scene-note" data-reveal style="--d:1000ms">A missed finding is usually a missing input, not a weak model.</p>
+</section>
+
+<section class="scene" id="scene-init">
+<p class="scene-step" data-reveal style="--d:0ms">Context is built once</p>
+<p class="scene-claim" data-reveal style="--d:80ms">Before it reads a patch, it reads the repository. Then it writes down what it found.</p>
+
+<div>
+  <svg class="iviz" id="iviz" viewBox="0 0 720 468" role="img" aria-label="Thousands of repository files are read once and synthesised into three review guides. Later, remake refreshes only the guides affected by new changes.">
+    <text class="iv-label" x="14" y="44" style="--d:0ms">repository</text>
+    <text class="iv-label" x="470" y="44" style="--d:0ms">guides on disk</text>
+
+    <g class="iv-chip" style="--d:0ms;  --c:#2a6bb0"><rect class="iv-box" x="14"  y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="62" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:20ms; --c:#1a5c3a"><rect class="iv-box" x="46"  y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="62" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:40ms; --c:#c94a1e"><rect class="iv-box" x="78"  y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="62" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:60ms; --c:#a67c1a"><rect class="iv-box" x="110" y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="62" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:80ms; --c:#1a5c3a"><rect class="iv-box" x="142" y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="62" width="2" height="18"/></g>
+
+    <g class="iv-chip" style="--d:0ms;  --c:#c94a1e"><rect class="iv-box" x="14"  y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="86" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:20ms; --c:#2a6bb0"><rect class="iv-box" x="46"  y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="86" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:40ms; --c:#a67c1a"><rect class="iv-box" x="78"  y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="86" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:60ms; --c:#1a5c3a"><rect class="iv-box" x="110" y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="86" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:80ms; --c:#c94a1e"><rect class="iv-box" x="142" y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="86" width="2" height="18"/></g>
+
+    <g class="iv-chip" style="--d:0ms;  --c:#a67c1a"><rect class="iv-box" x="14"  y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="110" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:20ms; --c:#1a5c3a"><rect class="iv-box" x="46"  y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="110" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:40ms; --c:#2a6bb0"><rect class="iv-box" x="78"  y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="110" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:60ms; --c:#c94a1e"><rect class="iv-box" x="110" y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="110" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:80ms; --c:#a67c1a"><rect class="iv-box" x="142" y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="110" width="2" height="18"/></g>
+
+    <g class="iv-chip" style="--d:0ms;  --c:#1a5c3a"><rect class="iv-box" x="14"  y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="134" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:20ms; --c:#c94a1e"><rect class="iv-box" x="46"  y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="134" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:40ms; --c:#a67c1a"><rect class="iv-box" x="78"  y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="134" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:60ms; --c:#2a6bb0"><rect class="iv-box" x="110" y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="134" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:80ms; --c:#1a5c3a"><rect class="iv-box" x="142" y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="134" width="2" height="18"/></g>
+
+    <g class="iv-chip" style="--d:0ms;  --c:#2a6bb0"><rect class="iv-box" x="14"  y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="158" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:20ms; --c:#a67c1a"><rect class="iv-box" x="46"  y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="158" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:40ms; --c:#1a5c3a"><rect class="iv-box" x="78"  y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="158" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:60ms; --c:#c94a1e"><rect class="iv-box" x="110" y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="158" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:80ms; --c:#2a6bb0"><rect class="iv-box" x="142" y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="158" width="2" height="18"/></g>
+
+    <g class="iv-chip" style="--d:0ms;  --c:#c94a1e"><rect class="iv-box" x="14"  y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="182" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:20ms; --c:#2a6bb0"><rect class="iv-box" x="46"  y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="182" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:40ms; --c:#1a5c3a"><rect class="iv-box" x="78"  y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="182" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:60ms; --c:#a67c1a"><rect class="iv-box" x="110" y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="182" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:80ms; --c:#c94a1e"><rect class="iv-box" x="142" y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="182" width="2" height="18"/></g>
+
+    <text class="iv-size" x="14" y="228" style="--d:560ms">10,438 files read once</text>
+
+    <g class="iv-core" style="--d:300ms">
+      <circle class="iv-dot" cx="228" cy="140" r="26"/>
+      <circle class="iv-dot" cx="228" cy="140" r="18"/>
+      <circle class="iv-dot" cx="228" cy="140" r="10"/>
+      <rect class="iv-core-box" x="196" y="126" width="64" height="28" rx="4"/>
+      <text class="iv-core-txt" x="228" y="141" text-anchor="middle">init</text>
+    </g>
+
+    <path class="iv-wire" style="--len:312; --d:620ms" d="M168 131 C 300 131, 340 85, 466 85"/>
+    <path class="iv-wire" style="--len:308; --d:680ms" d="M168 140 C 320 140, 340 163, 466 163"/>
+    <path class="iv-wire" style="--len:326; --d:740ms" d="M168 149 C 300 149, 340 241, 466 241"/>
+
+    <g class="iv-doc" style="--c:#2a6bb0; --d:800ms">
+      <rect class="iv-box" x="470" y="56" width="236" height="58" rx="4"/>
+      <rect class="iv-tint" x="470" y="56" width="4" height="58" rx="2"/>
+      <text class="iv-name" x="484" y="76">SKILL.md</text>
+      <text class="iv-size" x="694" y="76" text-anchor="end">14.2 KB</text>
+      <rect class="iv-track" x="484" y="92" width="208" height="6" rx="3"/>
+      <rect class="iv-fill" style="--d:900ms" x="484" y="92" width="208" height="6" rx="3"/>
+    </g>
+
+    <g class="iv-doc" style="--c:#1a5c3a; --d:880ms">
+      <rect class="iv-box" x="470" y="134" width="236" height="58" rx="4"/>
+      <rect class="iv-tint" x="470" y="134" width="4" height="58" rx="2"/>
+      <text class="iv-name" x="484" y="154">CODEBASE.md</text>
+      <text class="iv-size" x="694" y="154" text-anchor="end">9.8 KB</text>
+      <rect class="iv-track" x="484" y="170" width="208" height="6" rx="3"/>
+      <rect class="iv-fill" style="--d:980ms" x="484" y="170" width="208" height="6" rx="3"/>
+    </g>
+
+    <g class="iv-doc" style="--c:#c94a1e; --d:960ms">
+      <rect class="iv-box" x="470" y="212" width="236" height="58" rx="4"/>
+      <rect class="iv-tint" x="470" y="212" width="4" height="58" rx="2"/>
+      <text class="iv-name" x="484" y="232">PR_REVIEW_GUIDE.md</text>
+      <text class="iv-size" x="694" y="232" text-anchor="end">6.1 KB</text>
+      <rect class="iv-track" x="484" y="248" width="208" height="6" rx="3"/>
+      <rect class="iv-fill" style="--d:1060ms" x="484" y="248" width="208" height="6" rx="3"/>
+    </g>
+
+    <text class="iv-size" x="470" y="298" style="--d:1120ms">3 guides written · every review after this reuses them</text>
+
+    <line class="iv-div" x1="0" y1="324" x2="720" y2="324" style="--d:1200ms"/>
+
+    <text class="iv-label" x="14" y="348" style="--d:1260ms">later · new commits land</text>
+
+    <g class="iv-chip" style="--d:1340ms; --c:#c94a1e"><rect class="iv-box" x="14" y="366" width="26" height="18" rx="3"/><rect class="iv-tint" x="14" y="366" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="366" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:1380ms; --c:#2a6bb0"><rect class="iv-box" x="46" y="366" width="26" height="18" rx="3"/><rect class="iv-tint" x="46" y="366" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="366" width="2" height="18"/></g>
+    <g class="iv-chip" style="--d:1420ms; --c:#c94a1e"><rect class="iv-box" x="78" y="366" width="26" height="18" rx="3"/><rect class="iv-tint" x="78" y="366" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="366" width="2" height="18"/></g>
+
+    <text class="iv-size" x="14" y="404" style="--d:1480ms">3 files touched</text>
+
+    <g class="iv-mini" style="--d:1560ms">
+      <rect class="iv-core-box" x="150" y="361" width="72" height="28" rx="4"/>
+      <text class="iv-core-txt" x="186" y="376" text-anchor="middle" font-size="11px">remake</text>
+    </g>
+
+    <path class="iv-wire" style="--len:34; --d:1660ms" d="M122 375 C 134 375, 138 375, 150 375"/>
+    <path class="iv-wire" style="--len:78; --d:1740ms" d="M222 375 C 256 375, 264 375, 292 375"/>
+
+    <g class="iv-mini" style="--d:1820ms">
+      <rect class="iv-mbar" x="292" y="356" width="138" height="38" rx="3"/>
+      <rect class="iv-mfill" style="--c:#2a6bb0; --d:2100ms" x="292" y="356" width="138" height="3" rx="1.5"/>
+      <text class="iv-name" x="303" y="372" font-size="10px">SKILL.md</text>
+      <text class="iv-mstat up" x="303" y="386" style="--c:#2a6bb0; --d:2200ms">refreshed</text>
+    </g>
+
+    <g class="iv-mini" style="--d:1880ms">
+      <rect class="iv-mbar" x="436" y="356" width="138" height="38" rx="3"/>
+      <text class="iv-name" x="447" y="372" font-size="10px">CODEBASE.md</text>
+      <text class="iv-mstat" x="447" y="386" style="--d:2300ms">no change</text>
+    </g>
+
+    <g class="iv-mini" style="--d:1940ms">
+      <rect class="iv-mbar" x="580" y="356" width="138" height="38" rx="3"/>
+      <rect class="iv-mfill" style="--c:#c94a1e; --d:2180ms" x="580" y="356" width="138" height="3" rx="1.5"/>
+      <text class="iv-name" x="591" y="372" font-size="9.5px">PR_REVIEW_GUIDE.md</text>
+      <text class="iv-mstat up" x="591" y="386" style="--c:#c94a1e; --d:2280ms">refreshed</text>
+    </g>
+
+    <text class="iv-size" x="14" y="440" style="--d:2400ms">only guides touched by new commits are rewritten</text>
+  </svg>
+</div>
+
+<p class="scene-note" data-reveal style="--d:120ms">The guides live under your config directory, not inside the clone, so the context survives a fresh checkout and can be shared with a team.</p>
+</section>
+
+<section class="scene" id="scene-review">
+<p class="scene-step" data-reveal style="--d:0ms">Then it reviews</p>
+<p class="scene-claim" data-reveal style="--d:80ms">On the next pull request, the guides are already there.</p>
+
+<div class="ghi" id="ghi">
+  <div class="ghi-head">
+    <span class="ghi-icon">
+      <svg viewBox="0 0 16 16" aria-hidden="true">
+        <path class="ghi-open-ic" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354Z"/>
+        <path class="ghi-merged-ic" d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0 0 .005V3.25Z"/>
+      </svg>
+    </span>
+    <span class="ghi-title">Fix handshake schema compatibility</span>
+    <span class="ghi-num">#4128</span>
+    <span class="ghi-branch">GroophyLifefor:fix/handshake</span>
+    <span class="ghi-state">
+      <span class="ghi-state-a">Open</span>
+      <span class="ghi-state-b">Merged</span>
+    </span>
+  </div>
+
+  <div class="ghi-checks-head">
+    <span class="ghi-caret-down"></span>
+    <span class="ghi-chk"><span class="ghi-chk-run">Review in progress</span><span class="ghi-chk-done">All checks have passed</span></span>
+    <span class="ghi-count"><span class="ghi-chk-run">0 of 1 check</span><span class="ghi-chk-done">1 successful check</span></span>
+  </div>
+
+  <div class="ghi-link">
+    <span class="ghi-wire"></span>
+    <span class="ghi-packet down"></span>
+    <span class="ghi-packet up"></span>
+  </div>
+
+  <div class="ghi-server">
+    <span class="ghi-srv-dot"></span>
+    <span class="ghi-srv-name">review server</span>
+    <span class="ghi-srv-msg"><span class="ghi-srv-run">webhook received · starting review</span><span class="ghi-srv-done">context loaded · posting findings</span></span>
+  </div>
+
+  <div class="ghi-check" style="--d:0ms">
+    <span class="ghi-ind">
+      <svg class="ghi-spin" viewBox="0 0 16 16" aria-hidden="true">
+        <circle class="ghi-spin-bg" cx="8" cy="8" r="6.5"/>
+        <path class="ghi-spin-arc" d="M8 1.5a6.5 6.5 0 0 1 6.5 6.5"/>
+      </svg>
+      <svg class="ghi-tick" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8"/><path d="M4.6 8.4l2.3 2.3 4.5-4.9"/></svg>
+    </span>
+    <span>Review <span class="ghi-work">/ co-maintainer</span></span>
+    <span class="ghi-time"><span class="ghi-time-run">running…</span><span class="ghi-time-done">2m 14s</span></span>
+  </div>
+</div>
+
+<p class="scene-note" data-reveal style="--d:120ms">A green check is not the interesting part. What it wrote on the diff is.</p>
+</section>
+
+<section class="scene" id="scene-comment">
+<p class="scene-step" data-reveal style="--d:0ms">What it wrote</p>
+<p class="scene-claim" data-reveal style="--d:80ms">The pull request adds a field. Codegraph finds nothing that reads it.</p>
+
+<div class="prw">
+  <div class="prw-bar"><b>#4128</b> Files changed</div>
+
+  <div class="prw-file shown">
+    <div class="prw-path">src/remote/server.ts <em>in this PR</em></div>
+    <div class="prw-ln add"><span>+</span><span>minClientSchema: 2</span></div>
+  </div>
+
+  <div class="prw-tool">
+    <div class="prw-cmd"><b>codegraph-callers</b> minClientSchema</div>
+    <div class="prw-out">0 callers <span>· only written in this patch</span></div>
+  </div>
+
+  <div class="prw-note">
+    <div class="prw-who">co-maintainer <span>reviewed just now</span></div>
+    <p>The server now claims it can refuse old clients. Nothing in the graph reads this field, so nothing is refused.</p>
+  </div>
+</div>
+</section>
+
+<section class="scene" id="scene-fix">
+<p class="scene-step" data-reveal style="--d:0ms">And it writes the fix</p>
+<p class="scene-claim" data-reveal style="--d:80ms">The missing half of the handshake belongs on the client.</p>
+
+<div class="prw">
+  <div class="prw-bar"><b>Suggested change</b> src/remote/client.ts</div>
+  <div class="prw-file shown">
+    <div class="prw-ln add"><span>+</span><span>if (schema &lt; hs.minClientSchema) upgrade()</span></div>
+  </div>
+  <div class="prw-pair">
+    <div class="prw-end a"><small>server</small>writes minClientSchema</div>
+    <span class="prw-arrow"></span>
+    <div class="prw-end live"><small>client</small>now reads minClientSchema</div>
+  </div>
+</div>
+</section>
+
+<section class="scene" id="scene-close">
+<p class="scene-claim" data-reveal style="--d:0ms">The question is not which model reviews best, the question is about context management.</p>
+
+<p data-reveal style="--d:140ms"><strong>Lower context bloat → lower hallucination → faster reviews → more accurate predictions.</strong></p>
+
+<p class="colophon" data-reveal style="--d:240ms">GitHub link is <a href="https://github.com/GroophyLifefor/co-maintainer">GroophyLifefor/co-maintainer</a>.</p>
+</section>
+  </article>
+
+  <footer>
+    <span>© 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
+        <i class="ci ci-github"></i> GitHub
+      </a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
+        <i class="ci ci-linkedin"></i> LinkedIn
+      </a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+  <div class="scroll-cue" id="scroll-cue" aria-hidden="true">
+    <span>scroll</span>
+    <span class="sc-rail"></span>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var targets = document.querySelectorAll('.diagram, .open, .ghi, .scene, .iviz, .gap');
+
+  if (reduced || !('IntersectionObserver' in window)) {
+    Array.prototype.forEach.call(targets, function (el) { el.classList.add('in'); });
+    return;
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('in');
+      observer.unobserve(entry.target);
+    });
+  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.25 });
+
+  Array.prototype.forEach.call(targets, function (el) { observer.observe(el); });
+})();
+
+(function () {
+  var cue = document.getElementById('scroll-cue');
+  if (!cue) return;
+  var last = document.querySelector('.scene:last-of-type') || document.body;
+  function update() {
+    var remaining = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
+    var overFooter = remaining < 40;
+    var overLast = last.getBoundingClientRect().top < window.innerHeight * 0.55;
+    cue.classList.toggle('done', overFooter || overLast);
+  }
+  window.addEventListener('scroll', update, { passive: true });
+  window.addEventListener('resize', update);
+  update();
+})();
+</script>
+
+</body>
+</html>
