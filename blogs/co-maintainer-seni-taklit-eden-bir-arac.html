@@ -742,6 +742,28 @@
   .score .tile .w { font-size: 13px; line-height: 1.45; color: var(--ink3); }
   .score .tile.hot .n { color: var(--accent-d); }
 
+  .flow {
+    display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 22px; list-style: none; margin: 28px 0 36px; padding: 0;
+  }
+  .flow li {
+    position: relative; background: var(--paper2);
+    padding: 16px 16px 18px; margin: 0;
+    font-family: var(--mono); font-size: 13px; line-height: 1.4; color: var(--ink2);
+  }
+  .flow b {
+    display: block; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink4); margin-bottom: 10px;
+  }
+  .flow li:last-child { color: var(--ink); }
+  .flow li:last-child b { color: var(--accent); }
+  .flow li:not(:last-child)::after {
+    content: '→';
+    position: absolute; right: -18px; top: 50%; transform: translateY(-50%);
+    color: var(--ink4); font-size: 13px; line-height: 1; pointer-events: none;
+  }
+
   .axis { display: grid; gap: 10px; margin-top: 26px; }
   .arow { display: grid; grid-template-columns: 116px minmax(0,1fr) 44px 190px; gap: 16px; align-items: center; }
   .arow .an { font-family: var(--mono); font-size: 11.5px; color: var(--ink); }
@@ -813,6 +835,8 @@
       20%, 100% { opacity: 0; transform: translate(-50%, 0); }
     }
     .score { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .flow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .flow li:nth-child(2)::after { content: none; }
     .arow { grid-template-columns: 104px minmax(0,1fr) 44px; }
     .arow .aw { grid-column: 1 / -1; margin-top: -4px; }
   }
@@ -825,6 +849,11 @@
     .cmt::before { left: -12px; width: 8px; }
     .wsteps { grid-template-columns: minmax(0,1fr); }
     .score { grid-template-columns: minmax(0,1fr); }
+    .flow { grid-template-columns: minmax(0,1fr); }
+    .flow li:not(:last-child)::after,
+    .flow li:nth-child(2)::after {
+      content: '↓'; right: auto; left: 16px; top: auto; bottom: -18px; transform: none;
+    }
     .shot { overflow-x: auto; }
     .shot img { width: 780px; max-width: none; }
     .code { font-size: 10.5px; line-height: 19px; }
@@ -863,7 +892,7 @@
         <a href="/blogs/co-maintainer-an-imitator-of-yours.html" class="lang" data-umami-event="blog-lang-switch">English &#8594;</a>
       </div>
       <h1 class="title">co-maintainer,<br>seni <em>taklit eden</em> bir araç</h1>
-      <p class="lede">Her repoda kimsenin yazıya dökmediği bir bilgi vardır. Üç yıldır her pull request’i inceleyen kişinin kafasında yaşar ve o kişi gittiğinde onunla gider.</p>
+      <p class="lede">Her repoda kimsenin yazıya dökmediği çeşitli bilgiler vardır. Üç yıldır her pull request’i inceleyen kişinin kafasında durur ve o kişi gittiğinde onunla gider.</p>
       <div class="byline">
         <span>Murat Kirazkaya</span>
         <span>6 dk okuma</span>
@@ -1015,10 +1044,10 @@
     <section class="act">
       <div class="act-head">
         <div class="act-no"><span>03 &#183; okuma</span></div>
-        <h2>Repoyu her incelemede değil, bir kez oku</h2>
+        <h2>Repoyu bir kez oku, her incelemede değil</h2>
       </div>
 
-      <p>Modele her incelemede bütün bir repoyu vermek mümkün ve saçma. Bu yüzden okuma bir kez, bir kenarda yapılır ve ortaya çıkan şey taşınacak kadar küçüktür.</p>
+      <p>Her incelemede modele bütün repoyu vermek mümkün ama saçma. Repo onun yerine bir kez, incelemenin dışında okunur. Çıkan kılavuzlar da her yamaya götürecek kadar küçüktür.</p>
 
       <div class="bleed sticky-wrap">
         <div class="steps">
@@ -1442,7 +1471,7 @@
         <h2>Sıkıcı yarıyı otomatikleştirmek istediğinde</h2>
       </div>
 
-      <p><code>co-maintainer serve</code> tek bir süreç ve tek bir <code>app.db</code>. GitHub App webhook’unu, bir iş işçisini, panoyu ve son bölümdeki uzak inceleme API’sini taşır.</p>
+      <p><code>co-maintainer serve</code> tek bir süreç ve tek bir <code>app.db</code>. GitHub App webhook’unu, bir job worker’ı, panoyu ve son bölümdeki uzak inceleme API’sini barındırır.</p>
 
       <figure class="bleed">
         <div class="shot" data-anim>
@@ -1458,7 +1487,7 @@
     <section class="act">
       <div class="act-head">
         <div class="act-no"><span>09 &#183; kanıt</span></div>
-        <h2>Bunların hiçbiri gerçekten işe yarıyor mu</h2>
+        <h2>Peki bunlar gerçekten işe yarıyor mu?</h2>
       </div>
 
       <p>Kendi repolarımdan birinde otuz pull request. On dördü bilerek eklenmiş, elle doğrulanmış bir hata taşıyor. On altısı temiz kontrol, ki çoğu inceleme benchmark’ı bu kısmı atlar ve precision’ı ölçülebilir kılan da bu kısımdır.</p>
@@ -1473,7 +1502,7 @@
           <div class="tile">
             <span class="k">precision</span>
             <span class="n">0.353</span>
-            <span class="w">temiz koda da bayrak koyuyor, dürüst yarısı bu</span>
+            <span class="w">temiz koda da takılıyor. Saklamadığımız yarı bu</span>
           </div>
           <div class="tile">
             <span class="k">PR başına maliyet</span>
@@ -1526,14 +1555,17 @@
     <section class="act">
       <div class="act-head">
         <div class="act-no"><span>10 &#183; mesele</span></div>
-        <h2>Bağlam sahip olduğunuz kısımdır</h2>
+        <h2>Context optimizasyonu verim kaybı değildir</h2>
       </div>
 
-      <p>Soru hiçbir zaman hangi modelin en iyi incelediği değildi. Modeller birkaç ayda bir değişir ve cevap onlarla birlikte eskir. Soru, modelin başlarken elinde ne tuttuğudur.</p>
+      <p>Soru hiçbir zaman hangi modelin en iyi incelediği değildi. Modeller birkaç ayda bir değişir ve cevap onlarla birlikte eskir. Soru, modelin başlarken elinde ne tuttuğudur. Daha fazla context vermek daha doğru tahmin etmesini sağlamaz.</p>
 
-      <p class="pull">Repoyu bir kez oku. Öğrendiğini yaz. Sıradaki neyi inceliyorsa ona ver.</p>
-
-      <p>Kılavuzlar, kontrol ettiğiniz bir dizindeki düz markdown. Onları okuyabilir, yanlış bir satırı düzeltebilir ve tamamen başka bir şeye verebilirsiniz.</p>
+      <ol class="flow">
+        <li><b>01</b>daha az context</li>
+        <li><b>02</b>daha az halüsinasyon</li>
+        <li><b>03</b>daha hızlı inceleme</li>
+        <li><b>04</b>daha doğru tahmin</li>
+      </ol>
 
       <figure class="install">
         <div class="mach" data-anim>

@@ -742,6 +742,28 @@
   .score .tile .w { font-size: 13px; line-height: 1.45; color: var(--ink3); }
   .score .tile.hot .n { color: var(--accent-d); }
 
+  .flow {
+    display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
+    gap: 22px; list-style: none; margin: 28px 0 36px; padding: 0;
+  }
+  .flow li {
+    position: relative; background: var(--paper2);
+    padding: 16px 16px 18px; margin: 0;
+    font-family: var(--mono); font-size: 13px; line-height: 1.4; color: var(--ink2);
+  }
+  .flow b {
+    display: block; font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink4); margin-bottom: 10px;
+  }
+  .flow li:last-child { color: var(--ink); }
+  .flow li:last-child b { color: var(--accent); }
+  .flow li:not(:last-child)::after {
+    content: '→';
+    position: absolute; right: -18px; top: 50%; transform: translateY(-50%);
+    color: var(--ink4); font-size: 13px; line-height: 1; pointer-events: none;
+  }
+
   .axis { display: grid; gap: 10px; margin-top: 26px; }
   .arow { display: grid; grid-template-columns: 116px minmax(0,1fr) 44px 190px; gap: 16px; align-items: center; }
   .arow .an { font-family: var(--mono); font-size: 11.5px; color: var(--ink); }
@@ -813,6 +835,8 @@
       20%, 100% { opacity: 0; transform: translate(-50%, 0); }
     }
     .score { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .flow { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .flow li:nth-child(2)::after { content: none; }
     .arow { grid-template-columns: 104px minmax(0,1fr) 44px; }
     .arow .aw { grid-column: 1 / -1; margin-top: -4px; }
   }
@@ -825,6 +849,11 @@
     .cmt::before { left: -12px; width: 8px; }
     .wsteps { grid-template-columns: minmax(0,1fr); }
     .score { grid-template-columns: minmax(0,1fr); }
+    .flow { grid-template-columns: minmax(0,1fr); }
+    .flow li:not(:last-child)::after,
+    .flow li:nth-child(2)::after {
+      content: '↓'; right: auto; left: 16px; top: auto; bottom: -18px; transform: none;
+    }
     .shot { overflow-x: auto; }
     .shot img { width: 780px; max-width: none; }
     .code { font-size: 10.5px; line-height: 19px; }
@@ -1526,14 +1555,17 @@
     <section class="act">
       <div class="act-head">
         <div class="act-no"><span>10 &#183; the point</span></div>
-        <h2>Context is the part you own</h2>
+        <h2>Context optimisation is not a loss of yield</h2>
       </div>
 
-      <p>The question was never which model reviews best. Models change every few months and the answer expires with them. The question is what the model is holding when it starts.</p>
+      <p>The question was never which model reviews best. Models change every few months and the answer expires with them. The question is what the model is holding when it starts. Giving it more context does not make the prediction more accurate.</p>
 
-      <p class="pull">Read the repository once. Write down what you learned. Hand it to whatever reviews next.</p>
-
-      <p>The guides are plain markdown in a directory you control. You can read them, fix a line that is wrong, and hand them to something else entirely.</p>
+      <ol class="flow">
+        <li><b>01</b>less context</li>
+        <li><b>02</b>less hallucination</li>
+        <li><b>03</b>faster reviews</li>
+        <li><b>04</b>more accurate predictions</li>
+      </ol>
 
       <figure class="install">
         <div class="mach" data-anim>
