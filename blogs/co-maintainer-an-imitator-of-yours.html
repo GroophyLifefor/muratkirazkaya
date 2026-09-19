@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>co-maintainer, an imitator of yours - Murat Kirazkaya</title>
-<meta name="description" content="AI code review quality is bounded by the context the reviewer holds, not by the model. How co-maintainer turns a repository into guides an agent reads before it reads your patch.">
+<meta name="description" content="Every repository holds knowledge nobody wrote down. co-maintainer reads the repository once, writes that knowledge into guides, and hands them to a reviewer before it reads your patch.">
 <meta name="author" content="Murat Kirazkaya">
 <link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
 
@@ -27,689 +27,800 @@
 <link rel="canonical" href="https://muratkirazkaya.com/blogs/co-maintainer-an-imitator-of-yours.html">
 <link rel="alternate" hreflang="tr" href="/blogs/co-maintainer-seni-taklit-eden-bir-arac.html">
 
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+
+<script>document.documentElement.className += ' js';</script>
+
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --ink: #222222;
-    --ink2: #444444;
-    --ink3: #888888;
-    --surface: #fdfcf9;
-    --surface2: #f4f1ea;
-    --surface3: #ebe6dc;
+    --ink: #1b1a17;
+    --ink2: #4a4740;
+    --ink3: #8b867a;
+    --ink4: #b3ad9e;
+    --paper: #fbf9f4;
+    --paper2: #f4f0e7;
+    --paper3: #eae3d5;
+    --line: rgba(27, 26, 23, 0.13);
+    --line2: rgba(27, 26, 23, 0.06);
     --accent: #2c5d8f;
-    --accent2: #5c574e;
-    --line: rgba(34, 34, 34, 0.12);
-    --mono: 'IBM Plex Mono', monospace;
+    --accent-d: #1d4470;
+    --accent-soft: rgba(44, 93, 143, 0.10);
+    --alert: #bc4320;
+    --alert-soft: rgba(188, 67, 32, 0.10);
+    --good: #1a7f4b;
+    --mach: #15171c;
+    --mach2: #1d2027;
+    --mach3: #262a32;
+    --mach-line: rgba(255, 255, 255, 0.085);
+    --mach-ink: #ddd9cf;
+    --mach-ink2: #8f959f;
+    --mach-ink3: #5b616b;
+    --mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
     --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
     --sans: 'Source Sans 3', system-ui, sans-serif;
-    --chart-blue: #2a6bb0;
-    --chart-orange: #c94a1e;
-    --chart-aqua: #1a5c3a;
-    --chart-yellow: #a67c1a;
-    --rui-bg: #ffffff;
-    --rui-row-bg: #f6f8fa;
-    --rui-border: #d0d7de;
-    --rui-border-subtle: #d8dee4;
-    --rui-fg: #1f2328;
-    --rui-fg-muted: #59636e;
-    --rui-accent: #0969da;
-    --rui-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-    --rui-avatar-bg: #f6f8fa;
-    --rui-add-bg: #dafbe1;
-    --rui-add-fg: #1a7f37;
-    --rui-del-bg: #ffebe9;
-    --rui-del-fg: #cf222e;
-    --rui-tan-bg: #fff8c5;
-    --rui-tan-border: #d4a72c;
-    --rui-tan-fg: #9a6700;
-    --rui-btn-bg: #f6f8fa;
-    --rui-btn-border: #d0d7de;
+    --gh-bg: #ffffff;
+    --gh-row: #f6f8fa;
+    --gh-bd: #d1d9e0;
+    --gh-fg: #1f2328;
+    --gh-mut: #59636e;
+    --gh-blue: #0969da;
+    --gh-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
   }
 
-  html { font-family: var(--sans); background: var(--surface); color: var(--ink); font-size: 15px; line-height: 1.6; scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  html {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    font-size: 16px; line-height: 1.6; scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
 
-  .site { max-width: 860px; margin: 0 auto; padding: 0 28px; }
+  body::after {
+    content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none;
+    opacity: 0.4; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+  }
+
+  .site { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
 
   nav {
     display: flex; align-items: center; justify-content: space-between;
     padding: 22px 0; border-bottom: 1px solid var(--line);
-    position: sticky; top: 0; background: var(--surface); z-index: 10;
+    position: sticky; top: 0; background: rgba(251, 249, 244, 0.92);
+    backdrop-filter: saturate(140%) blur(8px); z-index: 20;
   }
-  .nav-logo { font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em; color: var(--ink2); text-decoration: none; }
+  .nav-logo { font-family: var(--mono); font-size: 13px; color: var(--ink2); text-decoration: none; }
   .nav-links { display: flex; gap: 24px; }
   .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
   .nav-links a:hover { color: var(--ink); }
   .nav-cta {
     font-family: var(--mono); font-size: 12px; padding: 7px 16px;
-    background: var(--ink); color: var(--surface); text-decoration: none; display: inline-block;
+    background: var(--ink); color: var(--paper); text-decoration: none;
     letter-spacing: 0.03em; transition: background 0.15s;
   }
   .nav-cta:hover { background: var(--accent); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
 
   .back-link {
     font-family: var(--mono); font-size: 11px; color: var(--ink3);
-    text-decoration: none; letter-spacing: 0.04em; transition: color 0.15s;
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 20px 0 0;
+    text-decoration: none; letter-spacing: 0.04em;
+    display: inline-flex; align-items: center; gap: 6px; padding: 22px 0 0;
   }
   .back-link:hover { color: var(--ink); }
 
-  .lang-switch {
-    font-family: var(--mono); font-size: 11px; color: var(--ink3);
-    text-decoration: none; letter-spacing: 0.04em; margin-left: auto;
-    text-transform: none;
+  .post, .act {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(0, 1fr)
+      [text-start] minmax(0, 660px) [text-end]
+      minmax(0, 1fr) [full-end];
   }
-  .lang-switch:hover { color: var(--ink); }
-  .post-top { display: flex; align-items: baseline; gap: 16px; }
+  .post > *, .act > * { grid-column: text; }
+  .post > .bleed, .act > .bleed { grid-column: full; }
+  .post > .act { grid-column: full; }
 
-  /* SCROLL CUE */
-  .scroll-cue {
-    position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%);
-    z-index: 20; display: flex; flex-direction: column; align-items: center; gap: 8px;
-    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.18em;
-    text-transform: uppercase; color: var(--ink3);
-    pointer-events: none; opacity: 1; transition: opacity 400ms ease;
+  .hero { padding: 54px 0 4px; }
+  .hero-meta {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink3); margin-bottom: 20px;
   }
-  .scroll-cue.done { opacity: 0; }
-  .scroll-cue .sc-rail {
-    position: relative; width: 1px; height: 32px;
-    background: var(--line); overflow: hidden;
+  .hero-meta .tag { color: var(--accent); }
+  .hero-meta .lang { margin-left: auto; color: var(--ink3); text-decoration: none; text-transform: none; letter-spacing: 0.04em; }
+  .hero-meta .lang:hover { color: var(--ink); }
+  h1.title {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(38px, 6.6vw, 68px); line-height: 1.02;
+    letter-spacing: -0.032em; margin-bottom: 26px;
   }
-  .scroll-cue .sc-rail::after {
-    content: ''; position: absolute; left: 0; top: -16px;
-    width: 1px; height: 16px; background: var(--ink3);
+  h1.title em { font-style: italic; color: var(--accent-d); }
+  .lede {
+    font-family: var(--serif); font-size: clamp(19px, 2.4vw, 23px);
+    line-height: 1.52; color: var(--ink2); max-width: 36em; margin-bottom: 8px;
+  }
+  .byline {
+    font-family: var(--mono); font-size: 11.5px; color: var(--ink3);
+    border-top: 1px solid var(--line); padding-top: 14px; margin-top: 30px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+  }
+
+  .act { padding: 76px 0 8px; }
+  .act-head { margin-bottom: 26px; }
+  .act-no {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink4);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .act-no::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(27px, 3.7vw, 40px); line-height: 1.12;
+    letter-spacing: -0.024em; margin: 14px 0 0;
+  }
+  h3 {
+    font-family: var(--sans); font-weight: 600; font-size: 14px;
+    letter-spacing: 0.02em; color: var(--ink); margin: 30px 0 8px;
+  }
+  p { font-size: 17px; line-height: 1.74; color: var(--ink2); margin-bottom: 1.1em; }
+  p strong { color: var(--ink); font-weight: 600; }
+  p a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  p a:hover { color: var(--ink); }
+  p code, li code {
+    font-family: var(--mono); font-size: 0.86em; background: var(--paper3);
+    padding: 0.1em 0.34em; border-radius: 2px; color: var(--ink);
+  }
+  .post ul { list-style: none; margin: 0 0 1.2em; }
+  .post ul li { position: relative; padding-left: 20px; margin-bottom: 0.6em; font-size: 17px; line-height: 1.7; color: var(--ink2); }
+  .post ul li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 7px; height: 1px; background: var(--ink4); }
+
+  .pull {
+    font-family: var(--serif); font-size: clamp(23px, 3.1vw, 31px);
+    line-height: 1.26; letter-spacing: -0.02em; color: var(--ink);
+    border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--line);
+    padding: 26px 0 28px; margin: 40px 0;
+  }
+  .aside {
+    font-size: 14.5px; line-height: 1.66; color: var(--ink3);
+    border-left: 2px solid var(--paper3); padding-left: 18px; margin: 26px 0 30px;
+  }
+  .aside b { color: var(--ink2); font-weight: 600; }
+
+  figure { margin: 40px 0 44px; }
+  .fig-cap {
+    display: flex; gap: 12px; align-items: baseline; margin-top: 14px;
+    font-family: var(--mono); font-size: 11px; line-height: 1.55;
+    color: var(--ink3); letter-spacing: 0.01em;
+  }
+  .fig-cap b { color: var(--ink2); font-weight: 500; white-space: nowrap; }
+
+  .js [data-r] { opacity: 0; transform: translateY(14px); }
+  .in [data-r], [data-r].in {
+    opacity: 1; transform: none;
+    transition: opacity 640ms cubic-bezier(.2,.7,.3,1) var(--d, 0ms),
+                transform 760ms cubic-bezier(.16,.84,.28,1) var(--d, 0ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    [data-r], .threads .rail i, .link .wireline, .link .cap, .link .pip, .abar i,
+    .fieldfig .band, .fieldfig .lbl, .fieldfig .big, .fieldfig .leader, .fieldfig .wipe-r,
+    .scalefig .sq-b, .scalefig .sq-s, .scalefig .base,
+    .scalefig .lbl, .scalefig .sub, .scalefig .ratio, .scalefig .ratio-sub {
+      opacity: 1 !important; transform: none !important;
+      transition: none !important; animation: none !important;
+    }
+    .wirecol .pk { display: none !important; }
+    .wirecol .pk.a { display: block !important; opacity: 1 !important; }
+    .prog i { transform: scaleX(.86) !important; animation: none !important; }
+  }
+
+  /* ============ machine surface ============ */
+  .mach {
+    background: var(--mach); border: 1px solid #0d0f13; border-radius: 7px;
+    color: var(--mach-ink); font-family: var(--mono); overflow: hidden;
+    box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 26px 48px -34px rgba(21,18,12,.7);
+  }
+  .mach-bar {
+    display: flex; align-items: center; gap: 10px; padding: 10px 14px;
+    background: var(--mach2); border-bottom: 1px solid var(--mach-line);
+    font-size: 11px; color: var(--mach-ink2); letter-spacing: 0.02em;
+  }
+  .mach-bar .dots { display: flex; gap: 6px; margin-right: 4px; }
+  .mach-bar .dots i { width: 9px; height: 9px; border-radius: 50%; background: #343943; display: block; }
+  .mach-bar .grow { flex: 1; }
+  .mach-bar .pill {
+    font-size: 10px; letter-spacing: 0.06em; text-transform: uppercase;
+    border: 1px solid var(--mach-line); color: var(--mach-ink3); padding: 2px 7px; border-radius: 3px;
+  }
+
+  .term { padding: 16px 18px 18px; font-size: 12.5px; line-height: 1.85; }
+  .term .l { display: block; white-space: pre-wrap; color: var(--mach-ink2); }
+  .term .p { color: var(--good); }
+  .term .cmd { color: var(--mach-ink); }
+  .term .dim { color: var(--mach-ink3); }
+  .term .ok { color: #6fbf8e; }
+  .term .warn { color: #d8a657; }
+  .term .acc { color: #7fa9d8; }
+  .term .cur {
+    display: inline-block; width: 7px; height: 14px; background: var(--mach-ink);
+    vertical-align: -2px; opacity: 0.9;
   }
   @media (prefers-reduced-motion: no-preference) {
-    .scroll-cue .sc-rail::after { animation: scDrop 2s cubic-bezier(.55, 0, .45, 1) infinite; }
-    @keyframes scDrop {
-      0%        { top: -16px; }
-      65%, 100% { top: 32px; }
-    }
-  }
-  @media (max-width: 767px) {
-    .scroll-cue { bottom: 12px; gap: 6px; }
-    .scroll-cue .sc-rail { height: 24px; }
+    .cur { animation: blink 1.1s step-end infinite; }
+    @keyframes blink { 0%, 55% { opacity: .9 } 56%, 100% { opacity: 0 } }
   }
 
-  .post-hero { padding: 40px 0 36px; }
-  .post-eyebrow {
-    font-family: var(--mono); font-size: 11px; color: var(--accent);
-    letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 18px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .post-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--accent); }
-  .post-title {
-    font-family: var(--serif); font-size: clamp(32px, 5.2vw, 48px);
-    line-height: 1.08; font-weight: 400; color: var(--ink);
-    margin-bottom: 22px; letter-spacing: -0.02em;
-  }
-  .post-main { padding-bottom: 0; max-width: 640px; }
-  .post-main h2 {
-    font-family: var(--serif); font-size: clamp(24px, 3.2vw, 32px);
-    font-weight: 400; color: var(--ink); margin: 48px 0 8px;
-    letter-spacing: -0.02em; line-height: 1.15;
-  }
-  .post-main h2:first-of-type { margin-top: 8px; }
-  .post-main .lede {
-    font-size: 14px; color: var(--ink3); margin-bottom: 1.2em; line-height: 1.55;
-  }
-
-  .post-main p {
-    font-size: 15px; color: var(--ink2); line-height: 1.75; margin-bottom: 1.05em;
-  }
-  .post-main p strong { color: var(--ink); font-weight: 500; }
-  .post-main a {
-    color: var(--accent); text-decoration: underline; text-underline-offset: 2px;
-  }
-  .post-main a:hover { color: var(--ink); }
-
-  .post-main ul {
-    margin: 0 0 1.15em; padding: 0; list-style: none;
-    color: var(--ink2); font-size: 15px; line-height: 1.7;
-  }
-  .post-main ul li {
-    position: relative; padding-left: 22px; margin-bottom: 0.55em;
-  }
-  .post-main ul li::before {
-    content: ''; position: absolute; left: 0; top: 0.55em;
-    width: 8px; height: 8px; background: var(--accent2);
-  }
-
-  .post-main code {
-    font-family: var(--mono); font-size: 0.9em;
-    background: var(--surface3); padding: 0.12em 0.35em;
-  }
-
-  /* OPENING - token cost, drawn to scale */
-  .open { width: 100%; height: auto; display: block; margin: 16px 0 4px; overflow: visible; }
-  .open-base { stroke: var(--line); stroke-width: 1; }
-  .open-sq { stroke-width: 1.5; }
-  .open-sq.small { stroke: var(--chart-aqua); fill: rgba(26, 92, 58, 0.09); }
-  .open-sq.big { stroke: var(--chart-orange); fill: rgba(201, 74, 30, 0.075); }
-  .open-lbl { font-family: var(--mono); font-size: 14px; fill: var(--ink); }
-  .open-sub { font-family: var(--mono); font-size: 10.5px; fill: var(--ink3); letter-spacing: 0.04em; }
-  .open-ratio { font-family: var(--serif); font-size: 44px; fill: var(--ink); letter-spacing: -0.02em; }
+  /* ============ fig 01 hero field ============ */
+  .fieldfig { width: 100%; height: auto; display: block; overflow: visible; }
+  .fieldfig .mark-a { fill: var(--ink); opacity: 0.17; }
+  .fieldfig .mark-b { fill: var(--ink); opacity: 0.11; }
+  .fieldfig .band-bg { fill: var(--paper); }
+  .fieldfig .band-glow { fill: var(--accent); opacity: 0.07; }
+  .fieldfig .band-line { stroke: var(--accent); stroke-width: 1.2; fill: none; }
+  .fieldfig .band-mark { fill: var(--accent); opacity: 0.8; }
+  .fieldfig .lbl { font-family: var(--mono); font-size: 11.5px; fill: var(--ink3); letter-spacing: 0.03em; }
+  .fieldfig .lbl.on { fill: var(--accent); }
+  .fieldfig .big { font-family: var(--serif); font-size: 15px; fill: var(--ink); letter-spacing: 0; }
+  .fieldfig .leader { stroke: var(--line); stroke-width: 1; }
+  .fieldfig .leader.on { stroke: var(--accent); opacity: 0.5; }
 
   @media (prefers-reduced-motion: no-preference) {
-    .open .open-sq, .open .open-lbl, .open .open-sub,
-    .open .open-ratio, .open .open-base {
-      opacity: 0; transform: scale(0.88);
-      transform-box: fill-box; transform-origin: center;
+    .js .fieldfig .wipe-r { transform: scaleX(0); transform-box: fill-box; transform-origin: left center; }
+    .fieldfig.in .wipe-r { transform: scaleX(1); transition: transform 1500ms cubic-bezier(.22,.7,.2,1) 120ms; }
+    .js .fieldfig .band { opacity: 0; transform: translateY(10px); }
+    .fieldfig.in .band { opacity: 1; transform: none; transition: opacity 700ms ease 900ms, transform 900ms cubic-bezier(.2,.9,.25,1) 900ms; }
+    .js .fieldfig .lbl, .js .fieldfig .big, .js .fieldfig .leader { opacity: 0; }
+    .fieldfig.in .lbl, .fieldfig.in .big, .fieldfig.in .leader {
+      opacity: 1; transition: opacity 700ms ease var(--d, 1200ms);
     }
-    .open.in .open-sq, .open.in .open-lbl, .open.in .open-sub,
-    .open.in .open-ratio, .open.in .open-base {
-      opacity: 1; transform: none;
-      transition: opacity 480ms ease var(--d, 0ms),
-                  transform 540ms cubic-bezier(.2, 1.25, .4, 1) var(--d, 0ms);
-    }
+    .fieldfig.in .leader { opacity: .55; }
   }
 
-  /* DIFF VS REPOSITORY */
-  .gap { width: 100%; height: auto; display: block; margin: 12px 0 4px; overflow: visible; }
-  .gap-frame { fill: var(--surface); stroke: var(--line); }
-  .gap-hd { font-family: var(--mono); font-size: 11px; fill: var(--ink3); letter-spacing: 0.06em; }
-  .gap-ln { fill: var(--surface3); }
-  .gap-add { fill: var(--chart-aqua); opacity: 0.34; }
-  .gap-del { fill: var(--chart-orange); opacity: 0.3; }
-  .gap-edge { stroke: var(--ink3); stroke-width: 1; opacity: 0.3; fill: none; }
-  .gap-node { fill: var(--surface); stroke: var(--ink3); stroke-width: 1; opacity: 0.75; }
-  .gap-node.hot { fill: rgba(42, 107, 176, 0.13); stroke: var(--chart-blue); stroke-width: 1.4; opacity: 1; }
-  .gap-cap { font-family: var(--mono); font-size: 11.5px; fill: var(--ink2); }
-  .gap-num { font-family: var(--mono); font-size: 10.5px; fill: var(--ink3); }
+  /* ============ fig 02 review threads ============ */
+  .threads { display: grid; grid-template-columns: 26px minmax(0, 1fr); }
+  .threads .rail { position: relative; }
+  .threads .rail i {
+    position: absolute; left: 5px; top: 0; bottom: 0; width: 1px; background: var(--line);
+    transform-origin: top; display: block;
+  }
+  .js .threads .rail i { transform: scaleY(0); }
+  .threads.in .rail i { transform: scaleY(1); transition: transform 1100ms cubic-bezier(.3,.8,.3,1) 240ms; }
+  .threads .stack { display: grid; gap: 12px; }
 
-  @media (prefers-reduced-motion: no-preference) {
-    .gap .gap-node, .gap .gap-edge { opacity: 0; }
-    .gap .gap-frame, .gap .gap-hd, .gap .gap-ln, .gap .gap-cap, .gap .gap-num {
-      opacity: 0; transform: translateX(-6px);
-    }
-    .gap.in .gap-frame, .gap.in .gap-hd, .gap.in .gap-ln,
-    .gap.in .gap-cap, .gap.in .gap-num {
-      opacity: 1; transform: none;
-      transition: opacity 460ms ease var(--d, 0ms), transform 460ms ease var(--d, 0ms);
-    }
-    .gap.in .gap-edge {
-      opacity: 0.3;
-      transition: opacity 520ms ease var(--d, 0ms);
-    }
-    .gap.in .gap-node {
-      opacity: 0.75;
-      transition: opacity 420ms ease var(--d, 0ms);
-    }
-    .gap.in .gap-node.hot { opacity: 1; }
+  .cmt {
+    border: 1px solid var(--gh-bd); border-radius: 7px; background: var(--gh-bg);
+    box-shadow: 0 10px 26px -24px rgba(20,18,14,.6);
+    position: relative;
   }
-
-  /* SCENES / SCROLL SNAP */
-  .scene, .post-hero {
-    display: flex; flex-direction: column; justify-content: center;
-    min-height: 100vh; min-height: 100svh;
-    padding: 96px 0 64px; margin: 0;
-    scroll-snap-align: start; scroll-snap-stop: always;
+  .cmt::before {
+    content: ''; position: absolute; left: -21px; top: 20px; width: 15px; height: 1px; background: var(--line);
   }
-  .post-hero { padding: 120px 0 64px; }
-
-  .scene-step {
-    display: flex; align-items: center; gap: 10px;
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em;
-    text-transform: uppercase; color: var(--ink3); margin-bottom: 12px;
-  }
-  .scene-step::after { content: ''; flex: 1; height: 1px; background: var(--line); }
-  .scene-claim {
-    font-family: var(--serif); font-size: clamp(19px, 3.1vw, 25px);
-    line-height: 1.34; letter-spacing: -0.018em; color: var(--ink);
-    margin: 0 0 20px; max-width: 42ch;
-  }
-  .scene-note {
-    font-size: 14px; color: var(--ink3); line-height: 1.65;
-    margin: 0; max-width: 56ch;
-  }
-  .scene p { max-width: 60ch; }
-
-  /* INIT VISUALISATION */
-  .iviz {
-    width: 100%; height: auto; display: block;
-    overflow: visible; margin: 8px 0 4px;
-  }
-  .iviz text { dominant-baseline: middle; }
-  .iv-box { fill: var(--surface); stroke: var(--line); }
-  .iv-tint { fill: var(--c); opacity: 0.1; }
-  .iv-edge { fill: var(--c); }
-  .iv-dot { fill: var(--c); opacity: 0.28; }
-  .iv-label { font-family: var(--mono); font-size: 11px; fill: var(--ink2); }
-  .iv-core-box { fill: var(--surface); stroke: var(--ink); stroke-width: 1.2; }
-  .iv-core-txt { font-family: var(--mono); font-size: 13px; fill: var(--ink); }
-  .iv-wire { fill: none; stroke: var(--ink3); stroke-width: 1.1; opacity: 0.45; }
-  .iv-name { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
-  .iv-size { font-family: var(--mono); font-size: 10px; fill: var(--ink3); }
-  .iv-track { fill: var(--surface3); }
-  .iv-fill { fill: var(--c); }
-  .iv-div { stroke: var(--line); stroke-width: 1; stroke-dasharray: 3 5; }
-  .iv-mbar { fill: var(--surface); stroke: var(--line); }
-  .iv-mfill { fill: var(--c); }
-  .iv-mstat { font-family: var(--mono); font-size: 9.5px; fill: var(--ink3); }
-  .iv-mstat.up { font-weight: 500; }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .scene [data-reveal] { opacity: 0; transform: translateY(12px); }
-    .scene.in [data-reveal] {
-      opacity: 1; transform: none;
-      transition: opacity 560ms ease var(--d, 0ms),
-                  transform 560ms cubic-bezier(.2, .8, .3, 1) var(--d, 0ms);
-    }
-    .iviz .iv-chip, .iviz .iv-core, .iviz .iv-doc, .iviz .iv-mini, .iviz .iv-div, .iviz .iv-mstat {
-      opacity: 0; transform: translateX(-8px);
-    }
-    .iviz .iv-doc { transform: translateX(8px); }
-    .iviz.in .iv-chip, .iviz.in .iv-core, .iviz.in .iv-doc, .iviz.in .iv-mini, .iviz.in .iv-div, .iviz.in .iv-mstat {
-      opacity: 1; transform: none;
-      transition: opacity 480ms ease var(--d, 0ms), transform 480ms ease var(--d, 0ms);
-    }
-    .iviz .iv-wire { stroke-dasharray: var(--len, 200); stroke-dashoffset: var(--len, 200); }
-    .iviz.in .iv-wire {
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 620ms ease var(--d, 0ms);
-    }
-    .iviz .iv-fill, .iviz .iv-mfill { transform: scaleX(0); transform-box: fill-box; transform-origin: left center; }
-    .iviz.in .iv-fill, .iviz.in .iv-mfill {
-      transform: scaleX(1);
-      transition: transform 780ms cubic-bezier(.3, .8, .3, 1) var(--d, 0ms);
-    }
-    .iviz.in .iv-mfill { transition-duration: 420ms; }
-  }
-
-  @media (max-width: 767px) {
-    html { scroll-snap-type: y proximity; }
-    .scene, .post-hero { min-height: 100vh; min-height: 100svh; padding: 68px 0 36px; }
-    .post-hero { padding: 90px 0 40px; }
-    .scene-claim { font-size: 17px; margin-bottom: 14px; }
-    .scene-note { font-size: 13px; }
-    .iviz { margin: 4px 0; }
-  }
-
-  /* DIAGRAM */
-  .diagram-card {
-    background: var(--surface2); border: 1px solid var(--line);
-    padding: 20px 18px 14px; margin: 1.5em 0;
-  }
-  .diagram-title { font-size: 14px; font-weight: 500; color: var(--ink); margin: 0 0 2px; }
-  .diagram-sub { font-family: var(--mono); font-size: 11px; color: var(--ink3); margin: 0 0 14px; }
-  .diagram { width: 100%; height: auto; display: block; overflow: visible; }
-  .diagram .node rect {
-    fill: var(--surface); stroke: var(--line); stroke-width: 1;
-  }
-  .diagram .node.accent rect { stroke: rgba(44, 93, 143, 0.42); }
-  .diagram .node text { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
-  .diagram .node text.sub { font-family: var(--sans); font-size: 10.5px; fill: var(--ink3); }
-  .diagram .node text.files { font-family: var(--mono); font-size: 10px; fill: var(--ink2); }
-  .diagram .node.accent text.label { fill: var(--accent); }
-  .diagram .link { stroke: var(--ink3); stroke-width: 1.2; fill: none; }
-  .diagram .link.flow { stroke: var(--accent); }
-  .diagram .link.feedback { stroke: var(--ink3); stroke-dasharray: 4 4; }
-  .diagram .dot { fill: var(--accent); }
-  .diagram .dot.muted { fill: var(--ink3); }
-  .diagram .col-label {
-    font-family: var(--mono); font-size: 10px; fill: var(--ink3);
-    letter-spacing: 0.08em; text-transform: uppercase;
-  }
-  .diagram-legend {
-    display: flex; gap: 18px; flex-wrap: wrap; margin-top: 12px;
-    font-family: var(--mono); font-size: 11px; color: var(--ink3);
-  }
-  .diagram-legend .item { display: flex; align-items: center; gap: 6px; }
-  .diagram-legend .swatch { width: 14px; height: 0; border-top: 1.2px solid var(--ink3); display: inline-block; }
-  .diagram-legend .swatch.flow { border-color: var(--accent); }
-  .diagram-legend .swatch.feedback { border-top-style: dashed; }
-
-  @media (prefers-reduced-motion: no-preference) {
-    .diagram .node,
-    .diagram .link,
-    .diagram .dot,
-    .diagram .col-label {
-      opacity: 0;
-    }
-    .diagram.in .node,
-    .diagram.in .dot,
-    .diagram.in .col-label {
-      opacity: 1;
-      transition: opacity 420ms ease var(--d, 0ms);
-    }
-    .diagram .link { stroke-dasharray: var(--len, 400); stroke-dashoffset: var(--len, 400); }
-    .diagram .link.feedback { stroke-dasharray: 4 4; stroke-dashoffset: 0; }
-    .diagram.in .link:not(.feedback) {
-      opacity: 1;
-      stroke-dashoffset: 0;
-      transition: stroke-dashoffset 620ms cubic-bezier(.4, .1, .2, 1) var(--d, 0ms),
-                  opacity 120ms linear var(--d, 0ms);
-    }
-    .diagram.in .link.feedback {
-      opacity: 1;
-      transition: opacity 420ms ease var(--d, 0ms);
-    }
-  }
-
-  /* GITHUB PR + CHECKS */
-  .ghi {
-    margin: 1.6em 0 2em;
-    border: 1px solid var(--rui-border);
-    background: var(--rui-bg);
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif;
-    font-size: 12px; line-height: 1.5;
-  }
-  .ghi * { box-sizing: border-box; }
-
-  .ghi-head {
-    display: flex; align-items: center; gap: 8px;
-    padding: 11px 16px;
-    border-bottom: 1px solid var(--rui-border-subtle);
-  }
-  .ghi-icon { position: relative; width: 16px; height: 16px; flex: 0 0 16px; }
-  .ghi-icon svg { position: absolute; inset: 0; width: 16px; height: 16px; }
-  .ghi-open-ic { fill: #1a7f37; }
-  .ghi-merged-ic { fill: #8250df; opacity: 0; }
-  .ghi-title { color: var(--rui-fg); font-weight: 600; }
-  .ghi-num { color: var(--rui-fg-muted); }
-  .ghi-branch {
-    font-family: var(--rui-mono); font-size: 11px;
-    background: #ddf4ff; color: #0969da;
-    padding: 1px 6px; border-radius: 2em;
-  }
-  .ghi-state {
-    margin-left: auto; position: relative;
-    display: inline-grid; place-items: center;
-    font-size: 11.5px; font-weight: 500;
-    padding: 1px 10px; border-radius: 2em;
-    border: 1px solid #1a7f37; color: #1a7f37;
-  }
-  .ghi-state span { grid-area: 1 / 1; }
-  .ghi-state-b { opacity: 0; }
-
-  .ghi-checks-head {
-    display: flex; align-items: center; gap: 8px;
-    padding: 9px 16px; background: var(--rui-row-bg);
-    border-bottom: 1px solid var(--rui-border-subtle);
-    font-weight: 600; color: var(--rui-fg);
-  }
-  .ghi-caret-down {
-    width: 0; height: 0; border-top: 4px solid var(--rui-fg-muted);
-    border-left: 3px solid transparent; border-right: 3px solid transparent;
-  }
-  .ghi-count { margin-left: auto; font-weight: 400; color: var(--rui-fg-muted); font-size: 11.5px; }
-
-  .ghi-check {
-    display: flex; align-items: center; gap: 8px;
-    padding: 7px 16px; color: var(--rui-fg);
-    border-bottom: 1px solid var(--rui-border-subtle);
-  }
-  .ghi-check:last-child { border-bottom: 0; }
-  .ghi-tick { width: 15px; height: 15px; flex: 0 0 15px; }
-  .ghi-tick circle { fill: #1f883d; }
-  .ghi-tick path {
-    fill: none; stroke: #fff; stroke-width: 2;
-    stroke-linecap: round; stroke-linejoin: round;
-  }
-  .ghi-work { color: var(--rui-fg-muted); }
-  .ghi-time-run, .ghi-time-done {
-    margin-left: auto; font-size: 11.5px;
-  }
-  .ghi-time-run { color: #9a6700; }
-  .ghi-time-done { color: var(--rui-fg-muted); }
-  .ghi-time { margin-left: auto; display: inline-grid; place-items: center end; }
-  .ghi-time > span { grid-area: 1 / 1; }
-  .ghi-srv-msg { display: inline-grid; place-items: center start; }
-  .ghi-srv-msg > span { grid-area: 1 / 1; }
-  .ghi-chk, .ghi-count { display: inline-grid; place-items: center start; }
-  .ghi-chk > span, .ghi-count > span { grid-area: 1 / 1; white-space: nowrap; }
-
-  .ghi-ind { position: relative; width: 15px; height: 15px; flex: 0 0 15px; }
-  .ghi-ind svg { position: absolute; inset: 0; width: 15px; height: 15px; }
-  .ghi-spin-arc { transform-origin: 8px 8px; }
-  .ghi-spin-bg { fill: none; stroke: #d4a72c; stroke-width: 2; }
-  .ghi-spin-arc {
-    fill: none; stroke: #9a6700; stroke-width: 2; stroke-linecap: round;
-  }
-
-  /* webhook link */
-  .ghi-link { position: relative; height: 42px; }
-  .ghi-wire { position: absolute; left: 23px; top: 0; width: 1px; height: 100%; }
-  .ghi-wire::before {
-    content: ''; position: absolute; inset: 0;
-    background: var(--rui-border); transform: scaleY(0); transform-origin: top;
-  }
-  .ghi-packet {
-    position: absolute; left: 20.5px; top: -3px;
-    width: 6px; height: 6px; border-radius: 50%; opacity: 0;
-  }
-  .ghi-packet.down { background: #8250df; }
-  .ghi-packet.up { background: #1f883d; }
-
-  .ghi-server {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 16px; color: var(--rui-fg);
-    border-top: 1px solid var(--rui-border-subtle);
-  }
-  .ghi-srv-dot {
-    width: 7px; height: 7px; flex: 0 0 7px; border-radius: 50%;
-    background: #8250df; margin-left: 3.5px;
-  }
-  .ghi-srv-name { font-weight: 600; }
-  .ghi-srv-msg { color: var(--rui-fg-muted); font-size: 11.5px; }
-
-  @media (prefers-reduced-motion: no-preference) {
-    /* stage 1 · the PR opens */
-    .ghi .ghi-head { opacity: 0; transform: translateY(4px); }
-    .ghi.in .ghi-head { opacity: 1; transform: none; transition: opacity 340ms ease, transform 340ms ease; }
-
-    /* stage 2 · webhook travels to your server */
-    .ghi .ghi-wire::before { transform: scaleY(0); transform-origin: top; }
-    .ghi.in .ghi-wire::before { transform: scaleY(1); transition: transform 420ms ease 700ms; }
-
-    @keyframes ghiDown {
-      0%   { transform: translateY(0); opacity: 0; }
-      14%  { opacity: 1; }
-      82%  { opacity: 1; }
-      100% { transform: translateY(42px); opacity: 0; }
-    }
-    @keyframes ghiUp {
-      0%   { transform: translateY(42px); opacity: 0; }
-      14%  { opacity: 1; }
-      82%  { opacity: 1; }
-      100% { transform: translateY(0); opacity: 0; }
-    }
-    .ghi.in .ghi-packet.down { animation: ghiDown 850ms cubic-bezier(.45, 0, .55, 1) 1000ms both; }
-    .ghi.in .ghi-packet.up { animation: ghiUp 850ms cubic-bezier(.45, 0, .55, 1) 4700ms both; }
-
-    /* stage 3 · your server acknowledges */
-    .ghi .ghi-server { opacity: 0; transform: translateY(4px); }
-    .ghi.in .ghi-server { opacity: 1; transform: none; transition: opacity 320ms ease 1800ms, transform 320ms ease 1800ms; }
-    .ghi .ghi-srv-done { opacity: 0; }
-    .ghi.in .ghi-srv-done { opacity: 1; transition: opacity 300ms ease 4000ms; }
-    .ghi.in .ghi-srv-run { opacity: 0; transition: opacity 300ms ease 4000ms; }
-
-    /* stage 4 · the check starts running */
-    .ghi .ghi-checks-head, .ghi .ghi-check { opacity: 0; transform: translateY(4px); }
-    .ghi.in .ghi-checks-head { opacity: 1; transform: none; transition: opacity 300ms ease 2400ms, transform 300ms ease 2400ms; }
-    .ghi.in .ghi-check { opacity: 1; transform: none; transition: opacity 300ms ease 2400ms, transform 300ms ease 2400ms; }
-
-    .ghi .ghi-spin { opacity: 0; }
-    @keyframes ghiSpinLife {
-      0%   { opacity: 0; transform: rotate(0deg); }
-      10%  { opacity: 1; }
-      90%  { opacity: 1; }
-      100% { opacity: 0; transform: rotate(900deg); }
-    }
-    .ghi.in .ghi-spin { animation: ghiSpinLife 2200ms linear 2400ms both; }
-
-    /* stage 5 · it passes */
-    .ghi .ghi-tick { transform: scale(0.4); opacity: 0; }
-    .ghi.in .ghi-tick {
-      transform: none; opacity: 1;
-      transition: transform 360ms cubic-bezier(.2, 1.5, .4, 1) 4600ms,
-                  opacity 200ms ease 4600ms;
-    }
-    .ghi .ghi-time-done { opacity: 0; }
-    .ghi.in .ghi-time-done { opacity: 1; transition: opacity 260ms ease 4700ms; }
-    .ghi.in .ghi-time-run { opacity: 0; transition: opacity 260ms ease 4700ms; }
-    .ghi .ghi-chk-done { opacity: 0; }
-    .ghi.in .ghi-chk-done { opacity: 1; transition: opacity 300ms ease 5000ms; }
-    .ghi.in .ghi-chk-run { opacity: 0; transition: opacity 300ms ease 5000ms; }
-
-    /* stage 6 · it merges */
-    .ghi .ghi-open-ic,
-    .ghi .ghi-merged-ic,
-    .ghi-state,
-    .ghi-state-b { transition-property: opacity, color, border-color; transition-duration: 380ms; transition-timing-function: ease; }
-    .ghi .ghi-open-ic { transition-delay: 5600ms; }
-    .ghi .ghi-merged-ic { transition-delay: 5600ms; }
-    .ghi-state { transition-delay: 5600ms; }
-    .ghi-state-b { transition-delay: 5600ms; }
-    .ghi.in .ghi-open-ic { opacity: 0; }
-    .ghi.in .ghi-merged-ic { opacity: 1; }
-    .ghi.in .ghi-state { color: #8250df; border-color: #8250df; }
-    .ghi.in .ghi-state-a { opacity: 0; }
-    .ghi.in .ghi-state-b { opacity: 1; }
-  }
-
-  @media (max-width: 560px) {
-    .ghi-branch { display: none; }
-    .ghi-count { display: none; }
-    .ghi-time { font-size: 11px; }
-  }
-
-  .colophon {
-    margin-top: 2em; padding-top: 1.2em; border-top: 1px solid var(--line);
-    font-family: var(--mono); font-size: 11px; color: var(--ink3); line-height: 1.55;
-  }
-
-  footer {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 28px 0; font-family: var(--mono); font-size: 11px; color: var(--ink3);
-    flex-wrap: wrap; gap: 12px;
-  }
-  .footer-links { display: flex; gap: 20px; align-items: center; }
-  .footer-links a {
-    color: var(--ink3); text-decoration: none; transition: color 0.15s;
-    display: inline-flex; align-items: center; gap: 6px;
-  }
-  .footer-links a:hover { color: var(--ink); }
-  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
-  .footer-links a:hover .ci { opacity: 1; }
-
-  /* PR FILES + COMMENT, continuing #4128 */
-  .prw {
-    margin-top: 18px; border: 1px solid var(--rui-border);
-    background: var(--rui-bg); font-family: var(--rui-mono); color: var(--rui-fg);
-    overflow: hidden;
-  }
-  .prw-bar {
-    display: flex; align-items: center; gap: 10px;
-    padding: 8px 12px; background: var(--rui-row-bg);
-    border-bottom: 1px solid var(--rui-border);
-    font-size: 11.5px; color: var(--rui-fg-muted);
-  }
-  .prw-bar b { color: var(--rui-fg); font-weight: 600; }
-  .prw-file { padding: 0; }
-  .prw-file + .prw-file { border-top: 1px solid var(--rui-border); }
-  .prw-path {
-    display: flex; justify-content: space-between; align-items: baseline;
-    padding: 7px 12px; font-size: 12px; color: var(--rui-fg);
-    background: #ffffff;
-  }
-  .prw-path em {
-    font-style: normal; font-size: 10px; letter-spacing: .04em;
-    text-transform: uppercase; color: var(--rui-fg-muted);
-  }
-  .prw-ln {
-    display: grid; grid-template-columns: 22px 1fr;
-    padding: 0 12px; line-height: 2.05; font-size: 12px;
-  }
-  .prw-ln.add { background: var(--rui-add-bg); color: var(--rui-add-fg); }
-  .prw-tool {
-    border-top: 1px solid var(--rui-border);
-    background: #f6f8fa; padding: 9px 12px 10px;
-  }
-  .prw-cmd {
-    font-size: 11.5px; color: var(--rui-fg);
-    display: flex; gap: 8px; align-items: baseline;
-  }
-  .prw-cmd b {
-    font-weight: 600; color: var(--rui-accent); font-size: 10.5px;
-    letter-spacing: .02em;
-  }
-  .prw-out {
-    margin-top: 4px; font-size: 11.5px; color: #9a6700;
-  }
-  .prw-out span { color: var(--rui-fg-muted); }
-  .prw-note {
-    border-top: 1px solid var(--rui-border);
-    padding: 12px 14px 13px; background: #fff;
-  }
-  .prw-who {
-    font-size: 12px; font-weight: 600; color: var(--rui-fg);
+  .cmt-head {
+    display: flex; align-items: center; gap: 9px; padding: 9px 14px;
+    background: var(--gh-row); border-bottom: 1px solid var(--gh-bd);
+    border-radius: 6px 6px 0 0; font-size: 12.5px; color: var(--gh-mut);
     font-family: var(--sans);
   }
-  .prw-who span { font-weight: 400; color: var(--rui-fg-muted); font-size: 11.5px; }
-  .prw-note p {
-    font-family: var(--sans); font-size: 14px; line-height: 1.5;
-    color: var(--rui-fg); margin: 6px 0 0; max-width: 52ch;
+  .cmt-av {
+    width: 22px; height: 22px; border-radius: 50%; background: #dbe3ea; color: #47525e;
+    display: grid; place-items: center; font-size: 9.5px; font-weight: 600; letter-spacing: 0.02em;
   }
-  .prw-pair {
-    display: grid; grid-template-columns: 1fr auto 1fr;
-    gap: 10px; align-items: center; padding: 14px;
+  .cmt-head b { color: var(--gh-fg); font-weight: 600; }
+  .cmt-head .when { margin-left: auto; font-family: var(--gh-mono); font-size: 11px; }
+  .cmt-body {
+    padding: 13px 15px 15px; font-size: 14.5px; line-height: 1.62; color: var(--gh-fg);
+    font-family: var(--sans);
   }
-  .prw-end {
-    border: 1px solid var(--rui-border); background: var(--rui-row-bg);
-    padding: 10px 12px; font-size: 11.5px; color: var(--rui-fg);
+  .cmt-body code {
+    font-family: var(--gh-mono); font-size: 0.86em; background: #eef1f4;
+    padding: 0.1em 0.35em; border-radius: 3px;
   }
-  .prw-end small {
-    display: block; font-size: 10px; letter-spacing: .06em;
-    text-transform: uppercase; color: var(--rui-fg-muted); margin-bottom: 4px;
+  .cmt-body .hl { background: rgba(188,67,32,.13); box-shadow: 0 0 0 2px rgba(188,67,32,.13); border-radius: 2px; }
+
+  .distill {
+    margin-top: 16px; display: grid; grid-template-columns: 26px minmax(0, 1fr); align-items: start;
   }
-  .prw-end.live { background: #dafbe1; border-color: #4ac26b; color: #0f5132; }
-  .prw-end.live small { color: #0f5132; }
-  .prw-arrow {
-    width: 48px; height: 1px; background: var(--rui-border); position: relative;
+  .distill .arm { position: relative; height: 100%; }
+  .distill .arm::before {
+    content: ''; position: absolute; left: 5px; top: -16px; height: calc(100% + 16px); width: 1px;
+    background: linear-gradient(var(--line), var(--accent));
   }
-  .prw-arrow::after {
-    content: ''; position: absolute; right: -1px; top: -3px;
-    border: 4px solid transparent; border-left-color: var(--rui-border);
-    border-right: 0;
+  .distill .arm::after {
+    content: ''; position: absolute; left: 2px; top: 28px; width: 7px; height: 7px;
+    border-radius: 50%; background: var(--accent);
   }
+  .out {
+    border: 1px solid var(--line); border-left: 2px solid var(--accent);
+    background: var(--paper2); padding: 15px 18px 17px;
+  }
+  .out .src {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em;
+    color: var(--accent); margin-bottom: 9px; display: flex; gap: 10px; align-items: center;
+  }
+  .out .src::after { content: ''; flex: 1; height: 1px; background: var(--accent-soft); }
+  .out p { font-family: var(--mono); font-size: 13px; line-height: 1.68; color: var(--ink); margin: 0; }
+  .out p code { background: transparent; padding: 0; color: var(--accent-d); }
+
+  /* ============ fig 03 two panes ============ */
+  .panes { display: grid; grid-template-columns: minmax(0,1fr) 104px minmax(0,1fr); align-items: start; }
+  .pane { position: relative; }
+  .pane.off { opacity: 0.92; }
+  .pane .tagline {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink3); margin-bottom: 9px; display: flex; align-items: center; gap: 8px;
+  }
+  .pane .tagline b { color: var(--accent); font-weight: 500; }
+  .pane .tagline .no { color: var(--alert); font-weight: 500; }
+
+  .code { padding: 12px 0 14px; font-size: 11.5px; line-height: 21px; }
+  .code .cl { display: grid; grid-template-columns: 34px minmax(0,1fr); }
+  .code .ln { color: var(--mach-ink3); text-align: right; padding-right: 11px; user-select: none; font-size: 10.5px; }
+  .code .tx { white-space: pre; color: var(--mach-ink); padding-right: 12px; overflow: hidden; }
+  .code .cl.add { background: rgba(26,127,75,.15); }
+  .code .cl.add .ln { color: #5f9e79; }
+  .code .cl.add .tx::before { content: '+'; color: #6fbf8e; margin-left: -8px; margin-right: 2px; }
+  .code .cl.key { background: rgba(44,93,143,.2); }
+  .code .cl.key .ln { color: #7fa9d8; }
+  .code .k { color: #8aa9e6; }
+  .code .s { color: #c9b077; }
+  .code .c { color: #656b76; font-style: italic; }
+  .code .n { color: #cd8f6d; }
+  .code .t { color: #75a89f; }
+  .code .f { color: #e3dfd4; }
+
+  .verdict {
+    border-top: 1px solid var(--mach-line); padding: 11px 14px;
+    display: flex; align-items: center; gap: 10px; font-size: 11.5px; color: var(--mach-ink2);
+  }
+  .verdict .bad { color: #e2825f; }
+  .verdict .num { color: var(--mach-ink); }
+
+  .link { position: relative; align-self: stretch; min-height: 120px; }
+  .link .wireline {
+    position: absolute; top: 96px; left: 6px; right: 6px; height: 1px; background: var(--ink4);
+    transform-origin: left;
+  }
+  .js .link .wireline { transform: scaleX(0); }
+  .link .cap {
+    position: absolute; top: 60px; left: 0; right: 0; text-align: center;
+    font-family: var(--mono); font-size: 10px; line-height: 1.4; color: var(--ink3);
+    letter-spacing: 0.02em;
+  }
+  .js .link .cap { opacity: 0; }
+  .link .pip {
+    position: absolute; top: 93px; left: 6px; width: 7px; height: 7px; border-radius: 50%;
+    background: var(--alert); opacity: 0;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .panes.in .link .wireline { transform: scaleX(1); transition: transform 700ms cubic-bezier(.3,.8,.3,1) 500ms; }
+    .panes.in .link .cap { opacity: 1; transition: opacity 600ms ease 1000ms; }
+    .panes.in .link .pip { animation: pipRun 2.4s cubic-bezier(.5,0,.5,1) 1200ms infinite; }
+    @keyframes pipRun {
+      0% { opacity: 0; transform: translateX(0); }
+      12% { opacity: 1; }
+      62% { opacity: 1; transform: translateX(78px); }
+      74%, 100% { opacity: 0; transform: translateX(78px); }
+    }
+  }
+
+  /* ============ fig 05 scale ============ */
+  .scalefig { width: 100%; height: auto; display: block; overflow: visible; }
+  .scalefig .base { stroke: var(--line); stroke-width: 1; }
+  .scalefig .sq-s { fill: rgba(26,127,75,.1); stroke: var(--good); stroke-width: 1.4; }
+  .scalefig .sq-b { fill: var(--alert-soft); stroke: var(--alert); stroke-width: 1.4; }
+  .scalefig .lbl { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
+  .scalefig .sub { font-family: var(--mono); font-size: 10.5px; fill: var(--ink3); letter-spacing: 0.04em; }
+  .scalefig .ratio { font-family: var(--serif); font-size: 104px; fill: var(--ink); letter-spacing: -0.04em; }
+  .scalefig .ratio-sub { font-family: var(--mono); font-size: 11px; fill: var(--ink3); letter-spacing: 0.06em; }
 
   @media (prefers-reduced-motion: no-preference) {
-    .prw .prw-file, .prw .prw-tool, .prw .prw-note, .prw .prw-end, .prw .prw-arrow {
-      opacity: 0; transform: translateY(8px);
+    .js .scalefig .sq-b { transform: scale(.045); transform-box: fill-box; transform-origin: 0% 100%; }
+    .scalefig.in .sq-b { transform: none; transition: transform 1400ms cubic-bezier(.2,.75,.2,1) 420ms; }
+    .js .scalefig .lbl, .js .scalefig .sub, .js .scalefig .ratio,
+    .js .scalefig .ratio-sub, .js .scalefig .sq-s, .js .scalefig .base { opacity: 0; }
+    .scalefig.in .lbl, .scalefig.in .sub, .scalefig.in .ratio, .scalefig.in .ratio-sub, .scalefig.in .sq-s, .scalefig.in .base {
+      opacity: 1; transition: opacity 700ms ease var(--d, 0ms);
     }
-    .scene.in .prw-file.shown { opacity: 1; transform: none; transition: opacity 380ms ease 80ms, transform 380ms ease 80ms; }
-    .scene.in .prw-tool { opacity: 1; transform: none; transition: opacity 380ms ease 520ms, transform 380ms ease 520ms; }
-    .scene.in .prw-note { opacity: 1; transform: none; transition: opacity 420ms ease 1100ms, transform 420ms ease 1100ms; }
-    .scene.in .prw-end.a { opacity: 1; transform: none; transition: opacity 360ms ease 160ms, transform 360ms ease 160ms; }
-    .scene.in .prw-arrow { opacity: 1; transform: none; transition: opacity 360ms ease 520ms, transform 360ms ease 520ms; }
-    .scene.in .prw-end.live { opacity: 1; transform: none; transition: opacity 420ms ease 860ms, transform 420ms ease 860ms; }
-    .prw .prw-ln.add { clip-path: inset(0 100% 0 0); }
-    .scene.in .prw-ln.add { clip-path: inset(0 0 0 0); transition: clip-path 600ms ease 160ms; }
-    .prw .prw-out { clip-path: inset(0 100% 0 0); }
-    .scene.in .prw-out { clip-path: inset(0 0 0 0); transition: clip-path 500ms ease 820ms; }
   }
 
-  @media (max-width: 767px) {
-    .prw-ln { font-size: 11px; }
-    .prw-note p { font-size: 13px; }
-    .prw-pair { grid-template-columns: 1fr; gap: 8px; }
-    .prw-arrow { width: 1px; height: 18px; margin: 0 auto; }
-    .prw-arrow::after {
-      right: auto; left: -3px; top: auto; bottom: -1px;
-      border: 4px solid transparent; border-top-color: var(--rui-border); border-left-color: transparent; border-bottom: 0;
+  /* ============ fig 04 sticky init ============ */
+  .sticky-wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); gap: 56px; align-items: start; }
+  .stickyfig { position: sticky; top: 100px; }
+  .steps { padding: 4px 0 0; }
+  .step { min-height: 74vh; display: flex; flex-direction: column; justify-content: center; }
+  .step:last-child { min-height: 58vh; }
+  .step .k {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink4); margin-bottom: 10px; display: flex; align-items: center; gap: 9px;
+  }
+  .step.on .k { color: var(--accent); }
+  .step .k b { font-weight: 500; }
+  .step h4 {
+    font-family: var(--serif); font-weight: 400; font-size: clamp(21px, 2.6vw, 27px);
+    line-height: 1.2; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 12px;
+  }
+  .step p { font-size: 16px; margin-bottom: 0.9em; }
+  .step p:last-child { margin-bottom: 0; }
+
+  .ivz { width: 100%; height: auto; display: block; overflow: visible; }
+  .ivz text { dominant-baseline: middle; }
+  .ivz .lb { font-family: var(--mono); font-size: 10.5px; fill: var(--ink3); letter-spacing: 0.06em; }
+  .ivz .lb.on { fill: var(--accent); }
+  .ivz .val { font-family: var(--mono); font-size: 11px; fill: var(--ink2); }
+  .ivz .mark { fill: var(--ink); opacity: 0.12; }
+  .ivz .frame { fill: none; stroke: var(--line); }
+  .ivz .card { fill: var(--paper); stroke: var(--line); }
+  .ivz .card-edge { fill: var(--accent); }
+  .ivz .nm { font-family: var(--mono); font-size: 11px; fill: var(--ink); }
+  .ivz .sz { font-family: var(--mono); font-size: 10px; fill: var(--ink3); }
+  .ivz .wire { fill: none; stroke: var(--ink4); stroke-width: 1; }
+  .ivz .wire.hot { stroke: var(--accent); }
+  .ivz .ev { fill: var(--accent); opacity: 0.75; }
+  .ivz .chip { fill: var(--paper2); stroke: var(--line); }
+  .ivz .pillbox { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; }
+  .ivz .pilltx { font-family: var(--mono); font-size: 12px; fill: var(--ink); }
+  .ivz .hot-mark { fill: var(--alert); opacity: 0.8; }
+  .ivz .tagtx { font-family: var(--mono); font-size: 9.5px; fill: var(--ink3); }
+  .ivz .tagtx.up { fill: var(--accent); }
+
+  .ivz .layer { opacity: 0; transition: opacity 520ms ease; }
+  .ivz[data-state="1"] .l1,
+  .ivz[data-state="2"] .l2,
+  .ivz[data-state="3"] .l3,
+  .ivz[data-state="4"] .l4 { opacity: 1; }
+  .ivz[data-state="2"] .l1-keep,
+  .ivz[data-state="3"] .l1-keep,
+  .ivz[data-state="4"] .l1-keep { opacity: 1; }
+  .ivz[data-state="3"] .l2-keep, .ivz[data-state="4"] .l2-keep { opacity: 0.35; }
+  .ivz[data-state="4"] .l3-keep { opacity: 1; }
+
+  /* ============ fig 06 guides ============ */
+  .guides { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .gcard {
+    border: 1px solid var(--line); background: var(--paper);
+    display: flex; flex-direction: column;
+    box-shadow: 0 14px 30px -28px rgba(20,18,14,.8);
+  }
+  .gcard-h {
+    display: flex; align-items: center; gap: 9px; padding: 10px 13px;
+    border-bottom: 1px solid var(--line); background: var(--paper2);
+    font-family: var(--mono); font-size: 11px; color: var(--ink2);
+  }
+  .gcard-h i { width: 7px; height: 7px; background: var(--accent); display: block; }
+  .gcard-h .sz { margin-left: auto; color: var(--ink4); font-size: 10px; }
+  .gbody { padding: 14px 15px 16px; font-family: var(--mono); font-size: 11.5px; line-height: 1.7; color: var(--ink2); }
+  .gbody .h { color: var(--ink); display: block; margin: 12px 0 7px; font-weight: 500; }
+  .gbody .h:first-child { margin-top: 0; }
+  .gbody .li { position: relative; padding-left: 13px; margin-bottom: 9px; }
+  .gbody .li::before { content: '-'; position: absolute; left: 0; color: var(--ink4); }
+  .gbody kbd { font: inherit; color: var(--accent-d); }
+  .gbody .mark { background: var(--accent-soft); box-shadow: 0 0 0 3px var(--accent-soft); border-radius: 1px; }
+  .gcard-f {
+    margin-top: auto; padding: 9px 13px; border-top: 1px dashed var(--line);
+    font-family: var(--mono); font-size: 10px; color: var(--ink4); letter-spacing: 0.04em;
+  }
+
+  /* ============ fig 07 github ============ */
+  .gh {
+    border: 1px solid var(--gh-bd); border-radius: 7px; background: var(--gh-bg);
+    font-family: var(--sans); font-size: 13px; color: var(--gh-fg); overflow: hidden;
+    box-shadow: 0 24px 46px -34px rgba(20,18,14,.65);
+  }
+  .gh-h { display: flex; align-items: center; gap: 9px; padding: 12px 16px; border-bottom: 1px solid var(--gh-bd); flex-wrap: wrap; }
+  .gh-h .oc { width: 16px; height: 16px; flex: 0 0 16px; }
+  .gh-h .oc path { fill: #1a7f37; }
+  .gh-h b { font-weight: 600; }
+  .gh-h .num { color: var(--gh-mut); }
+  .gh-h .br {
+    font-family: var(--gh-mono); font-size: 11px; background: #ddf4ff; color: var(--gh-blue);
+    padding: 1px 7px; border-radius: 2em;
+  }
+  .gh-h .state {
+    margin-left: auto; font-size: 11.5px; font-weight: 500; padding: 2px 11px;
+    border-radius: 2em; border: 1px solid #1a7f37; color: #1a7f37;
+  }
+  .gh-checks { background: var(--gh-row); border-bottom: 1px solid var(--gh-bd); padding: 10px 16px; }
+  .gh-chk-row { display: flex; align-items: center; gap: 10px; font-size: 12.5px; }
+  .gh-chk-row .ind { width: 15px; height: 15px; position: relative; flex: 0 0 15px; }
+  .gh-chk-row .ind svg { position: absolute; inset: 0; width: 15px; height: 15px; }
+  .gh-chk-row .spin circle { fill: none; stroke: #d4a72c; stroke-width: 2; opacity: .3; }
+  .gh-chk-row .spin path { fill: none; stroke: #d4a72c; stroke-width: 2; stroke-linecap: round; }
+  .gh-chk-row .tick { opacity: 0; }
+  .gh-chk-row .tick circle { fill: #1a7f37; }
+  .gh-chk-row .tick path { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+  .gh-chk-row .nm b { font-weight: 600; }
+  .gh-chk-row .nm span { color: var(--gh-mut); }
+  .gh-chk-row .msg { color: var(--gh-mut); }
+  .gh-chk-row .det { margin-left: auto; color: var(--gh-blue); font-size: 12px; }
+  .gh-chk-row .t-run { display: inline; }
+  .gh-chk-row .t-done { display: none; }
+
+  .gh.done .spin { opacity: 0; }
+  .gh.done .tick { opacity: 1; }
+  .gh.done .t-run { display: none; }
+  .gh.done .t-done { display: inline; }
+  .gh .spin, .gh .tick { transition: opacity 400ms ease; }
+  @media (prefers-reduced-motion: no-preference) {
+    .gh .spin path { transform-origin: 50% 50%; animation: spin 1.1s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  }
+
+  .gh-note { padding: 14px 16px; border-bottom: 1px solid var(--gh-bd); display: flex; gap: 11px; }
+  .gh-bot {
+    width: 26px; height: 26px; flex: 0 0 26px; border-radius: 5px;
+    background: var(--mach); color: #cfe0f2; display: grid; place-items: center;
+    font-family: var(--mono); font-size: 11px; font-weight: 600;
+    object-fit: cover; border: 1px solid rgba(31,35,40,.12);
+  }
+  .gh-note .who { font-size: 12.5px; color: var(--gh-mut); margin-bottom: 7px; }
+  .gh-note .who b { color: var(--gh-fg); font-weight: 600; }
+  .gh-note .who .bot-tag {
+    font-family: var(--gh-mono); font-size: 10px; border: 1px solid var(--gh-bd);
+    border-radius: 3px; padding: 0 5px; margin-left: 4px; color: var(--gh-mut);
+  }
+  .gh-sum { font-size: 13.5px; line-height: 1.6; }
+  .gh-sum .cnt { display: flex; gap: 14px; margin-top: 9px; font-family: var(--gh-mono); font-size: 11.5px; color: var(--gh-mut); flex-wrap: wrap; }
+  .gh-sum .cnt b { color: var(--gh-fg); }
+
+  .gh-file { border-bottom: 1px solid var(--gh-bd); }
+  .gh-file-h {
+    display: flex; align-items: center; gap: 9px; padding: 9px 16px; background: var(--gh-row);
+    border-bottom: 1px solid var(--gh-bd); font-family: var(--gh-mono); font-size: 12px;
+  }
+  .gh-file-h .add { color: #1a7f37; } .gh-file-h .del { color: #cf222e; }
+  .gh-code { font-family: var(--gh-mono); font-size: 12px; line-height: 20px; }
+  .gh-code .r { display: grid; grid-template-columns: 42px 42px minmax(0,1fr); }
+  .gh-code .r > i { color: #8c959f; text-align: right; padding-right: 10px; font-style: normal; font-size: 11px; }
+  .gh-code .r > span { white-space: pre; padding-left: 8px; overflow: hidden; }
+  .gh-code .r.p { background: #dafbe1; }
+  .gh-code .r.p > span::before { content: '+'; color: #1a7f37; margin-left: -8px; margin-right: 2px; }
+  .gh-code .r.m { background: #ffebe9; }
+  .gh-code .r.m > span::before { content: '-'; color: #cf222e; margin-left: -8px; margin-right: 2px; }
+  .gh-code .k { color: #cf222e; } .gh-code .s { color: #0a3069; } .gh-code .c { color: #6e7781; } .gh-code .n { color: #0550ae; } .gh-code .fn { color: #8250df; }
+
+  .gh-inline { border-top: 1px solid var(--gh-bd); background: #fff; padding: 14px 16px; display: flex; gap: 11px; }
+  .gh-badge {
+    font-family: var(--gh-mono); font-size: 10.5px; font-weight: 600; padding: 1px 7px;
+    border-radius: 3px; border: 1px solid #d4a72c; background: #fff8c5; color: #7d4e00;
+    letter-spacing: 0.02em;
+  }
+  .gh-badge.p1 { border-color: #cf222e; background: #ffebe9; color: #a40e26; }
+  .gh-inline .body { font-size: 13.5px; line-height: 1.62; }
+  .gh-inline .body .loc { font-family: var(--gh-mono); font-size: 11.5px; color: var(--gh-mut); margin: 8px 0 0; }
+  .gh-inline code, .gh-sum code { font-family: var(--gh-mono); font-size: 0.87em; background: #eef1f4; padding: 0.1em 0.35em; border-radius: 3px; }
+  .modes code, .wstep code, .node code {
+    font-family: var(--mono); font-size: 0.9em; background: var(--paper3);
+    padding: 0.08em 0.3em; border-radius: 2px;
+  }
+  .node.dark code { background: var(--mach3); color: var(--mach-ink); }
+  .wstep code { background: transparent; padding: 0; color: var(--ink2); }
+
+  .gh-sugg { margin-top: 12px; border: 1px solid var(--gh-bd); border-radius: 6px; overflow: hidden; }
+  .gh-sugg .hd { padding: 7px 12px; background: var(--gh-row); border-bottom: 1px solid var(--gh-bd); font-size: 12px; color: var(--gh-mut); }
+  .gh-sugg .ft { padding: 9px 12px; background: var(--gh-row); border-top: 1px solid var(--gh-bd); }
+  .gh-btn {
+    display: inline-block; font-size: 12px; font-weight: 500; padding: 4px 12px;
+    border: 1px solid rgba(31,35,40,.15); border-radius: 6px; background: #1f883d; color: #fff;
+  }
+  .gh-btn.sec { background: #f6f8fa; color: var(--gh-fg); }
+
+  /* ============ fig 08 modes ============ */
+  .scroll-x { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .modes { display: grid; grid-template-columns: 168px repeat(3, minmax(168px, 1fr)); border: 1px solid var(--line); min-width: 660px; background: var(--paper); }
+  .modes > div { padding: 13px 15px; border-right: 1px solid var(--line2); border-bottom: 1px solid var(--line2); font-size: 13.5px; color: var(--ink2); line-height: 1.5; }
+  .modes > div:nth-child(4n) { border-right: 0; }
+  .modes .rh {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--ink3); background: var(--paper2);
+  }
+  .modes .ch { font-family: var(--mono); font-size: 12.5px; color: var(--ink); background: var(--paper2); }
+  .modes .ch b { color: var(--accent); font-weight: 500; }
+  .modes .ch em { display: block; font-style: normal; font-family: var(--sans); font-size: 11.5px; color: var(--ink3); margin-top: 3px; }
+  .modes .hot { color: var(--ink); }
+
+  /* ============ fig 09 remote wire ============ */
+  .wire { display: grid; grid-template-columns: minmax(0,1fr) 132px minmax(0,1fr); align-items: stretch; }
+  .node { border: 1px solid var(--line); background: var(--paper); padding: 16px 17px 18px; }
+  .node.dark { background: var(--mach); border-color: #0d0f13; color: var(--mach-ink); }
+  .node .nh {
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.04em;
+    color: var(--ink3); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+  }
+  .node.dark .nh { color: var(--mach-ink3); }
+  .node .nh i { width: 7px; height: 7px; border-radius: 50%; background: var(--ink4); display: block; }
+  .node.dark .nh i { background: var(--good); }
+  .node .nrow {
+    font-family: var(--mono); font-size: 11.5px; line-height: 1.75; color: var(--ink2);
+    display: flex; gap: 9px; align-items: baseline;
+  }
+  .node.dark .nrow { color: var(--mach-ink2); }
+  .node .nrow b { color: var(--ink); font-weight: 500; }
+  .node.dark .nrow b { color: var(--mach-ink); }
+  .node .nrow .x { color: var(--ink4); }
+  .node .none {
+    margin-top: 13px; padding-top: 11px; border-top: 1px dashed var(--line);
+    font-family: var(--mono); font-size: 10.5px; line-height: 1.7; color: var(--ink3);
+  }
+  .node.dark .none { border-top-color: var(--mach-line); color: var(--mach-ink3); }
+
+  .wirecol { position: relative; }
+  .wirecol .rail { position: absolute; top: 50%; left: 0; right: 0; height: 1px; background: var(--line); }
+  .wirecol .pk {
+    position: absolute; top: calc(50% - 9px); left: 6px;
+    font-family: var(--mono); font-size: 9px; letter-spacing: 0.04em;
+    padding: 2px 7px; border-radius: 2em; white-space: nowrap; opacity: 0;
+    border: 1px solid var(--line); background: var(--paper); color: var(--ink2);
+  }
+  .wirecol .pk.up { border-color: rgba(44,93,143,.45); color: var(--accent-d); }
+  .wirecol .pk.dn { border-color: rgba(188,67,32,.4); color: var(--alert); }
+  html:not(.js) .wirecol .pk { display: none; }
+  html:not(.js) .wirecol .pk.a { display: block; opacity: 1; }
+  @media (prefers-reduced-motion: no-preference) {
+    .wire.in .pk.a { animation: pkUp 10.5s linear 0s infinite; }
+    .wire.in .pk.b { animation: pkDn 10.5s linear 3.2s infinite; }
+    .wire.in .pk.c { animation: pkUp 10.5s linear 4.8s infinite; }
+    .wire.in .pk.d { animation: pkDn 10.5s linear 6.4s infinite; }
+    @keyframes pkUp {
+      0% { opacity: 0; transform: translateX(0); }
+      2.3% { opacity: 1; }
+      13% { opacity: 1; transform: translateX(84px); }
+      15.5%, 100% { opacity: 0; transform: translateX(84px); }
+    }
+    @keyframes pkDn {
+      0% { opacity: 0; transform: translateX(84px); }
+      2.3% { opacity: 1; }
+      13% { opacity: 1; transform: translateX(0); }
+      15.5%, 100% { opacity: 0; transform: translateX(0); }
     }
   }
-  @media (max-width: 600px) {
-    .nav-links { display: none; }
+  .wsteps { display: grid; grid-template-columns: repeat(5, minmax(0,1fr)); gap: 12px; margin-top: 18px; }
+  .wstep {
+    border-top: 2px solid var(--line); padding-top: 10px;
+    font-family: var(--mono); font-size: 10.5px; line-height: 1.6; color: var(--ink3);
+  }
+  .wstep b { display: block; color: var(--ink2); font-weight: 500; margin-bottom: 3px; }
+  @media (prefers-reduced-motion: no-preference) {
+    .wire-block.in .wstep { animation: stepGlow 10.5s linear infinite; }
+    .wire-block.in .wstep:nth-child(1) { animation-delay: 0s; }
+    .wire-block.in .wstep:nth-child(2) { animation-delay: 1.6s; }
+    .wire-block.in .wstep:nth-child(3) { animation-delay: 3.2s; }
+    .wire-block.in .wstep:nth-child(4) { animation-delay: 4.8s; }
+    .wire-block.in .wstep:nth-child(5) { animation-delay: 6.4s; }
+    @keyframes stepGlow {
+      0%, 15.2% { border-top-color: var(--accent); color: var(--ink2); }
+      18%, 100% { border-top-color: var(--line); color: var(--ink3); }
+    }
+  }
+
+  /* ============ fig 10 dashboard screenshot ============ */
+  .shot {
+    border: 1px solid var(--line); border-radius: 7px; overflow: hidden; background: #fff;
+    box-shadow: 0 26px 48px -36px rgba(20,18,14,.6);
+  }
+  .shot-bar {
+    display: flex; align-items: center; gap: 10px; padding: 9px 14px;
+    background: var(--paper2); border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; color: var(--ink3);
+  }
+  .shot-bar .dots { display: flex; gap: 6px; }
+  .shot-bar .dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--paper3); display: block; }
+  .shot img {
+    display: block; width: 100%; aspect-ratio: 1675 / 330;
+    object-fit: cover; object-position: top center;
+  }
+
+  /* ============ fig 11 scorecard ============ */
+  .score { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .score .tile { background: var(--paper); padding: 18px 18px 20px; }
+  .score .tile .n {
+    font-family: var(--serif); font-size: clamp(30px, 4.4vw, 46px); line-height: 1;
+    letter-spacing: -0.03em; color: var(--ink); display: block; margin-bottom: 8px;
+  }
+  .score .tile .n small { font-size: 0.45em; color: var(--ink3); letter-spacing: 0; }
+  .score .tile .k {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink3); display: block; margin-bottom: 5px;
+  }
+  .score .tile .w { font-size: 13px; line-height: 1.45; color: var(--ink3); }
+  .score .tile.hot .n { color: var(--accent-d); }
+
+  .axis { display: grid; gap: 10px; margin-top: 26px; }
+  .arow { display: grid; grid-template-columns: 116px minmax(0,1fr) 44px 190px; gap: 16px; align-items: center; }
+  .arow .an { font-family: var(--mono); font-size: 11.5px; color: var(--ink); }
+  .arow .aw { font-size: 12px; color: var(--ink3); line-height: 1.4; }
+  .abar { height: 15px; background: var(--paper2); position: relative; }
+  .abar i {
+    position: absolute; inset: 0 auto 0 0; width: var(--w); background: var(--accent);
+    transform-origin: left;
+  }
+  .js .abar i { transform: scaleX(0); }
+  .axis.in .abar i { transform: scaleX(1); transition: transform 900ms cubic-bezier(.22,.8,.3,1) var(--d, 0ms); }
+  .arow .av { font-family: var(--mono); font-size: 12.5px; color: var(--ink); text-align: right; }
+
+  /* ============ close ============ */
+  .install { margin: 30px 0 10px; }
+  .endlinks { display: flex; gap: 22px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; margin: 26px 0 8px; }
+  .endlinks a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); padding-bottom: 2px; }
+  .endlinks a:hover { color: var(--ink); border-color: var(--ink); }
+
+  footer {
+    display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;
+    border-top: 1px solid var(--line); margin-top: 84px; padding: 26px 0 40px;
+    font-size: 12.5px; color: var(--ink3);
+  }
+  .footer-links { display: flex; gap: 20px; }
+  .footer-links a { color: var(--ink3); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; }
+  .footer-links a:hover { color: var(--ink); }
+
+  /* ============ responsive ============ */
+  @media (max-width: 980px) {
+    .sticky-wrap { grid-template-columns: minmax(0,1fr); gap: 0; }
+    .stickyfig { position: sticky; top: 62px; background: var(--paper); padding: 10px 0 14px; z-index: 2; }
+    .steps { order: 2; }
+    .step { min-height: 54vh; }
+    .guides { grid-template-columns: minmax(0,1fr); }
+    .wsteps { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .code { font-size: 10.6px; line-height: 20px; }
+  }
+  @media (max-width: 860px) {
+    .panes { grid-template-columns: minmax(0,1fr); }
+    .link { min-height: 74px; }
+    .link .wireline { top: 50%; left: 50%; right: auto; width: 1px; height: 46px; transform: scaleY(0); transform-origin: top; }
+    .panes.in .link .wireline { transform: scaleY(1); }
+    .link .cap { top: 6px; }
+    .link .pip { top: 50%; left: calc(50% - 3px); }
+    .panes.in .link .pip { animation: pipDown 2.4s cubic-bezier(.5,0,.5,1) 1200ms infinite; }
+    @keyframes pipDown {
+      0% { opacity: 0; transform: translateY(0); }
+      12% { opacity: 1; }
+      62% { opacity: 1; transform: translateY(40px); }
+      74%, 100% { opacity: 0; transform: translateY(40px); }
+    }
+    .wire { grid-template-columns: minmax(0,1fr); }
+    .wirecol { height: 96px; }
+    .wirecol .rail { top: 0; bottom: 0; left: 50%; right: auto; width: 1px; height: 100%; }
+    .wirecol .pk { top: 8px; left: 50%; transform: translateX(-50%); }
+    .wire.in .pk.a, .wire.in .pk.c { animation-name: pkDown; }
+    .wire.in .pk.b, .wire.in .pk.d { animation-name: pkUpv; }
+    @keyframes pkDown {
+      0% { opacity: 0; transform: translate(-50%, 0); }
+      3% { opacity: 1; }
+      17% { opacity: 1; transform: translate(-50%, 62px); }
+      20%, 100% { opacity: 0; transform: translate(-50%, 62px); }
+    }
+    @keyframes pkUpv {
+      0% { opacity: 0; transform: translate(-50%, 62px); }
+      3% { opacity: 1; }
+      17% { opacity: 1; transform: translate(-50%, 0); }
+      20%, 100% { opacity: 0; transform: translate(-50%, 0); }
+    }
+    .score { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .arow { grid-template-columns: 104px minmax(0,1fr) 44px; }
+    .arow .aw { grid-column: 1 / -1; margin-top: -4px; }
+  }
+  @media (max-width: 640px) {
+    html { font-size: 15.5px; }
+    .site { padding: 0 20px; }
+    .act { padding: 56px 0 6px; }
+    p, .post ul li { font-size: 16.5px; }
+    .threads { grid-template-columns: 16px minmax(0,1fr); }
+    .cmt::before { left: -12px; width: 8px; }
+    .wsteps { grid-template-columns: minmax(0,1fr); }
+    .score { grid-template-columns: minmax(0,1fr); }
+    .shot { overflow-x: auto; }
+    .shot img { width: 780px; max-width: none; }
+    .code { font-size: 10.5px; line-height: 19px; }
+    .code .tx { white-space: pre-wrap; }
+    .gh-code { font-size: 11px; }
+    .gh-code .r { grid-template-columns: 28px 28px minmax(0,1fr); }
+    .gh-code .r > span { white-space: pre-wrap; }
+    .gh-inline, .gh-note { padding: 13px 12px; gap: 9px; }
+    figure { margin: 30px 0 34px; }
   }
 </style>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
 </head>
 <body>
-
 <div class="site">
 
   <nav>
@@ -723,380 +834,764 @@
     <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="nav-cta" data-umami-event="blog-nav-github">GitHub</a>
   </nav>
 
-  <div class="post-top">
-    <a href="/blogs" class="back-link" data-umami-event="blog-back-blogs">← Blogs</a>
-  </div>
+  <a href="/blogs" class="back-link" data-umami-event="blog-back-blogs">&#8592; Blogs</a>
 
-  <header class="post-hero">
-    <div class="post-eyebrow">Blog · English · Sep 19, 2026
-      <a href="/blogs/co-maintainer-seni-taklit-eden-bir-arac.html" class="lang-switch" data-umami-event="blog-lang-switch">Türkçe →</a>
-    </div>
-    <h1 class="post-title">co-maintainer, an imitator of yours</h1>
-  </header>
-  <article class="post-main">
-<section class="scene" id="scene-hook">
-<p class="scene-claim" data-reveal style="--d:0ms">One agent writes the change. Another agent reviews it. Neither one has read your repository.</p>
+  <article class="post">
 
-<svg class="open" id="open" viewBox="0 0 640 440" role="img" aria-label="Token cost drawn to scale: repository context costs 18.9 thousand tokens, patch-only context costs 1.35 million, 71 times more">
-  <line class="open-base" x1="0" y1="352" x2="640" y2="352" style="--d:0ms"/>
+    <header class="hero">
+      <div class="hero-meta">
+        <span class="tag">Blog</span><span>English</span><span>Sep 19, 2026</span>
+        <a href="/blogs/co-maintainer-seni-taklit-eden-bir-arac.html" class="lang" data-umami-event="blog-lang-switch">T&#252;rk&#231;e &#8594;</a>
+      </div>
+      <h1 class="title">co-maintainer,<br>an <em>imitator</em> of yours</h1>
+      <p class="lede">Every repository holds knowledge nobody wrote down. It lives in whoever has reviewed every pull request for three years, and it leaves when they do.</p>
+      <div class="byline">
+        <span>Murat Kirazkaya</span>
+        <span>6 min read</span>
+        <span>on context, not models</span>
+      </div>
+    </header>
 
-  <rect class="open-sq small" x="150" y="341" width="11" height="11" style="--d:120ms"/>
-  <text class="open-lbl" x="150" y="330" text-anchor="middle" style="--d:200ms">18.9K</text>
-  <text class="open-sub" x="150" y="380" text-anchor="middle" style="--d:240ms">reused repository context</text>
+    <figure class="bleed">
+      <svg class="fieldfig" viewBox="0 0 1056 404" role="img" aria-label="A wide field of small marks represents the whole repository. A narrow bright band cutting through it represents the pull request under review.">
+        <defs>
+          <pattern id="mkA" width="22" height="12" patternUnits="userSpaceOnUse">
+            <rect class="mark-a" x="2" y="3" width="8" height="5" rx="1"/>
+            <rect class="mark-a" x="13" y="3" width="7" height="5" rx="1"/>
+          </pattern>
+          <pattern id="mkC" width="22" height="12" patternUnits="userSpaceOnUse">
+            <rect class="band-mark" x="2" y="3" width="8" height="5" rx="1"/>
+            <rect class="band-mark" x="13" y="3" width="7" height="5" rx="1"/>
+          </pattern>
+          <mask id="wipe">
+            <rect class="wipe-r" x="22" y="60" width="1012" height="276" fill="#ffffff"/>
+          </mask>
+        </defs>
 
-  <rect class="open-sq big" x="300" y="84" width="268" height="268" style="--d:380ms"/>
-  <text class="open-lbl" x="434" y="72" text-anchor="middle" style="--d:460ms">1.35M</text>
-  <text class="open-sub" x="434" y="380" text-anchor="middle" style="--d:500ms">heavy context to understand PR</text>
+        <g mask="url(#wipe)">
+          <rect x="22" y="60" width="1012" height="276" fill="url(#mkA)"/>
+        </g>
 
-  <text class="open-ratio" x="640" y="404" text-anchor="end" style="--d:600ms">71x</text>
-  <text class="open-sub" x="0" y="404" style="--d:600ms">same pull requests, same model</text>
-</svg>
-</section>
+        <g class="band">
+          <rect class="band-glow" x="594" y="22" width="94" height="356"/>
+          <rect class="band-bg" x="616" y="36" width="66" height="324"/>
+          <rect x="616" y="36" width="66" height="324" fill="url(#mkC)"/>
+          <rect class="band-line" x="616" y="36" width="66" height="324"/>
+        </g>
 
-<section class="scene" id="scene-diff">
-<p class="scene-claim" data-reveal style="--d:0ms">An AI reviewer sees a diff. <strong>A human reviewer sees a diff plus everything they learned here over the past years.</strong></p>
-
-<svg class="gap" id="gap" viewBox="0 0 640 344" role="img" aria-label="The diff is a small slice of the repository, and the rules, callers, tests and conventions a review depends on sit outside it">
-  <defs>
-    <linearGradient id="gapFade" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="0" stop-color="#f4f1ea" stop-opacity="0"/>
-      <stop offset="1" stop-color="#f4f1ea" stop-opacity="1"/>
-    </linearGradient>
-  </defs>
-  <text class="gap-hd" x="16" y="26" style="--d:0ms">WHAT AN AI REVIEWER IS SHOWN</text>
-  <rect class="gap-frame" x="14" y="40" width="252" height="300" rx="4" style="--d:0ms"/>
-  <rect class="gap-ln" x="30" y="66" width="176" height="9" rx="2" style="--d:80ms"/>
-  <rect class="gap-ln" x="30" y="86" width="210" height="9" rx="2" style="--d:100ms"/>
-  <rect class="gap-add" x="30" y="112" width="196" height="9" rx="2" style="--d:160ms"/>
-  <rect class="gap-add" x="30" y="132" width="150" height="9" rx="2" style="--d:180ms"/>
-  <rect class="gap-ln" x="30" y="158" width="204" height="9" rx="2" style="--d:240ms"/>
-  <rect class="gap-del" x="30" y="184" width="126" height="9" rx="2" style="--d:300ms"/>
-  <rect class="gap-ln" x="30" y="210" width="188" height="9" rx="2" style="--d:340ms"/>
-  <rect class="gap-ln" x="30" y="236" width="160" height="9" rx="2" style="--d:380ms"/>
-  <rect class="gap-add" x="30" y="262" width="178" height="9" rx="2" style="--d:420ms"/>
-  <rect class="gap-ln" x="30" y="288" width="140" height="9" rx="2" style="--d:460ms"/>
-  <text class="gap-num" x="30" y="324" style="--d:520ms">+184  -37 lines</text>
-
-  <text class="gap-hd" x="330" y="26" style="--d:0ms">WHAT DECIDES IF IT IS RIGHT</text>
-
-  <path class="gap-edge" style="--d:560ms" d="M266 96 C 300 96, 302 96, 330 96"/>
-  <rect class="gap-node" x="330" y="86" width="294" height="22" rx="3" style="--d:600ms"/>
-  <text class="gap-cap" x="344" y="101" style="--d:640ms">which module already owns this rule</text>
-
-  <path class="gap-edge" style="--d:680ms" d="M266 140 C 300 140, 302 140, 330 140"/>
-  <rect class="gap-node" x="330" y="130" width="294" height="22" rx="3" style="--d:720ms"/>
-  <text class="gap-cap" x="344" y="145" style="--d:760ms">which callers depend on this behavior</text>
-
-  <path class="gap-edge" style="--d:800ms" d="M266 184 C 300 184, 302 184, 330 184"/>
-  <rect class="gap-node" x="330" y="174" width="294" height="22" rx="3" style="--d:840ms"/>
-  <text class="gap-cap" x="344" y="189" style="--d:880ms">which tests assert the old contract</text>
-
-  <path class="gap-edge" style="--d:920ms" d="M266 228 C 300 228, 302 228, 330 228"/>
-  <rect class="gap-node" x="330" y="218" width="294" height="22" rx="3" style="--d:960ms"/>
-  <text class="gap-cap" x="344" y="233" style="--d:1000ms">what this codebase does by convention</text>
-
-  <path class="gap-edge" style="--d:1040ms" d="M266 272 C 300 272, 302 272, 330 272"/>
-  <rect class="gap-node hot" x="330" y="262" width="294" height="22" rx="3" style="--d:1080ms"/>
-  <text class="gap-cap" x="344" y="277" style="--d:1120ms">the field the client never checks</text>
-
-  <text class="gap-num" x="640" y="324" text-anchor="end" style="--d:1180ms">none of it is in the diff</text>
-</svg>
-
-<p class="scene-note" data-reveal style="--d:1000ms">A missed finding is usually a missing input, not a weak model.</p>
-</section>
-
-<section class="scene" id="scene-init">
-<p class="scene-step" data-reveal style="--d:0ms">Context is built once</p>
-<p class="scene-claim" data-reveal style="--d:80ms">Before it reads a patch, it reads the repository. Then it writes down what it found.</p>
-
-<div>
-  <svg class="iviz" id="iviz" viewBox="0 0 720 468" role="img" aria-label="Thousands of repository files are read once and synthesised into three review guides. Later, remake refreshes only the guides affected by new changes.">
-    <text class="iv-label" x="14" y="44" style="--d:0ms">repository</text>
-    <text class="iv-label" x="470" y="44" style="--d:0ms">guides on disk</text>
-
-    <g class="iv-chip" style="--d:0ms;  --c:#2a6bb0"><rect class="iv-box" x="14"  y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="62" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:20ms; --c:#1a5c3a"><rect class="iv-box" x="46"  y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="62" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:40ms; --c:#c94a1e"><rect class="iv-box" x="78"  y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="62" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:60ms; --c:#a67c1a"><rect class="iv-box" x="110" y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="62" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:80ms; --c:#1a5c3a"><rect class="iv-box" x="142" y="62"  width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="62"  width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="62" width="2" height="18"/></g>
-
-    <g class="iv-chip" style="--d:0ms;  --c:#c94a1e"><rect class="iv-box" x="14"  y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="86" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:20ms; --c:#2a6bb0"><rect class="iv-box" x="46"  y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="86" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:40ms; --c:#a67c1a"><rect class="iv-box" x="78"  y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="86" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:60ms; --c:#1a5c3a"><rect class="iv-box" x="110" y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="86" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:80ms; --c:#c94a1e"><rect class="iv-box" x="142" y="86"  width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="86"  width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="86" width="2" height="18"/></g>
-
-    <g class="iv-chip" style="--d:0ms;  --c:#a67c1a"><rect class="iv-box" x="14"  y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="110" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:20ms; --c:#1a5c3a"><rect class="iv-box" x="46"  y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="110" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:40ms; --c:#2a6bb0"><rect class="iv-box" x="78"  y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="110" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:60ms; --c:#c94a1e"><rect class="iv-box" x="110" y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="110" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:80ms; --c:#a67c1a"><rect class="iv-box" x="142" y="110" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="110" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="110" width="2" height="18"/></g>
-
-    <g class="iv-chip" style="--d:0ms;  --c:#1a5c3a"><rect class="iv-box" x="14"  y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="134" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:20ms; --c:#c94a1e"><rect class="iv-box" x="46"  y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="134" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:40ms; --c:#a67c1a"><rect class="iv-box" x="78"  y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="134" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:60ms; --c:#2a6bb0"><rect class="iv-box" x="110" y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="134" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:80ms; --c:#1a5c3a"><rect class="iv-box" x="142" y="134" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="134" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="134" width="2" height="18"/></g>
-
-    <g class="iv-chip" style="--d:0ms;  --c:#2a6bb0"><rect class="iv-box" x="14"  y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="158" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:20ms; --c:#a67c1a"><rect class="iv-box" x="46"  y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="158" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:40ms; --c:#1a5c3a"><rect class="iv-box" x="78"  y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="158" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:60ms; --c:#c94a1e"><rect class="iv-box" x="110" y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="158" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:80ms; --c:#2a6bb0"><rect class="iv-box" x="142" y="158" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="158" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="158" width="2" height="18"/></g>
-
-    <g class="iv-chip" style="--d:0ms;  --c:#c94a1e"><rect class="iv-box" x="14"  y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="14"  y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="182" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:20ms; --c:#2a6bb0"><rect class="iv-box" x="46"  y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="46"  y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="182" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:40ms; --c:#1a5c3a"><rect class="iv-box" x="78"  y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="78"  y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="182" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:60ms; --c:#a67c1a"><rect class="iv-box" x="110" y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="110" y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="110" y="182" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:80ms; --c:#c94a1e"><rect class="iv-box" x="142" y="182" width="26" height="18" rx="3"/><rect class="iv-tint" x="142" y="182" width="26" height="18" rx="3"/><rect class="iv-edge" x="142" y="182" width="2" height="18"/></g>
-
-    <text class="iv-size" x="14" y="228" style="--d:560ms">10,438 files read once</text>
-
-    <g class="iv-core" style="--d:300ms">
-      <circle class="iv-dot" cx="228" cy="140" r="26"/>
-      <circle class="iv-dot" cx="228" cy="140" r="18"/>
-      <circle class="iv-dot" cx="228" cy="140" r="10"/>
-      <rect class="iv-core-box" x="196" y="126" width="64" height="28" rx="4"/>
-      <text class="iv-core-txt" x="228" y="141" text-anchor="middle">init</text>
-    </g>
-
-    <path class="iv-wire" style="--len:312; --d:620ms" d="M168 131 C 300 131, 340 85, 466 85"/>
-    <path class="iv-wire" style="--len:308; --d:680ms" d="M168 140 C 320 140, 340 163, 466 163"/>
-    <path class="iv-wire" style="--len:326; --d:740ms" d="M168 149 C 300 149, 340 241, 466 241"/>
-
-    <g class="iv-doc" style="--c:#2a6bb0; --d:800ms">
-      <rect class="iv-box" x="470" y="56" width="236" height="58" rx="4"/>
-      <rect class="iv-tint" x="470" y="56" width="4" height="58" rx="2"/>
-      <text class="iv-name" x="484" y="76">SKILL.md</text>
-      <text class="iv-size" x="694" y="76" text-anchor="end">14.2 KB</text>
-      <rect class="iv-track" x="484" y="92" width="208" height="6" rx="3"/>
-      <rect class="iv-fill" style="--d:900ms" x="484" y="92" width="208" height="6" rx="3"/>
-    </g>
-
-    <g class="iv-doc" style="--c:#1a5c3a; --d:880ms">
-      <rect class="iv-box" x="470" y="134" width="236" height="58" rx="4"/>
-      <rect class="iv-tint" x="470" y="134" width="4" height="58" rx="2"/>
-      <text class="iv-name" x="484" y="154">CODEBASE.md</text>
-      <text class="iv-size" x="694" y="154" text-anchor="end">9.8 KB</text>
-      <rect class="iv-track" x="484" y="170" width="208" height="6" rx="3"/>
-      <rect class="iv-fill" style="--d:980ms" x="484" y="170" width="208" height="6" rx="3"/>
-    </g>
-
-    <g class="iv-doc" style="--c:#c94a1e; --d:960ms">
-      <rect class="iv-box" x="470" y="212" width="236" height="58" rx="4"/>
-      <rect class="iv-tint" x="470" y="212" width="4" height="58" rx="2"/>
-      <text class="iv-name" x="484" y="232">PR_REVIEW_GUIDE.md</text>
-      <text class="iv-size" x="694" y="232" text-anchor="end">6.1 KB</text>
-      <rect class="iv-track" x="484" y="248" width="208" height="6" rx="3"/>
-      <rect class="iv-fill" style="--d:1060ms" x="484" y="248" width="208" height="6" rx="3"/>
-    </g>
-
-    <text class="iv-size" x="470" y="298" style="--d:1120ms">3 guides written · every review after this reuses them</text>
-
-    <line class="iv-div" x1="0" y1="324" x2="720" y2="324" style="--d:1200ms"/>
-
-    <text class="iv-label" x="14" y="348" style="--d:1260ms">later · new commits land</text>
-
-    <g class="iv-chip" style="--d:1340ms; --c:#c94a1e"><rect class="iv-box" x="14" y="366" width="26" height="18" rx="3"/><rect class="iv-tint" x="14" y="366" width="26" height="18" rx="3"/><rect class="iv-edge" x="14" y="366" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:1380ms; --c:#2a6bb0"><rect class="iv-box" x="46" y="366" width="26" height="18" rx="3"/><rect class="iv-tint" x="46" y="366" width="26" height="18" rx="3"/><rect class="iv-edge" x="46" y="366" width="2" height="18"/></g>
-    <g class="iv-chip" style="--d:1420ms; --c:#c94a1e"><rect class="iv-box" x="78" y="366" width="26" height="18" rx="3"/><rect class="iv-tint" x="78" y="366" width="26" height="18" rx="3"/><rect class="iv-edge" x="78" y="366" width="2" height="18"/></g>
-
-    <text class="iv-size" x="14" y="404" style="--d:1480ms">3 files touched</text>
-
-    <g class="iv-mini" style="--d:1560ms">
-      <rect class="iv-core-box" x="150" y="361" width="72" height="28" rx="4"/>
-      <text class="iv-core-txt" x="186" y="376" text-anchor="middle" font-size="11px">remake</text>
-    </g>
-
-    <path class="iv-wire" style="--len:34; --d:1660ms" d="M122 375 C 134 375, 138 375, 150 375"/>
-    <path class="iv-wire" style="--len:78; --d:1740ms" d="M222 375 C 256 375, 264 375, 292 375"/>
-
-    <g class="iv-mini" style="--d:1820ms">
-      <rect class="iv-mbar" x="292" y="356" width="138" height="38" rx="3"/>
-      <rect class="iv-mfill" style="--c:#2a6bb0; --d:2100ms" x="292" y="356" width="138" height="3" rx="1.5"/>
-      <text class="iv-name" x="303" y="372" font-size="10px">SKILL.md</text>
-      <text class="iv-mstat up" x="303" y="386" style="--c:#2a6bb0; --d:2200ms">refreshed</text>
-    </g>
-
-    <g class="iv-mini" style="--d:1880ms">
-      <rect class="iv-mbar" x="436" y="356" width="138" height="38" rx="3"/>
-      <text class="iv-name" x="447" y="372" font-size="10px">CODEBASE.md</text>
-      <text class="iv-mstat" x="447" y="386" style="--d:2300ms">no change</text>
-    </g>
-
-    <g class="iv-mini" style="--d:1940ms">
-      <rect class="iv-mbar" x="580" y="356" width="138" height="38" rx="3"/>
-      <rect class="iv-mfill" style="--c:#c94a1e; --d:2180ms" x="580" y="356" width="138" height="3" rx="1.5"/>
-      <text class="iv-name" x="591" y="372" font-size="9.5px">PR_REVIEW_GUIDE.md</text>
-      <text class="iv-mstat up" x="591" y="386" style="--c:#c94a1e; --d:2280ms">refreshed</text>
-    </g>
-
-    <text class="iv-size" x="14" y="440" style="--d:2400ms">only guides touched by new commits are rewritten</text>
-  </svg>
-</div>
-
-<p class="scene-note" data-reveal style="--d:120ms">The guides live under your config directory, not inside the clone, so the context survives a fresh checkout and can be shared with a team.</p>
-</section>
-
-<section class="scene" id="scene-review">
-<p class="scene-step" data-reveal style="--d:0ms">Then it reviews</p>
-<p class="scene-claim" data-reveal style="--d:80ms">On the next pull request, the guides are already there.</p>
-
-<div class="ghi" id="ghi">
-  <div class="ghi-head">
-    <span class="ghi-icon">
-      <svg viewBox="0 0 16 16" aria-hidden="true">
-        <path class="ghi-open-ic" d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354Z"/>
-        <path class="ghi-merged-ic" d="M5.45 5.154A4.25 4.25 0 0 0 9.25 7.5h1.378a2.251 2.251 0 1 1 0 1.5H9.25A5.734 5.734 0 0 1 5 7.123v3.505a2.25 2.25 0 1 1-1.5 0V5.372a2.25 2.25 0 1 1 1.95-.218ZM4.25 13.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm8.5-4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5ZM5 3.25a.75.75 0 1 0 0 .005V3.25Z"/>
+        <text class="lbl" x="24" y="40" style="--d:1100ms">northwind/payments-api &#183; 1,284 files</text>
+        <text class="lbl on" x="649" y="18" text-anchor="middle" style="--d:1300ms">pull request #312</text>
+        <text class="lbl on" x="649" y="382" text-anchor="middle" style="--d:1400ms">2 files &#183; +41 &#8722;6</text>
+        <text class="lbl" x="24" y="382" style="--d:1500ms">everything that decides whether those 41 lines are correct</text>
       </svg>
-    </span>
-    <span class="ghi-title">Fix handshake schema compatibility</span>
-    <span class="ghi-num">#4128</span>
-    <span class="ghi-branch">GroophyLifefor:fix/handshake</span>
-    <span class="ghi-state">
-      <span class="ghi-state-a">Open</span>
-      <span class="ghi-state-b">Merged</span>
-    </span>
-  </div>
+      <figcaption class="fig-cap"><b>Fig. 01</b><span>An AI reviewer is handed the band. A human reviewer is handed the band and also happens to be carrying the field.</span></figcaption>
+    </figure>
 
-  <div class="ghi-checks-head">
-    <span class="ghi-caret-down"></span>
-    <span class="ghi-chk"><span class="ghi-chk-run">Review in progress</span><span class="ghi-chk-done">All checks have passed</span></span>
-    <span class="ghi-count"><span class="ghi-chk-run">0 of 1 check</span><span class="ghi-chk-done">1 successful check</span></span>
-  </div>
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>01 &#183; the repetition</span></div>
+        <h2>You have written this comment before</h2>
+      </div>
 
-  <div class="ghi-link">
-    <span class="ghi-wire"></span>
-    <span class="ghi-packet down"></span>
-    <span class="ghi-packet up"></span>
-  </div>
+      <p>Three pull requests, six months apart, three contributors. The same comment every time, worded a little differently every time. The rule is real and everyone knows it. It is just nowhere a machine can read it.</p>
 
-  <div class="ghi-server">
-    <span class="ghi-srv-dot"></span>
-    <span class="ghi-srv-name">review server</span>
-    <span class="ghi-srv-msg"><span class="ghi-srv-run">webhook received · starting review</span><span class="ghi-srv-done">context loaded · posting findings</span></span>
-  </div>
+      <figure class="bleed">
+        <div class="threads" data-anim>
+          <div class="rail"><i></i></div>
+          <div class="stack">
 
-  <div class="ghi-check" style="--d:0ms">
-    <span class="ghi-ind">
-      <svg class="ghi-spin" viewBox="0 0 16 16" aria-hidden="true">
-        <circle class="ghi-spin-bg" cx="8" cy="8" r="6.5"/>
-        <path class="ghi-spin-arc" d="M8 1.5a6.5 6.5 0 0 1 6.5 6.5"/>
-      </svg>
-      <svg class="ghi-tick" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8"/><path d="M4.6 8.4l2.3 2.3 4.5-4.9"/></svg>
-    </span>
-    <span>Review <span class="ghi-work">/ co-maintainer</span></span>
-    <span class="ghi-time"><span class="ghi-time-run">running…</span><span class="ghi-time-done">2m 14s</span></span>
-  </div>
-</div>
+            <div class="cmt" data-r style="--d:0ms">
+              <div class="cmt-head">
+                <span class="cmt-av">MK</span><b>murat</b><span>reviewed #218</span>
+                <span class="when">Mar 3</span>
+              </div>
+              <div class="cmt-body">We keep amounts as integer minor units. <code>amount * 0.029</code> turns a <code>Money</code> into a float, and the rounding is already gone by the time it reaches the ledger. Use <code>mulRate</code>.</div>
+            </div>
 
-<p class="scene-note" data-reveal style="--d:120ms">A green check is not the interesting part. What it wrote on the diff is.</p>
-</section>
+            <div class="cmt" data-r style="--d:180ms">
+              <div class="cmt-head">
+                <span class="cmt-av">MK</span><b>murat</b><span>reviewed #264</span>
+                <span class="when">Jun 11</span>
+              </div>
+              <div class="cmt-body">Same thing as <code>#218</code>. This multiplies a <span class="hl">Money by a float</span>. <code>mulRate(amount, 29, 1000)</code> does it in one rounding step.</div>
+            </div>
 
-<section class="scene" id="scene-comment">
-<p class="scene-step" data-reveal style="--d:0ms">What it wrote</p>
-<p class="scene-claim" data-reveal style="--d:80ms">The pull request adds a field. Codegraph finds nothing that reads it.</p>
+            <div class="cmt" data-r style="--d:360ms">
+              <div class="cmt-head">
+                <span class="cmt-av">MK</span><b>murat</b><span>reviewed #301</span>
+                <span class="when">Sep 2</span>
+              </div>
+              <div class="cmt-body"><span class="hl">Float math on money again</span>, third time this quarter. <code>mulRate</code>.</div>
+            </div>
 
-<div class="prw">
-  <div class="prw-bar"><b>#4128</b> Files changed</div>
+            <div class="distill" data-r style="--d:560ms">
+              <div class="arm"></div>
+              <div class="out">
+                <div class="src">co-maintainer noted this in CODEBASE.md</div>
+                <p>Money is an integer count of minor units, defined in <kbd>src/money.ts</kbd>. Never multiply or divide a <kbd>Money</kbd> by a float. Rate math goes through <kbd>mulRate(amount, numerator, denominator)</kbd>, which rounds once, at the end.</p>
+              </div>
+            </div>
 
-  <div class="prw-file shown">
-    <div class="prw-path">src/remote/server.ts <em>in this PR</em></div>
-    <div class="prw-ln add"><span>+</span><span>minClientSchema: 2</span></div>
-  </div>
+          </div>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 02</b><span>Nobody typed the sentence at the bottom. co-maintainer read the repository's review history and wrote it, in the repository's own words.</span></figcaption>
+      </figure>
+    </section>
 
-  <div class="prw-tool">
-    <div class="prw-cmd"><b>codegraph-callers</b> minClientSchema</div>
-    <div class="prw-out">0 callers <span>· only written in this patch</span></div>
-  </div>
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>02 &#183; the gap</span></div>
+        <h2>What the diff does not say</h2>
+      </div>
 
-  <div class="prw-note">
-    <div class="prw-who">co-maintainer <span>reviewed just now</span></div>
-    <p>The server now claims it can refuse old clients. Nothing in the graph reads this field, so nothing is refused.</p>
-  </div>
-</div>
-</section>
+      <p>A reviewer reads the patch while quietly holding four years of this codebase. Here is what that is worth.</p>
 
-<section class="scene" id="scene-fix">
-<p class="scene-step" data-reveal style="--d:0ms">And it writes the fix</p>
-<p class="scene-claim" data-reveal style="--d:80ms">The missing half of the handshake belongs on the client.</p>
+      <figure class="bleed">
+        <div class="panes" data-anim>
 
-<div class="prw">
-  <div class="prw-bar"><b>Suggested change</b> src/remote/client.ts</div>
-  <div class="prw-file shown">
-    <div class="prw-ln add"><span>+</span><span>if (schema &lt; hs.minClientSchema) upgrade()</span></div>
-  </div>
-  <div class="prw-pair">
-    <div class="prw-end a"><small>server</small>writes minClientSchema</div>
-    <span class="prw-arrow"></span>
-    <div class="prw-end live"><small>client</small>now reads minClientSchema</div>
-  </div>
-</div>
-</section>
+          <div class="pane">
+            <div class="tagline"><b>in the diff</b> &#183; src/billing/refund.ts</div>
+            <div class="mach">
+              <div class="mach-bar"><span class="dots"><i></i><i></i><i></i></span><span class="grow">src/billing/refund.ts</span><span class="pill">#312</span></div>
+              <div class="code">
+                <div class="cl"><span class="ln">40</span><span class="tx"><span class="k">export function</span> <span class="f">refundFee</span>(amount: <span class="t">Money</span>) {</span></div>
+                <div class="cl add"><span class="ln">41</span><span class="tx">  <span class="k">const</span> fee = amount * <span class="n">0.029</span>;</span></div>
+                <div class="cl add"><span class="ln">42</span><span class="tx">  <span class="k">return</span> { fee, net: amount - fee };</span></div>
+                <div class="cl"><span class="ln">43</span><span class="tx">}</span></div>
+              </div>
+              <div class="verdict"><span>tests pass</span><span class="dim">&#183;</span><span>types pass</span><span class="dim">&#183;</span><span>lint passes</span></div>
+            </div>
+          </div>
 
-<section class="scene" id="scene-close">
-<p class="scene-claim" data-reveal style="--d:0ms">The question is not which model reviews best, the question is about context management.</p>
+          <div class="link">
+            <div class="cap">the thing that<br>makes it wrong</div>
+            <div class="wireline"></div>
+            <div class="pip"></div>
+          </div>
 
-<p data-reveal style="--d:140ms"><strong>Lower context bloat → lower hallucination → faster reviews → more accurate predictions.</strong></p>
+          <div class="pane off">
+            <div class="tagline"><span class="no">not in the diff</span> &#183; untouched for 14 months</div>
+            <div class="mach">
+              <div class="mach-bar"><span class="dots"><i></i><i></i><i></i></span><span class="grow">src/money.ts</span><span class="pill">main</span></div>
+              <div class="code">
+                <div class="cl"><span class="ln">7</span><span class="tx"><span class="c">// minor units. 1299 is 12.99</span></span></div>
+                <div class="cl key"><span class="ln">8</span><span class="tx"><span class="k">export type</span> <span class="t">Money</span> = <span class="t">number</span> &amp; { __minor: <span class="k">true</span> };</span></div>
+                <div class="cl"><span class="ln">9</span><span class="tx"></span></div>
+                <div class="cl"><span class="ln">10</span><span class="tx"><span class="k">export const</span> <span class="f">mulRate</span> = (m, n, d): <span class="t">Money</span> =&gt;</span></div>
+                <div class="cl"><span class="ln">11</span><span class="tx">  <span class="f">Math</span>.round((m * n) / d) <span class="k">as</span> <span class="t">Money</span>;</span></div>
+              </div>
+              <div class="verdict"><span>ledger.post() rejects</span><span class="num">37.671</span><span class="bad">at runtime, in production</span></div>
+            </div>
+          </div>
 
-<p class="colophon" data-reveal style="--d:240ms">GitHub link is <a href="https://github.com/GroophyLifefor/co-maintainer">GroophyLifefor/co-maintainer</a>.</p>
-</section>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 03</b><span>The changed line is in the patch. The reason it is wrong is in a file nobody touched.</span></figcaption>
+      </figure>
+
+      <p>The types compile, because a branded <code>number</code> is still a <code>number</code>. The fee comes out fractional, <code>ledger.post()</code> asserts integers, and the refund throws on the first amount that does not divide evenly.</p>
+
+      <p class="pull">A missed finding is usually a missing input, not a weak model.</p>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>03 &#183; the reading</span></div>
+        <h2>Read the repository once, not once per review</h2>
+      </div>
+
+      <p>Handing the model a whole repository on every review is possible, and absurd. So the reading happens once, off to the side, and what comes out is small enough to carry.</p>
+
+      <div class="bleed sticky-wrap">
+        <div class="steps">
+
+          <div class="step" data-state="1">
+            <div class="k"><b>probe</b></div>
+            <h4>Start with the part that costs nothing</h4>
+            <p>It reads the repository through the GitHub API and prints the <code>init</code> line you should run, limits already filled in. No model is called, nothing is written.</p>
+          </div>
+
+          <div class="step" data-state="2">
+            <div class="k"><b>init</b> &#183; extract</div>
+            <h4>A cheap model turns the repository into evidence</h4>
+            <p>Tree, files, pull requests, their diffs, the discussions on them, commit history. Every observation stays bound to the file or pull request that produced it, because a rule nobody can trace back is how a review tool starts inventing them.</p>
+          </div>
+
+          <div class="step" data-state="3">
+            <div class="k"><b>init</b> &#183; synthesise</div>
+            <h4>A reasoning model turns evidence into three guides</h4>
+            <p>How to contribute here, how the code is actually written, and what reviewers here have historically stopped pull requests for. They land in your config directory, not in the clone, so a fresh checkout keeps them.</p>
+          </div>
+
+          <div class="step" data-state="4">
+            <div class="k"><b>remake</b></div>
+            <h4>Then keep it alive for the price of a diff</h4>
+            <p>It refetches, reuses every piece of evidence the cache says is unchanged, and rewrites only the guides the new commits touch. <code>init</code> is the once. This is the loop.</p>
+          </div>
+
+        </div>
+
+        <div class="stickyfig">
+          <svg class="ivz" data-state="1" viewBox="0 0 650 430" role="img" aria-label="The repository is read once, turned into evidence by a low cost model, synthesised into three guide files by a reasoning model, and later refreshed incrementally by remake.">
+            <defs>
+              <pattern id="mk2" width="22" height="12" patternUnits="userSpaceOnUse">
+                <rect class="mark" x="0" y="3" width="8" height="5" rx="1"/>
+                <rect class="mark" x="11" y="3" width="7" height="5" rx="1"/>
+              </pattern>
+            </defs>
+
+            <text class="lb layer l1 l1-keep" x="8" y="32">REPOSITORY</text>
+            <rect class="layer l1 l1-keep" x="8" y="46" width="168" height="248" fill="url(#mk2)"/>
+            <rect class="frame layer l1 l1-keep" x="8" y="46" width="168" height="248"/>
+            <text class="val layer l1 l1-keep" x="8" y="312">1,284 files &#183; 312 pull requests</text>
+
+            <g class="layer l1">
+              <rect x="8" y="118" width="168" height="72" fill="rgba(44,93,143,0.12)" stroke="#2c5d8f" stroke-width="1" stroke-dasharray="3 4"/>
+              <rect class="card" x="206" y="118" width="366" height="128"/>
+              <rect class="card-edge" x="206" y="118" width="3" height="128"/>
+              <text class="nm" x="224" y="146">probe northwind/payments-api</text>
+              <text class="sz" x="224" y="172">312 pull requests sampled, 4,180 commits seen</text>
+              <text class="sz" x="224" y="192">no model called, nothing written to disk</text>
+              <text class="lb on" x="224" y="218">prints the init line it recommends</text>
+            </g>
+
+            <g class="layer l2">
+              <path class="wire" d="M176 120 C 190 120, 192 62, 200 62"/>
+              <path class="wire" d="M176 170 C 190 170, 192 62, 200 62"/>
+              <path class="wire" d="M176 220 C 190 220, 192 62, 200 62"/>
+              <text class="lb" x="206" y="32">EVIDENCE</text>
+              <rect class="pillbox" x="200" y="46" width="124" height="30" rx="3"/>
+              <text class="pilltx" x="262" y="62" text-anchor="middle">extract</text>
+              <text class="sz" x="200" y="92">low cost model</text>
+            </g>
+
+            <g class="layer l2 l2-keep">
+              <rect class="ev" x="206" y="112" width="96" height="5" rx="2"/>
+              <rect class="ev" x="206" y="130" width="112" height="5" rx="2"/>
+              <rect class="ev" x="206" y="148" width="74" height="5" rx="2"/>
+              <rect class="ev" x="206" y="166" width="108" height="5" rx="2"/>
+              <rect class="ev" x="206" y="184" width="88" height="5" rx="2"/>
+              <rect class="ev" x="206" y="202" width="118" height="5" rx="2"/>
+              <rect class="ev" x="206" y="220" width="80" height="5" rx="2"/>
+              <rect class="ev" x="206" y="238" width="104" height="5" rx="2"/>
+              <rect class="ev" x="206" y="256" width="92" height="5" rx="2"/>
+            </g>
+
+            <g class="layer l2">
+              <text class="sz" x="206" y="292">each one bound to a file or a pull request</text>
+            </g>
+
+            <g class="layer l3">
+              <rect class="pillbox" x="200" y="46" width="124" height="30" rx="3" fill="#fbf9f4"/>
+              <text class="pilltx" x="262" y="62" text-anchor="middle">synthesise</text>
+              <text class="sz" x="200" y="92">reasoning model</text>
+              <path class="wire hot" d="M330 120 C 340 120, 342 86, 350 86"/>
+              <path class="wire hot" d="M330 170 C 340 170, 342 166, 350 166"/>
+              <path class="wire hot" d="M330 220 C 340 220, 342 246, 350 246"/>
+            </g>
+
+            <g class="layer l3 l3-keep">
+              <text class="lb" x="350" y="32">GUIDES ON DISK</text>
+
+              <rect class="card" x="350" y="52" width="222" height="68"/>
+              <rect class="card-edge" x="350" y="52" width="3" height="68"/>
+              <text class="nm" x="366" y="76">SKILL.md</text>
+              <text class="sz" x="556" y="76" text-anchor="end">14.2 KB</text>
+              <text class="sz" x="366" y="98">how to contribute here</text>
+
+              <rect class="card" x="350" y="132" width="222" height="68"/>
+              <rect class="card-edge" x="350" y="132" width="3" height="68"/>
+              <text class="nm" x="366" y="156">CODEBASE.md</text>
+              <text class="sz" x="556" y="156" text-anchor="end">9.8 KB</text>
+              <text class="sz" x="366" y="178">how the code is written</text>
+
+              <rect class="card" x="350" y="212" width="222" height="68"/>
+              <rect class="card-edge" x="350" y="212" width="3" height="68"/>
+              <text class="nm" x="366" y="236">PR_REVIEW_GUIDE.md</text>
+              <text class="sz" x="556" y="236" text-anchor="end">6.1 KB</text>
+              <text class="sz" x="366" y="258">what reviewers stop PRs for</text>
+            </g>
+
+            <g class="layer l3">
+              <text class="sz" x="350" y="300">30 KB, reused by every review after this</text>
+            </g>
+
+            <g class="layer l4">
+              <line class="frame" x1="8" y1="330" x2="642" y2="330" stroke-dasharray="3 5"/>
+              <text class="lb" x="8" y="352">LATER &#183; 3 COMMITS LAND ON MAIN</text>
+              <rect class="hot-mark" x="8" y="366" width="20" height="14" rx="2"/>
+              <rect class="hot-mark" x="34" y="366" width="20" height="14" rx="2"/>
+              <rect class="hot-mark" x="60" y="366" width="20" height="14" rx="2"/>
+              <rect class="pillbox" x="118" y="358" width="92" height="30" rx="3"/>
+              <text class="pilltx" x="164" y="374" text-anchor="middle">remake</text>
+              <path class="wire" d="M80 373 C 98 373, 104 373, 118 373"/>
+              <path class="wire" d="M210 373 C 260 373, 300 373, 340 340"/>
+              <text class="tagtx up" x="582" y="86">rewritten</text>
+              <text class="tagtx" x="582" y="166">unchanged</text>
+              <text class="tagtx up" x="582" y="246">rewritten</text>
+              <text class="sz" x="8" y="412">cached evidence is reused, only touched guides are paid for again</text>
+            </g>
+          </svg>
+        </div>
+      </div>
+
+      <figure class="bleed">
+        <div class="mach" data-anim>
+          <div class="mach-bar"><span class="dots"><i></i><i></i><i></i></span><span class="grow">zsh &#183; ~/src/payments-api</span><span class="pill">once per repository</span></div>
+          <div class="term">
+<span class="l"><span class="p">$</span> <span class="cmd">co-maintainer probe northwind/payments-api --auth=gh</span></span>
+<span class="l"><span class="dim">  repository</span>     northwind/payments-api   <span class="dim">default branch</span> main</span>
+<span class="l"><span class="dim">  pull requests</span>  312 sampled over 14 months</span>
+<span class="l"><span class="dim">  commits</span>        4,180 on main</span>
+<span class="l"><span class="acc">  recommended</span></span>
+<span class="l">    co-maintainer init northwind/payments-api --include-codebase \</span>
+<span class="l">      --include-pull-requests --include-pull-request-changes \</span>
+<span class="l">      --include-commit-history --max-pr-months=12 --max-commits=500</span>
+<span class="l"><span class="dim">  no model was called, nothing was written</span></span>
+<span class="l"> </span>
+<span class="l"><span class="p">$</span> <span class="cmd">co-maintainer init northwind/payments-api --auth=gh --ai=openrouter</span></span>
+<span class="l"><span class="dim">  extract</span>   1,284 files, 312 pull requests            <span class="dim">low model</span></span>
+<span class="l"><span class="dim">  synth</span>     SKILL.md  CODEBASE.md  PR_REVIEW_GUIDE.md  <span class="dim">high model</span></span>
+<span class="l"><span class="ok">  written</span>   ~/.config/co-maintainer/repos/northwind/payments-api</span>
+<span class="l"><span class="dim">  done in 6m 12s</span><span class="cur"></span></span>
+          </div>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 04</b><span>Two commands, one of which is free. Output trimmed to the shape of it.</span></figcaption>
+      </figure>
+
+      <p>The reason it happens once:</p>
+
+      <figure class="bleed">
+        <svg class="scalefig" viewBox="0 0 1056 424" role="img" aria-label="Token cost drawn to scale. Reused repository context is 18.9 thousand tokens. Re-reading the repository for every review is 1.35 million tokens, 71 times more.">
+          <line class="base" x1="0" y1="372" x2="1056" y2="372" style="--d:0ms"/>
+          <rect class="sq-s" x="120" y="359" width="13" height="13" style="--d:200ms"/>
+          <text class="lbl" x="126" y="344" text-anchor="middle" style="--d:300ms">18.9K</text>
+          <text class="sub" x="126" y="394" text-anchor="middle" style="--d:340ms">reused repository context</text>
+
+          <rect class="sq-b" x="430" y="80" width="292" height="292"/>
+          <text class="lbl" x="576" y="62" text-anchor="middle" style="--d:1500ms">1.35M</text>
+          <text class="sub" x="576" y="394" text-anchor="middle" style="--d:1540ms">the repository, re-read per review</text>
+
+          <text class="ratio" x="1044" y="330" text-anchor="end" style="--d:1700ms">71&#215;</text>
+          <text class="ratio-sub" x="1044" y="368" text-anchor="end" style="--d:1800ms">same pull requests &#183; same model</text>
+        </svg>
+        <figcaption class="fig-cap"><b>Fig. 05</b><span>Drawn to scale. The small square is what a review costs when the repository was read in advance.</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>04 &#183; the artifact</span></div>
+        <h2>The guides are the product</h2>
+      </div>
+
+      <p>Models are rented. Whichever one is best this quarter will not be best next quarter. The context is the part you own.</p>
+
+      <figure class="bleed">
+        <div class="guides" data-anim>
+
+          <div class="gcard" data-r style="--d:0ms">
+            <div class="gcard-h"><i></i>SKILL.md<span class="sz">14.2 KB</span></div>
+            <div class="gbody">
+              <span class="h">## Shipping</span>
+              <div class="li">Pull requests run CI via <kbd>.github/workflows/ci.yml</kbd>, which defines a <kbd>test</kbd> job and a <kbd>contract</kbd> job that replays recorded provider webhooks.</div>
+              <div class="li">Run <kbd>npm run verify-pack</kbd> before tagging a release.</div>
+              <span class="h">## Tests</span>
+              <div class="li">A new provider adapter is expected to ship with a webhook replay fixture under <kbd>test/fixtures/providers/</kbd>.</div>
+            </div>
+            <div class="gcard-f">how to contribute here</div>
+          </div>
+
+          <div class="gcard" data-r style="--d:140ms">
+            <div class="gcard-h"><i></i>CODEBASE.md<span class="sz">9.8 KB</span></div>
+            <div class="gbody">
+              <span class="h">## Money</span>
+              <div class="li"><span class="mark">Money is an integer count of minor units, defined in <kbd>src/money.ts</kbd>. Never multiply or divide a <kbd>Money</kbd> by a float. Rate math goes through <kbd>mulRate(amount, numerator, denominator)</kbd>.</span></div>
+              <div class="li"><kbd>ledger.post()</kbd> asserts an integer amount, so a float that reaches it throws rather than rounding quietly.</div>
+              <span class="h">## Code layout</span>
+              <div class="li">Each provider adapter lives in <kbd>src/providers/</kbd> and exports only <kbd>charge</kbd>, <kbd>refund</kbd> and <kbd>webhook</kbd>.</div>
+            </div>
+            <div class="gcard-f">how the code is actually written</div>
+          </div>
+
+          <div class="gcard" data-r style="--d:280ms">
+            <div class="gcard-h"><i></i>PR_REVIEW_GUIDE.md<span class="sz">6.1 KB</span></div>
+            <div class="gbody">
+              <span class="h">## What reviewers here ask for</span>
+              <div class="li">Float arithmetic on an amount is the most frequently raised issue in this repository's history (<kbd>#218</kbd>, <kbd>#264</kbd>, <kbd>#301</kbd>).</div>
+              <div class="li">Three adapters have been blocked for shipping without a replay test. Treat a missing fixture as blocking, not as a nit.</div>
+              <span class="h">## Tone</span>
+              <div class="li">Reviewers here state the consequence, then the fix, in that order.</div>
+            </div>
+            <div class="gcard-f">what reviewers here stop PRs for</div>
+          </div>
+
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 06</b><span>Generated text, not hand written. The highlighted line is the one from Fig. 02, and the numbers under it are the pull requests it came from.</span></figcaption>
+      </figure>
+
+      <p>Read them out loud and they sound like the person who has been merging into this repository for two years. That is where the title comes from. It is not trying to be a better reviewer than your team, it is trying to be a cheap imitation of the one you already have, awake at 2am, on the boring pull requests too.</p>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>05 &#183; the review</span></div>
+        <h2>What it writes on the diff</h2>
+      </div>
+
+      <p>A pull request opens. The guides are already on disk, so the reviewer starts from a repository it has read instead of a patch it has never seen.</p>
+
+      <figure class="bleed">
+        <div class="gh" data-anim data-settle="2400">
+          <div class="gh-h">
+            <svg class="oc" viewBox="0 0 16 16" aria-hidden="true"><path d="M1.5 3.25a2.25 2.25 0 1 1 3 2.122v5.256a2.251 2.251 0 1 1-1.5 0V5.372A2.25 2.25 0 0 1 1.5 3.25Zm5.677-.177L9.573.677A.25.25 0 0 1 10 .854V2.5h1A2.5 2.5 0 0 1 13.5 5v5.628a2.251 2.251 0 1 1-1.5 0V5a1 1 0 0 0-1-1h-1v1.646a.25.25 0 0 1-.427.177L7.177 3.427a.25.25 0 0 1 0-.354Z"/></svg>
+            <b>Charge providers: percentage refund fee</b>
+            <span class="num">#312</span>
+            <span class="br">northwind:feat/refund-fee</span>
+            <span class="state">Open</span>
+          </div>
+
+          <div class="gh-checks">
+            <div class="gh-chk-row">
+              <span class="ind">
+                <svg class="spin" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="6.2"/><path d="M8 1.8a6.2 6.2 0 0 1 6.2 6.2"/></svg>
+                <svg class="tick" viewBox="0 0 16 16" aria-hidden="true"><circle cx="8" cy="8" r="8"/><path d="M4.6 8.3l2.3 2.3 4.5-4.9"/></svg>
+              </span>
+              <span class="nm"><b>Review</b> <span>/ co-maintainer</span></span>
+              <span class="msg"><span class="t-run">reading guides and diff&#8230;</span><span class="t-done">2 findings, 1 blocking</span></span>
+              <span class="det"><span class="t-run">24s</span><span class="t-done">Details</span></span>
+            </div>
+          </div>
+
+          <div class="gh-note">
+            <img class="gh-bot" src="/img/pp.jpeg" alt="">
+            <div>
+              <div class="who"><b>co-maintainer</b><span class="bot-tag">bot</span> reviewed just now</div>
+              <div class="gh-sum">
+                Reviewed against <code>SKILL.md</code>, <code>CODEBASE.md</code> and <code>PR_REVIEW_GUIDE.md</code> for this repository, with codegraph enabled.
+                <div class="cnt">
+                  <span><b>1</b> blocking</span>
+                  <span><b>1</b> non blocking</span>
+                  <span><b>9,312</b> tokens</span>
+                  <span><b>24.7s</b></span>
+                  <span><b>$0.0041</b></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="gh-file">
+            <div class="gh-file-h"><span>src/billing/refund.ts</span><span class="add">+3</span><span class="del">&#8722;0</span></div>
+            <div class="gh-code">
+              <div class="r"><i>39</i><i>39</i><span><span class="k">export</span> <span class="k">function</span> <span class="fn">refundFee</span>(amount: Money) {</span></div>
+              <div class="r p"><i></i><i>40</i><span>  <span class="k">const</span> fee = amount * <span class="n">0.029</span>;</span></div>
+              <div class="r p"><i></i><i>41</i><span>  <span class="k">return</span> { fee, net: amount - fee };</span></div>
+              <div class="r"><i>40</i><i>42</i><span>}</span></div>
+            </div>
+
+            <div class="gh-inline">
+              <img class="gh-bot" src="/img/pp.jpeg" alt="">
+              <div class="body">
+                <div style="margin-bottom:8px"><span class="gh-badge p1">P1 &#183; blocking</span></div>
+                <p style="margin:0;font-size:13.5px;line-height:1.62;color:#1f2328"><code>refundFee()</code> returns a fractional amount. <code>ledger.post()</code> asserts an integer count of minor units, so every refund whose fee does not divide evenly throws in production instead of rounding. <code>CODEBASE.md</code> puts rate math through <code>mulRate</code> for exactly this reason.</p>
+                <p class="loc">src/billing/refund.ts:41 &#183; 3 call sites reach this</p>
+
+                <div class="gh-sugg">
+                  <div class="hd">Suggested change</div>
+                  <div class="gh-code">
+                    <div class="r m"><i>41</i><i></i><span>  <span class="k">const</span> fee = amount * <span class="n">0.029</span>;</span></div>
+                    <div class="r p"><i></i><i>41</i><span>  <span class="k">const</span> fee = <span class="fn">mulRate</span>(amount, <span class="n">29</span>, <span class="n">1000</span>);</span></div>
+                  </div>
+                  <div class="ft"><span class="gh-btn">Commit suggestion</span> <span class="gh-btn sec">Add to batch</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 07</b><span>The green check is not the interesting part. The comment naming an assertion in a file the patch never touched is.</span></figcaption>
+      </figure>
+
+      <p>Without the guides there are two honest options here. Say nothing, because a percentage fee is a normal thing to write. Or say something vague about floating point, which everybody has learned to scroll past.</p>
+
+      <ul>
+        <li><strong>Findings carry over.</strong> Push a fix, run it again, and the finding closes instead of being raised twice.</li>
+        <li><strong>A blocking finding exits non zero.</strong> That is all CI needs.</li>
+        <li><strong><code>--json</code> on stdout, logs on stderr.</strong> Findings, counts, tokens, duration, codegraph state, one document.</li>
+        <li><strong>Codegraph is optional.</strong> On by default, and the binary is installed on request, not behind your back.</li>
+      </ul>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>06 &#183; the three doors</span></div>
+        <h2>Same guides, three ways in</h2>
+      </div>
+
+      <p>There are only three answers people actually want: the mess in my working tree, that pull request over there, and the first one without making every laptop pay for <code>init</code>.</p>
+
+      <figure class="bleed">
+        <div class="scroll-x">
+          <div class="modes" data-anim>
+            <div class="rh"></div>
+            <div class="ch"><b>review</b><em>local review</em></div>
+            <div class="ch"><b>review owner/repo 312</b><em>pull request review</em></div>
+            <div class="ch"><b>review --remote</b><em>remote review</em></div>
+
+            <div class="rh">what it reads</div>
+            <div class="hot">Staged, unstaged and untracked files in your clone</div>
+            <div class="hot">The pull request and its patch through <code>gh</code>, no checkout</div>
+            <div class="hot">The same local diff as the first column</div>
+
+            <div class="rh">where the guides are</div>
+            <div>Your disk, your own <code>init</code></div>
+            <div>Your disk, your own <code>init</code></div>
+            <div class="hot">The server, built once for the team</div>
+
+            <div class="rh">where the model runs</div>
+            <div>Your machine, your key</div>
+            <div>Your machine, your key</div>
+            <div class="hot">The server, with its key</div>
+
+            <div class="rh">what you need</div>
+            <div>A clone and an <code>init</code></div>
+            <div><code>gh</code> and an <code>init</code></div>
+            <div class="hot">A host and a token</div>
+
+            <div class="rh">when you reach for it</div>
+            <div>Before you open the pull request</div>
+            <div>Reviewing someone else's work</div>
+            <div>Your first week on a new team</div>
+          </div>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 08</b><span>Pull request review and remote review do not combine. One takes a number, the other takes a diff.</span></figcaption>
+      </figure>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>07 &#183; remote</span></div>
+        <h2>The wire, for the laptop that never ran init</h2>
+      </div>
+
+      <p>Somebody joins on Monday and clones the repository. Local review wants guides, guides want <code>init</code>, and <code>init</code> wants minutes and money. Paying that once per laptop is how a tool dies in its third week.</p>
+
+      <figure class="bleed wire-block" data-anim>
+        <div class="wire" data-anim>
+          <div class="node">
+            <div class="nh"><i></i>your laptop</div>
+            <div class="nrow"><span class="x">$</span><b>co-maintainer review --remote</b></div>
+            <div class="nrow"><span class="x">&#183;</span><span>git diff against main, 2 files</span></div>
+            <div class="nrow"><span class="x">&#183;</span><span>codegraph runs here, on your clone</span></div>
+            <div class="nrow"><span class="x">&#183;</span><span>no guides, no provider key, no init</span></div>
+            <div class="none">never leaves this machine<br>the clone &#183; your credentials &#183; everything you did not stage</div>
+          </div>
+
+          <div class="wirecol">
+            <div class="rail"></div>
+            <div class="pk up a">diff</div>
+            <div class="pk dn b">tool call</div>
+            <div class="pk up c">tool result</div>
+            <div class="pk dn d">findings</div>
+          </div>
+
+          <div class="node dark">
+            <div class="nh"><i></i>co-maintainer serve</div>
+            <div class="nrow"><span class="x">&#183;</span><b>guides for northwind/payments-api</b></div>
+            <div class="nrow"><span class="x">&#183;</span><span>built once, by whoever set the server up</span></div>
+            <div class="nrow"><span class="x">&#183;</span><span>the model runs here, with the team key</span></div>
+            <div class="nrow"><span class="x">&#183;</span><span>job queue, per token concurrency</span></div>
+            <div class="none">never sees<br>your working tree &#183; your history &#183; anything outside the diff</div>
+          </div>
+        </div>
+
+        <div class="wsteps">
+          <div class="wstep"><b>1 &#183; handshake</b>token <code>cmr_&#8230;</code>, schema and body limits agreed</div>
+          <div class="wstep"><b>2 &#183; submit</b>the diff goes up, and only the diff</div>
+          <div class="wstep"><b>3 &#183; queue</b>the server runs the model against its own guides</div>
+          <div class="wstep"><b>4 &#183; tool bridge</b>it asks your laptop to run codegraph and waits</div>
+          <div class="wstep"><b>5 &#183; sync</b>findings come back, identical to a local run</div>
+        </div>
+
+        <figcaption class="fig-cap"><b>Fig. 09</b><span>The tool bridge is the part worth staring at. The model is on the server, the code it needs to inspect is on your machine.</span></figcaption>
+      </figure>
+
+      <p class="aside"><b>The boring safety bits.</b> Tokens are hashed at rest, and deactivating one cancels every review in flight for it. The CLI prints a one time notice per host the first time it uploads a diff, so nobody finds out by reading the source six months later.</p>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>08 &#183; the server</span></div>
+        <h2>When you want the boring half automated</h2>
+      </div>
+
+      <p><code>co-maintainer serve</code> is one process and one <code>app.db</code>. It carries the GitHub App webhook, a job worker, the dashboard, and the remote review API from the last act.</p>
+
+      <figure class="bleed">
+        <div class="shot" data-anim>
+          <div class="shot-bar"><span class="dots"><i></i><i></i><i></i></span><span>localhost:5000</span></div>
+          <img src="/images/co-maintainer-ss.png" alt="The co-maintainer dashboard listing one repository with its status, knowledge freshness, auto review toggle, review count and 30 day cost.">
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 10</b><span>The knowledge column is the one that matters. It says <b>needs update</b> when main has moved past the guides, and a remake is one click from there.</span></figcaption>
+      </figure>
+
+      <p>Add a repository and <code>init</code> runs as a job you can watch. Flip auto review on and a pull request opening is enough to start one. The repo above has been connected for 8 days. Everything, init, remake and every review included, cost <strong>$1.20</strong> in total.</p>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>09 &#183; the evidence</span></div>
+        <h2>Does any of this actually work</h2>
+      </div>
+
+      <p>Thirty pull requests on a repository of mine. Fourteen carry a deliberately seeded, hand verified defect. Sixteen are clean controls, which is the part most review benchmarks skip and the part that makes precision measurable.</p>
+
+      <figure class="bleed">
+        <div class="score" data-anim>
+          <div class="tile hot">
+            <span class="k">recall</span>
+            <span class="n">0.857</span>
+            <span class="w">12 of the 14 seeded defects, found</span>
+          </div>
+          <div class="tile">
+            <span class="k">precision</span>
+            <span class="n">0.353</span>
+            <span class="w">it flags clean code too, this is the honest half</span>
+          </div>
+          <div class="tile">
+            <span class="k">cost per PR</span>
+            <span class="n"><small>$</small>0.0045</span>
+            <span class="w">$0.134 for the whole run</span>
+          </div>
+          <div class="tile">
+            <span class="k">time per PR</span>
+            <span class="n">28.9<small>s</small></span>
+            <span class="w">8.5K tokens on average</span>
+          </div>
+        </div>
+
+        <div class="axis" data-anim>
+          <div class="arow">
+            <span class="an">repo_wide</span>
+            <span class="abar"><i style="--w:100%;--d:0ms"></i></span><span class="av">1.000</span>
+            <span class="aw">needs codegraph, cross file reasoning</span>
+          </div>
+          <div class="arow">
+            <span class="an">convention</span>
+            <span class="abar"><i style="--w:100%;--d:90ms"></i></span><span class="av">1.000</span>
+            <span class="aw">needs CODEBASE.md</span>
+          </div>
+          <div class="arow">
+            <span class="an">history</span>
+            <span class="abar"><i style="--w:100%;--d:180ms"></i></span><span class="av">1.000</span>
+            <span class="aw">needs PR_REVIEW_GUIDE.md</span>
+          </div>
+          <div class="arow">
+            <span class="an">diff_local</span>
+            <span class="abar"><i style="--w:80%;--d:270ms"></i></span><span class="av">0.800</span>
+            <span class="aw">needs nothing, it is all in the patch</span>
+          </div>
+          <div class="arow">
+            <span class="an">file_local</span>
+            <span class="abar"><i style="--w:50%;--d:360ms"></i></span><span class="av">0.500</span>
+            <span class="aw">needs the rest of the same file</span>
+          </div>
+        </div>
+
+        <figcaption class="fig-cap"><b>Fig. 11</b><span>bench core v3, GroophyLifefor/heap-analysis, Sep 14, 2026. Recall by what kind of context the defect needed.</span></figcaption>
+      </figure>
+
+      <p>Every defect that needed something outside the diff was caught. The two misses are on the axes where everything needed was already sitting in the patch, which is funny and slightly humbling: the context machinery works, ordinary close range reading is what still slips.</p>
+
+      <p class="aside">Thirty pull requests, no repeat runs, so variance is unmeasured. It raises about one unnecessary finding per clean pull request, and that number is what decides whether a team keeps a review bot or mutes it.</p>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>10 &#183; the point</span></div>
+        <h2>Context is the part you own</h2>
+      </div>
+
+      <p>The question was never which model reviews best. Models change every few months and the answer expires with them. The question is what the model is holding when it starts.</p>
+
+      <p class="pull">Read the repository once. Write down what you learned. Hand it to whatever reviews next.</p>
+
+      <p>The guides are plain markdown in a directory you control. You can read them, fix a line that is wrong, and hand them to something else entirely.</p>
+
+      <figure class="install">
+        <div class="mach" data-anim>
+          <div class="mach-bar"><span class="dots"><i></i><i></i><i></i></span><span class="grow">get started</span><span class="pill">node 24+</span></div>
+          <div class="term">
+<span class="l"><span class="p">$</span> <span class="cmd">npm install -g co-maintainer</span></span>
+<span class="l"><span class="p">$</span> <span class="cmd">co-maintainer probe owner/repo --auth=gh</span></span>
+<span class="l"><span class="dim">  then run the init line it prints, then:</span></span>
+<span class="l"><span class="p">$</span> <span class="cmd">co-maintainer review</span><span class="cur"></span></span>
+          </div>
+        </div>
+      </figure>
+
+      <div class="endlinks">
+        <a href="https://github.com/GroophyLifefor/co-maintainer" target="_blank" rel="noreferrer">GroophyLifefor/co-maintainer</a>
+        <a href="https://groophylifefor.github.io/co-maintainer/getting-started.html" target="_blank" rel="noreferrer">Getting started</a>
+        <a href="https://github.com/GroophyLifefor/co-maintainer/blob/main/benchmark/core_v3/README.md" target="_blank" rel="noreferrer">bench core v3, in full</a>
+      </div>
+    </section>
+
   </article>
 
   <footer>
-    <span>© 2026 Murat Kirazkaya</span>
+    <span>&#169; 2026 Murat Kirazkaya</span>
     <div class="footer-links">
-      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github">
-        <i class="ci ci-github"></i> GitHub
-      </a>
-      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin">
-        <i class="ci ci-linkedin"></i> LinkedIn
-      </a>
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github"><i class="ci ci-github"></i> GitHub</a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin"><i class="ci ci-linkedin"></i> LinkedIn</a>
       <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
     </div>
   </footer>
-
-  <div class="scroll-cue" id="scroll-cue" aria-hidden="true">
-    <span>scroll</span>
-    <span class="sc-rail"></span>
-  </div>
 
 </div>
 
 <script>
 (function () {
   var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var targets = document.querySelectorAll('.diagram, .open, .ghi, .scene, .iviz, .gap');
+  var sel = '[data-anim], [data-r], .fieldfig, .scalefig';
+  var nodes = document.querySelectorAll(sel);
+
+  function settle(el) {
+    var ms = parseInt(el.getAttribute('data-settle') || '0', 10);
+    if (!ms) return;
+    if (reduced) { el.classList.add('done'); return; }
+    setTimeout(function () { el.classList.add('done'); }, ms);
+  }
 
   if (reduced || !('IntersectionObserver' in window)) {
-    Array.prototype.forEach.call(targets, function (el) { el.classList.add('in'); });
-    return;
+    Array.prototype.forEach.call(nodes, function (el) { el.classList.add('in'); settle(el); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        settle(e.target);
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.18 });
+    Array.prototype.forEach.call(nodes, function (el) { io.observe(el); });
   }
 
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('in');
-      observer.unobserve(entry.target);
-    });
-  }, { rootMargin: '0px 0px -12% 0px', threshold: 0.25 });
-
-  Array.prototype.forEach.call(targets, function (el) { observer.observe(el); });
-})();
-
-(function () {
-  var cue = document.getElementById('scroll-cue');
-  if (!cue) return;
-  var last = document.querySelector('.scene:last-of-type') || document.body;
-  function update() {
-    var remaining = document.documentElement.scrollHeight - window.scrollY - window.innerHeight;
-    var overFooter = remaining < 40;
-    var overLast = last.getBoundingClientRect().top < window.innerHeight * 0.55;
-    cue.classList.toggle('done', overFooter || overLast);
+  var fig = document.querySelector('.ivz');
+  var steps = document.querySelectorAll('.step');
+  if (fig && steps.length) {
+    if (!('IntersectionObserver' in window)) {
+      fig.setAttribute('data-state', '3');
+    } else {
+      var so = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          Array.prototype.forEach.call(steps, function (s) { s.classList.remove('on'); });
+          e.target.classList.add('on');
+          fig.setAttribute('data-state', e.target.getAttribute('data-state'));
+        });
+      }, { rootMargin: '-45% 0px -45% 0px', threshold: 0 });
+      Array.prototype.forEach.call(steps, function (s) { so.observe(s); });
+    }
   }
-  window.addEventListener('scroll', update, { passive: true });
-  window.addEventListener('resize', update);
-  update();
 })();
 </script>
 
