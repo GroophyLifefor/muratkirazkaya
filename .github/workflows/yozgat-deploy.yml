@@ -1,8 +1,9 @@
 name: Deploy to Yozgat
 
-on:
-  push:
-    branches: [main]
+# Disabled for a while
+# on:
+#   push:
+#     branches: [main]
 
 jobs:
   deploy:
