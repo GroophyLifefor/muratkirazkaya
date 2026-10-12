@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reasoning model returns empty content? The thinking ate the answer - Murat Kirazkaya</title>
+<meta name="description" content="A reasoning model can spend its whole output budget thinking and hand you nothing. The fix is not a bigger budget: take the answer through a resolve tool call.">
+<meta name="author" content="Murat Kirazkaya">
+<link rel="icon" type="image/jpeg" href="/img/pp.jpeg">
+
+<script defer src="https://umami.ordu.dev/script.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0" data-performance="true"></script>
+<script defer src="https://umami.ordu.dev/recorder.js" data-website-id="86ec79de-56b1-44f6-a2ce-c9efb14b22b0"></script>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18026929077"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'AW-18026929077');
+</script>
+
+<meta property="og:type" content="article">
+<meta property="og:title" content="Reasoning model returns empty content? The thinking ate the answer">
+<meta property="og:description" content="Reasoning tokens eat the answer's budget. Stop waiting for the text: take the answer through a resolve call.">
+<meta property="og:url" content="https://muratkirazkaya.com/blogs/take-the-answer-through-resolve.html">
+<meta property="og:image" content="https://muratkirazkaya.com/img/blog-7.jpeg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1652">
+<meta property="og:image:height" content="932">
+<meta property="og:image:alt" content="A KETSU-style illustration of the cafe, taken in front of the Ayisigi Cafe in Ordu Province">
+<meta property="og:locale" content="en_US">
+<meta property="og:locale:alternate" content="tr_TR">
+<meta property="article:published_time" content="2026-10-12">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://muratkirazkaya.com/img/blog-7.jpeg">
+<meta name="twitter:title" content="Reasoning model returns empty content? The thinking ate the answer">
+<meta name="twitter:description" content="Reasoning tokens eat the answer's budget. Stop waiting for the text: take the answer through a resolve call.">
+
+<link rel="canonical" href="https://muratkirazkaya.com/blogs/take-the-answer-through-resolve.html">
+<link rel="alternate" hreflang="en" href="https://muratkirazkaya.com/blogs/take-the-answer-through-resolve.html">
+<link rel="alternate" hreflang="tr" href="https://muratkirazkaya.com/blogs/reasoning-model-bos-content-dusunce-cevabi-yedi.html">
+<link rel="alternate" hreflang="x-default" href="https://muratkirazkaya.com/blogs/take-the-answer-through-resolve.html">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Reasoning model returns empty content? The thinking ate the answer",
+  "description": "A reasoning model can spend its whole output budget thinking and hand you nothing. The fix is not a bigger budget: take the answer through a resolve tool call.",
+  "image": "https://muratkirazkaya.com/img/blog-7.jpeg",
+  "datePublished": "2026-10-12",
+  "inLanguage": "en",
+  "author": { "@type": "Person", "name": "Murat Kirazkaya" },
+  "mainEntityOfPage": { "@type": "WebPage", "@id": "https://muratkirazkaya.com/blogs/take-the-answer-through-resolve.html" }
+}
+</script>
+
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;1,6..72,400&family=Source+Sans+3:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/dheereshag/coloured-icons@1.9.7/app/ci.min.css">
+
+<script>document.documentElement.className += ' js';</script>
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --ink: #1b1a17;
+    --ink2: #4a4740;
+    --ink3: #8b867a;
+    --ink4: #b3ad9e;
+    --paper: #fbf9f4;
+    --paper2: #f4f0e7;
+    --paper3: #eae3d5;
+    --line: rgba(27, 26, 23, 0.13);
+    --accent: #2c5d8f;
+    --accent-d: #1d4470;
+    --alert: #bc4320;
+    --good: #1a7f4b;
+    --mach: #15171c;
+    --mach2: #1d2027;
+    --mach-line: rgba(255, 255, 255, 0.085);
+    --mach-ink: #ddd9cf;
+    --mach-ink2: #8f959f;
+    --mach-ink3: #5b616b;
+    --serif: 'Newsreader', 'Iowan Old Style', Georgia, serif;
+    --sans: 'Source Sans 3', system-ui, sans-serif;
+  }
+
+  html {
+    font-family: var(--sans); background: var(--paper); color: var(--ink);
+    font-size: 16px; line-height: 1.6; scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  }
+  body { overflow-x: hidden; }
+
+  body::after {
+    content: ''; position: fixed; inset: 0; z-index: 3; pointer-events: none;
+    opacity: 0.4; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)' opacity='0.16'/%3E%3C/svg%3E");
+  }
+
+  .site { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 22px 0; border-bottom: 1px solid var(--line);
+    position: sticky; top: 0; background: rgba(251, 249, 244, 0.92);
+    backdrop-filter: saturate(140%) blur(8px); z-index: 20;
+  }
+  .nav-logo { font-size: 14px; font-weight: 600; letter-spacing: 0.01em; color: var(--ink2); text-decoration: none; }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-links a { font-size: 13px; color: var(--ink3); text-decoration: none; transition: color 0.15s; }
+  .nav-links a:hover { color: var(--ink); }
+  .nav-cta {
+    font-size: 13px; font-weight: 600; padding: 7px 16px;
+    background: var(--ink); color: var(--paper); text-decoration: none;
+    letter-spacing: 0.02em; transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--accent); }
+  @media (max-width: 720px) { .nav-links { display: none; } }
+
+  .back-link {
+    font-size: 12.5px; color: var(--ink3); text-decoration: none; letter-spacing: 0.03em;
+    display: inline-flex; align-items: center; gap: 6px; padding: 22px 0 0;
+  }
+  .back-link:hover { color: var(--ink); }
+
+  .post-cover {
+    display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; object-fit: cover;
+    margin: 20px 0 0; border: 1px solid var(--line); border-radius: 8px;
+  }
+
+  .post, .act {
+    display: grid;
+    grid-template-columns:
+      [full-start] minmax(0, 1fr)
+      [text-start] minmax(0, 660px) [text-end]
+      minmax(0, 1fr) [full-end];
+  }
+  .post > *, .act > * { grid-column: text; }
+  .post > .bleed, .act > .bleed { grid-column: full; }
+  .post > .act { grid-column: full; }
+
+  .hero { padding: 54px 0 4px; }
+  .hero-meta {
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+    font-size: 12px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink3); margin-bottom: 20px;
+  }
+  .hero-meta .tag { color: var(--accent); }
+  .hero-meta .lang { margin-left: auto; color: var(--ink3); text-decoration: none; text-transform: none; letter-spacing: 0.04em; font-weight: 600; }
+  .hero-meta .lang:hover { color: var(--ink); }
+  h1.title {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(38px, 6.6vw, 68px); line-height: 1.02;
+    letter-spacing: -0.032em; margin-bottom: 26px;
+  }
+  h1.title em { font-style: italic; color: var(--accent-d); }
+  .lede {
+    font-family: var(--serif); font-size: clamp(19px, 2.4vw, 23px);
+    line-height: 1.52; color: var(--ink2); max-width: 36em; margin-bottom: 8px;
+  }
+  .byline {
+    font-size: 13px; color: var(--ink3);
+    border-top: 1px solid var(--line); padding-top: 14px; margin-top: 30px;
+    display: flex; gap: 18px; flex-wrap: wrap;
+  }
+
+  .act { padding: 76px 0 8px; }
+  .act-head { margin-bottom: 26px; }
+  .act-no {
+    font-size: 12px; font-weight: 600; letter-spacing: 0.18em;
+    text-transform: uppercase; color: var(--ink4);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .act-no::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  h2 {
+    font-family: var(--serif); font-weight: 400;
+    font-size: clamp(27px, 3.7vw, 40px); line-height: 1.12;
+    letter-spacing: -0.024em; margin: 14px 0 0;
+  }
+  h3 {
+    font-family: var(--sans); font-weight: 600; font-size: 15px;
+    letter-spacing: 0.01em; color: var(--ink); margin: 30px 0 8px;
+  }
+  p { font-size: 17px; line-height: 1.74; color: var(--ink2); margin-bottom: 1.1em; }
+  p strong { color: var(--ink); font-weight: 600; }
+  p a { color: var(--accent); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+  p a:hover { color: var(--ink); }
+  code {
+    font-family: var(--sans); font-weight: 600; font-size: 0.92em; background: var(--paper3);
+    padding: 0.08em 0.36em; border-radius: 3px; color: var(--ink);
+  }
+  .post ul { list-style: none; margin: 0 0 1.2em; }
+  .post ul li { position: relative; padding-left: 20px; margin-bottom: 0.6em; font-size: 17px; line-height: 1.7; color: var(--ink2); }
+  .post ul li::before { content: ''; position: absolute; left: 0; top: 0.72em; width: 7px; height: 1px; background: var(--ink4); }
+
+  .pull {
+    font-family: var(--serif); font-size: clamp(23px, 3.1vw, 31px);
+    line-height: 1.26; letter-spacing: -0.02em; color: var(--ink);
+    border-top: 1.5px solid var(--ink); border-bottom: 1px solid var(--line);
+    padding: 26px 0 28px; margin: 40px 0;
+  }
+  .aside {
+    font-size: 15px; line-height: 1.66; color: var(--ink3);
+    border-left: 2px solid var(--paper3); padding-left: 18px; margin: 26px 0 30px;
+  }
+  .aside b { color: var(--ink2); font-weight: 600; }
+
+  .trace {
+    background: var(--paper2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 6px 18px; margin: 26px 0 30px;
+  }
+  .trace .row {
+    display: grid; grid-template-columns: 110px minmax(0, 1fr) auto; gap: 14px; align-items: baseline;
+    padding: 13px 0; border-bottom: 1px solid var(--line); font-size: 15.5px; color: var(--ink2);
+  }
+  .trace .row:last-child { border-bottom: none; }
+  .trace .row .k { font-weight: 600; color: var(--ink); }
+  .trace .row .t { font-size: 14px; color: var(--ink3); white-space: nowrap; }
+  .trace .row.sum .k, .trace .row.sum .v { color: var(--good); }
+  @media (max-width: 560px) {
+    .trace .row { grid-template-columns: 1fr; gap: 3px; }
+  }
+
+  figure { margin: 40px 0 44px; }
+  .fig-cap {
+    display: flex; gap: 12px; align-items: baseline; margin-top: 14px;
+    font-size: 13px; line-height: 1.55; color: var(--ink3);
+  }
+  .fig-cap b { color: var(--ink2); font-weight: 600; white-space: nowrap; }
+  .fig-cap .replay {
+    margin-left: auto; font: inherit; font-weight: 600; font-size: 12.5px; color: var(--ink2);
+    background: transparent; border: 1px solid var(--line); border-radius: 6px; padding: 5px 12px; cursor: pointer;
+    transition: background-color 150ms ease, color 150ms ease, transform 100ms ease;
+  }
+  .fig-cap .replay:hover { background: var(--ink); color: var(--paper); }
+  .fig-cap .replay:active { transform: scale(0.97); }
+
+  .js [data-r] { opacity: 0; transform: translateY(14px); }
+  .in [data-r], [data-r].in {
+    opacity: 1; transform: none;
+    transition: opacity 640ms cubic-bezier(.2,.7,.3,1) var(--d, 0ms),
+                transform 760ms cubic-bezier(.16,.84,.28,1) var(--d, 0ms);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    [data-r] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  }
+
+  footer {
+    display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap;
+    padding: 36px 0 48px; margin-top: 56px; border-top: 1px solid var(--line);
+    font-size: 13px; color: var(--ink3);
+  }
+  .footer-links { display: flex; gap: 20px; align-items: center; }
+  .footer-links a { color: var(--ink3); text-decoration: none; display: inline-flex; align-items: center; gap: 6px; transition: color 0.15s; }
+  .footer-links a:hover { color: var(--ink); }
+  .footer-links .ci { font-size: 18px; opacity: 0.7; transition: opacity 0.15s; }
+  .footer-links a:hover .ci { opacity: 1; }
+
+  /* ============ embedded problem pie ============ */
+  .pp {
+    --mach3: #262a32;
+    display: flex; align-items: center; justify-content: center; gap: 46px; flex-wrap: wrap;
+    max-width: 920px; margin: 0 auto; padding: 38px 30px;
+    background: var(--mach); color: var(--mach-ink); font-family: var(--sans);
+    border: 1px solid #0d0f13; border-radius: 8px;
+    box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 26px 48px -34px rgba(21,18,12,.7);
+  }
+  .pp-pie {
+    position: relative; width: 190px; height: 190px; border-radius: 50%; flex: none;
+    background: conic-gradient(var(--accent) 0deg, var(--mach3) 0deg); box-shadow: inset 0 0 0 1px var(--mach-line);
+  }
+  .pp-pie::after { content: ''; position: absolute; inset: 50px; border-radius: 50%; background: var(--mach); }
+  .pp-mid { position: absolute; inset: 0; z-index: 3; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 600; }
+  .pp-side { min-width: 250px; max-width: 320px; }
+  .pp-row { display: flex; align-items: center; gap: 10px; line-height: 2.1; font-size: 15px; }
+  .pp-row b { margin-left: auto; font-weight: 600; }
+  .pp-sw { width: 12px; height: 12px; border-radius: 3px; }
+  .pp-sw.r { background: var(--accent); }
+  .pp-sw.a { background: var(--good); }
+  .pp-badge {
+    display: inline-block; margin-top: 16px; padding: 5px 11px; border-radius: 5px; font-size: 13px; font-weight: 600; line-height: 1.4;
+    background: rgba(188,67,32,.16); color: #e88a6f; opacity: 0; transition: opacity 200ms cubic-bezier(.23,1,.32,1);
+  }
+  .pp-badge.show { opacity: 1; }
+  .pp-cap { margin-top: 12px; color: var(--mach-ink2); font-size: 13.5px; line-height: 1.55; }
+  @media (max-width: 560px) { .pp { gap: 22px; padding: 28px 20px; } .pp-side { min-width: 0; } }
+
+  /* ============ embedded walk ============ */
+  .rw {
+    --blue: #3f7fbf; --blue2: #8fb8e0; --green: #2fae76; --green2: #7fe0ab; --amber: #e8b84f;
+    --mline: var(--mach-line); --mink: var(--mach-ink); --mink2: var(--mach-ink2); --mink3: var(--mach-ink3);
+    --eo: cubic-bezier(.23, 1, .32, 1);
+    position: relative; height: 470px; max-width: 920px; margin: 0 auto;
+    background: var(--mach); color: var(--mink); font-family: var(--sans);
+    border: 1px solid #0d0f13; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 0 rgba(255,255,255,.05) inset, 0 26px 48px -34px rgba(21,18,12,.7);
+  }
+  .rw-stage { position: absolute; inset: 0; overflow: hidden; }
+  .rw-top {
+    position: absolute; left: 0; right: 0; top: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between;
+    gap: 10px 20px; flex-wrap: wrap; padding: 16px 24px; border-bottom: 1px solid var(--mline); background: var(--mach2);
+  }
+  .rw-hud { font-size: 15px; font-weight: 600; line-height: 1.35; color: var(--mink); letter-spacing: -.005em; }
+  .rw-steps { display: flex; align-items: center; list-style: none; counter-reset: rws; }
+  .rw-steps li { display: flex; align-items: center; gap: 7px; counter-increment: rws; font-size: 12.5px; font-weight: 500; color: var(--mink3); transition: color 250ms var(--eo); }
+  .rw-steps li::before {
+    content: counter(rws); display: grid; place-items: center; width: 20px; height: 20px; border-radius: 50%; font-size: 11px; font-weight: 600;
+    border: 1px solid var(--mline); color: var(--mink3);
+    transition: background-color 250ms var(--eo), border-color 250ms var(--eo), color 250ms var(--eo);
+  }
+  .rw-steps li:not(:last-child)::after { content: ''; width: 18px; height: 1px; margin: 0 8px 0 3px; background: var(--mline); }
+  .rw-steps li.on { color: var(--mink); }
+  .rw-steps li.on::before { border-color: var(--blue2); color: var(--mink); background: rgba(63,127,191,.28); }
+  .rw-steps li.done { color: var(--mink2); }
+  .rw-steps li.done::before { content: '\2713'; border-color: rgba(47,174,118,.5); background: rgba(47,174,118,.18); color: var(--green2); }
+  .rw.narrow .rw-top { padding: 10px 16px; gap: 6px 12px; }
+  .rw.narrow .rw-hud { font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
+  .rw.narrow .rw-steps li { font-size: 0; gap: 0; }
+  .rw.narrow .rw-steps li:not(:last-child)::after { width: 12px; margin: 0 5px; }
+  .rw.narrow .rw-lane-label, .rw.narrow .rw-walllabel, .rw.narrow .rw-note { font-size: 11px; }
+  .rw.narrow .rw-chip { font-size: 12px; padding: 6px 10px; }
+  .rw.narrow .rw-sub { display: none; }
+  .rw-rail { position: absolute; height: 36px; border-radius: 18px; background: rgba(255,255,255,.03); border: 1px solid var(--mline); }
+  .rw-lane-label { position: absolute; font-size: 12px; font-weight: 500; color: var(--mink3); letter-spacing: .09em; text-transform: uppercase; }
+  .rw-lane-label b { color: var(--mink); font-weight: 700; }
+  .rw-tok {
+    position: absolute; left: 0; top: 0; width: 20px; height: 20px; border-radius: 6px; background: var(--blue);
+    will-change: transform, opacity; opacity: 0; box-shadow: 0 2px 8px rgba(0,0,0,.35); transition: background-color 300ms var(--eo);
+  }
+  .rw-tok::after, .rw-cap::after { content: ''; position: absolute; inset: 0; border-radius: inherit; background: linear-gradient(rgba(255,255,255,.3), rgba(255,255,255,0) 58%); }
+  .rw-tok.kept { background: var(--amber); }
+  .rw-tok.fin { background: var(--green); }
+  .rw-wall { position: absolute; width: 0; border-left: 2px dashed var(--amber); filter: drop-shadow(0 0 6px rgba(232,184,79,.5)); }
+  .rw-wall.hit { animation: rwhit 600ms var(--eo); }
+  @keyframes rwhit {
+    0% { filter: drop-shadow(0 0 16px rgba(232,184,79,1)); transform: translateX(0); }
+    20% { transform: translateX(-4px); } 45% { transform: translateX(2px); }
+    100% { filter: drop-shadow(0 0 6px rgba(232,184,79,.5)); transform: translateX(0); }
+  }
+  .rw-walllabel {
+    position: absolute; font-size: 12px; font-weight: 600; color: var(--amber); white-space: nowrap; translate: -50% 0; padding: 3px 11px; border-radius: 999px;
+    background: linear-gradient(rgba(232,184,79,.12), rgba(232,184,79,.12)), var(--mach); border: 1px solid rgba(232,184,79,.4);
+  }
+  .rw-chip {
+    position: absolute; font-size: 13px; font-weight: 500; line-height: 1.35; padding: 8px 13px; border-radius: 10px; opacity: 0; translate: 0 6px;
+    max-width: calc(100% - 24px); text-align: left; box-shadow: 0 8px 22px rgba(0,0,0,.4);
+    transition: opacity 280ms var(--eo), translate 280ms var(--eo);
+  }
+  .rw-chip::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: currentColor; margin-right: 9px; vertical-align: 1px; }
+  .rw-chip.show { opacity: 1; translate: 0 0; }
+  .rw-chip.red { color: #ec8b72; background: linear-gradient(rgba(208,85,58,.14), rgba(208,85,58,.14)), var(--mach); border: 1px solid rgba(208,85,58,.5); }
+  .rw-chip.amber { color: var(--amber); background: linear-gradient(rgba(232,184,79,.12), rgba(232,184,79,.12)), var(--mach); border: 1px solid rgba(232,184,79,.4); }
+  .rw-chip.green { color: var(--green2); background: linear-gradient(rgba(47,174,118,.14), rgba(47,174,118,.14)), var(--mach); border: 1px solid rgba(47,174,118,.45); }
+  #rw-resolve { white-space: nowrap; }
+  #rw-collect, #rw-handoff { left: 0; right: 0; margin: 0 auto; width: fit-content; }
+  .rw-chip.caret::after { content: ''; position: absolute; left: var(--caret-x, 50%); top: 100%; width: 2px; height: 10px; margin-left: -1px; background: var(--green); opacity: .55; }
+  .rw-cap { position: absolute; left: 0; top: 0; height: 20px; border-radius: 8px; background: var(--amber); opacity: 0; will-change: transform, width, opacity; box-shadow: 0 2px 10px rgba(232,184,79,.3); }
+  .rw-note { position: absolute; font-size: 12.5px; font-weight: 500; color: var(--amber); opacity: 0; transition: opacity 300ms var(--eo); white-space: nowrap; }
+  .rw-note.show { opacity: .9; }
+</style>
+</head>
+<body>
+<div class="site">
+
+  <nav>
+    <a href="/" class="nav-logo" data-umami-event="blog-nav-logo">Murat Kirazkaya</a>
+    <div class="nav-links">
+      <a href="/projects">Projects</a>
+      <a href="/#open-source">Open Source</a>
+      <a href="/blogs">Blogs</a>
+      <a href="/about">About</a>
+    </div>
+    <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" class="nav-cta" data-umami-event="blog-nav-github">GitHub</a>
+  </nav>
+
+  <a href="/blogs" class="back-link" data-umami-event="blog-back-blogs">&#8592; Blogs</a>
+
+  <img class="post-cover" src="/img/blog-7.jpeg" alt="A KETSU-style illustration of the cafe, taken in front of the Ayisigi Cafe in Ordu Province" width="1652" height="932">
+
+  <article class="post">
+
+    <header class="hero">
+      <div class="hero-meta">
+        <span class="tag">Blog</span><span>English</span><span>Oct 12, 2026</span>
+        <a href="/blogs/reasoning-model-bos-content-dusunce-cevabi-yedi.html" class="lang" data-umami-event="blog-lang-switch">T&#252;rk&#231;e &#8594;</a>
+      </div>
+      <h1 class="title">The thinking <em>ate</em><br>the answer</h1>
+      <p class="lede">A reasoning model can spend its whole output budget thinking and hand you nothing. The fix is not a bigger budget. It is to stop waiting for the text.</p>
+      <div class="byline">
+        <span>Murat Kirazkaya</span>
+        <span>4 min read</span>
+        <span>a fix for the cut</span>
+      </div>
+    </header>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>01 &#183; the cut</span></div>
+        <h2>The thinking ate the answer</h2>
+      </div>
+
+      <p data-r>On most providers, reasoning tokens count against the same output budget as the visible answer. If the model spends all of it thinking, you get an HTTP 200, an empty <code>content</code>, and <code>finish_reason: "length"</code>, plus a bill for every token it thought.</p>
+      <p data-r>One real review request, captured while building <a href="https://github.com/GroophyLifefor/co-maintainer" target="_blank" rel="noreferrer">co-maintainer</a>: 128,000 tokens generated, none of them visible, about five minutes of wall clock, fully billed.</p>
+
+      <figure class="bleed" data-r>
+        <div class="pp" id="pp" role="img" aria-label="Animated pie chart. Reasoning fills the whole output budget, from 0 to 100 percent, and the answer gets 0 percent.">
+          <div class="pp-pie" id="pp-pie"><div class="pp-mid" id="pp-mid">0&#176;</div></div>
+          <div class="pp-side">
+            <div class="pp-row"><span class="pp-sw r"></span>reasoning <b id="pp-r">0%</b></div>
+            <div class="pp-row"><span class="pp-sw a"></span>answer <b id="pp-a">0%</b></div>
+            <div class="pp-badge" id="pp-badge">finish_reason: "length" &#183; content empty &#183; still billed</div>
+            <div class="pp-cap">128,000 tokens spent thinking, zero visible output written, and the bill is full.</div>
+          </div>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 01</b><span>One output budget. Reasoning fills all of it, and the answer gets nothing.</span><button class="replay" id="pp-replay" type="button">Replay</button></figcaption>
+      </figure>
+
+      <div class="pull" data-r>The model was not slow. It was thinking, and the thinking was eating the answer.</div>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>02 &#183; the idea</span></div>
+        <h2>Stop waiting for the text</h2>
+      </div>
+
+      <p data-r>If the answer lives in <code>content</code>, it has to survive to the very end of the stream, and the end is exactly where the budget runs out. So give the model one tool, <code>resolve</code>, and ask it to return the answer through that tool. The answer becomes the call's arguments, not the message.</p>
+      <p data-r>That changes two things. The call can arrive while the model is still reasoning, and calling it is terminal: the moment it lands, you take the answer and stop reading. Nothing later in the stream can take it back.</p>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>03 &#183; two beats</span></div>
+        <h2>Take it mid-stream, or force it in the next chunk</h2>
+      </div>
+
+      <h3>A &#183; resolve arrives while reasoning streams</h3>
+      <p data-r>The client reads the stream. If a <code>resolve</code> call shows up, the answer is taken right there. It does not matter that the model would never have finished its thinking.</p>
+
+      <h3>B &#183; it never arrives</h3>
+      <p data-r>Count the reasoning as it streams. When it crosses a soft budget (30,000 tokens in co-maintainer), abort the connection before the provider's own limit. The thinking is not garbage, it is work, so the next chunk re-sends it: the aborted turn's <code>reasoning_details</code>, echoed back unmodified, plus one instruction to finish now and not restart, with the tool call forced.</p>
+      <p data-r>Either way the run ends the same way: a <code>resolve</code> call and <code>finish_reason: "tool_calls"</code>, never <code>"length"</code>.</p>
+
+      <figure class="bleed" data-r>
+        <div class="rw" id="rw" role="img" aria-label="Animation. Turn 1 streams reasoning tokens until they hit the max_tokens wall and the stream is aborted. The collected thinking is handed to a new chunk, and turn 2 finishes with a single resolve call.">
+          <div class="rw-top">
+            <div class="rw-hud" id="rw-hud">Turn 1 &#183; streaming reasoning</div>
+            <ol class="rw-steps" id="rw-steps"><li>stream</li><li>abort</li><li>handoff</li><li>turn 2</li><li>resolve</li></ol>
+          </div>
+          <div class="rw-stage" id="rw-stage">
+            <div class="rw-lane-label" id="rw-l1"><b>TURN 1</b><span class="rw-sub"> &#183; chunk 1</span></div>
+            <div class="rw-rail" id="rw-rail1"></div>
+            <div class="rw-wall" id="rw-wall"></div>
+            <div class="rw-walllabel" id="rw-walllabel">max_tokens</div>
+            <div class="rw-chip red" id="rw-abort">ABORT &#183; the cut happens here</div>
+            <div class="rw-chip amber" id="rw-collect">thinking collected &#183; &#8776; 30,002 tok</div>
+            <div class="rw-chip amber" id="rw-handoff">HANDOFF &#183; thinking + &#8220;finish now, don&#8217;t restart&#8221;</div>
+            <div class="rw-lane-label" id="rw-l2"><b>TURN 2</b><span class="rw-sub"> &#183; new chunk</span></div>
+            <div class="rw-rail" id="rw-rail2"></div>
+            <div class="rw-cap" id="rw-cap"></div>
+            <div class="rw-note" id="rw-carried">carried thinking</div>
+            <div class="rw-chip green caret" id="rw-resolve">resolve { answer }</div>
+            <div class="rw-chip green" id="rw-result">finish_reason: &#8220;tool_calls&#8221; &#8594; DONE</div>
+          </div>
+        </div>
+        <figcaption class="fig-cap"><b>Fig. 02</b><span>Turn 1 is cut at the budget, its thinking is carried into turn 2, and one resolve call finishes the job.</span><button class="replay" id="rw-replay" type="button">Replay</button></figcaption>
+      </figure>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>04 &#183; the evidence</span></div>
+        <h2>What it cost, replayed</h2>
+      </div>
+
+      <p data-r>I replayed the captured spiral through this ladder, with a 30,000-token first budget and a 15,000-token second:</p>
+
+      <div class="trace" data-r>
+        <div class="row"><span class="k">Segment 1</span><span class="v">aborted at about 30,002 reasoning tokens, no content</span><span class="t">146 s</span></div>
+        <div class="row"><span class="k">Segment 2</span><span class="v">about 1,632 reasoning tokens, <code>finish_reason: "tool_calls"</code></span><span class="t">11 s</span></div>
+        <div class="row sum"><span class="k">Total</span><span class="v">about 31,634 reasoning tokens, $0.0100</span><span class="t">157 s</span></div>
+      </div>
+
+      <p data-r>The spiral it replaced cost $0.15 or more and five minutes, for no answer at all. The same request now takes 157 seconds and a cent: about 2&#215; faster and 15&#215; cheaper, and it ends with an answer.</p>
+
+      <div class="aside" data-r><b>Two honest notes.</b> These numbers come from co-maintainer, where the tool is called <code>report_finding</code>; <code>resolve</code> is the generic name for the pattern. And beat A, taking the call mid-stream, is the mechanism as designed. I have no measurement for it here.</div>
+    </section>
+
+    <section class="act">
+      <div class="act-head">
+        <div class="act-no"><span>05 &#183; the limits</span></div>
+        <h2>Where it stops working</h2>
+      </div>
+
+      <ul>
+        <li data-r>Models that cannot turn reasoning off have no last-resort rung. The first two beats still apply.</li>
+        <li data-r>A cut stream never receives the final usage chunk, so the cost of an aborted segment is reported as unknown, not as a wrong lower bound.</li>
+      </ul>
+
+      <div class="pull" data-r>The model may never finish. That stops mattering the moment resolve is called.</div>
+    </section>
+
+  </article>
+
+  <footer>
+    <span>&#169; 2026 Murat Kirazkaya</span>
+    <div class="footer-links">
+      <a href="https://github.com/GroophyLifefor" target="_blank" rel="noreferrer" data-umami-event="blog-footer-github"><i class="ci ci-github"></i> GitHub</a>
+      <a href="https://www.linkedin.com/in/muratkirazkaya/" target="_blank" rel="noreferrer" data-umami-event="blog-footer-linkedin"><i class="ci ci-linkedin"></i> LinkedIn</a>
+      <a href="https://ordu.dev" target="_blank" rel="noreferrer" data-umami-event="blog-footer-ordudev">ordu.dev</a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+(function () {
+  var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nodes = document.querySelectorAll('[data-r]');
+  if (reduced || !('IntersectionObserver' in window)) {
+    Array.prototype.forEach.call(nodes, function (el) { el.classList.add('in'); });
+  } else {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        e.target.classList.add('in');
+        io.unobserve(e.target);
+      });
+    }, { rootMargin: '0px 0px -10% 0px', threshold: 0.18 });
+    Array.prototype.forEach.call(nodes, function (el) { io.observe(el); });
+  }
+})();
+
+// ---------- embedded problem pie ----------
+(function () {
+  function el(id) { return document.getElementById(id); }
+  function eo(p) { return 1 - Math.pow(1 - p, 3); }
+  var pie = el('pp-pie'), mid = el('pp-mid'), pr = el('pp-r'), pa = el('pp-a'), badge = el('pp-badge'), cur = null;
+  var reduced = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setState(deg) {
+    pie.style.background = 'conic-gradient(var(--accent) 0deg ' + deg + 'deg, var(--mach3) ' + deg + 'deg 360deg)';
+    mid.textContent = Math.round(deg) + '\u00b0';
+    pr.textContent = Math.round(deg / 360 * 100) + '%';
+    pa.textContent = '0%';
+  }
+  function play() {
+    if (cur) cur();
+    badge.classList.remove('show'); setState(0);
+    if (reduced) { setState(360); badge.classList.add('show'); return; }
+    var t0 = performance.now(), raf = 0, to = 0;
+    (function f(now) {
+      var p = Math.min(1, (now - t0) / 2800);
+      setState(eo(p) * 360);
+      if (p < 1) raf = requestAnimationFrame(f);
+      else to = setTimeout(function () { badge.classList.add('show'); }, 200);
+    })(t0);
+    cur = function () { cancelAnimationFrame(raf); clearTimeout(to); cur = null; };
+  }
+  el('pp-replay').addEventListener('click', play);
+  if ('IntersectionObserver' in window) {
+    var once = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { once.disconnect(); play(); } });
+    }, { threshold: 0.4 });
+    once.observe(el('pp'));
+  } else { play(); }
+})();
+
+// ---------- embedded walk ----------
+// Stateless timeline: render(e) draws the whole scene for elapsed time e (ms), so resize and the reduced-motion end frame reuse it.
+(function () {
+  function el(id) { return document.getElementById(id); }
+  function eo(p) { return 1 - Math.pow(1 - p, 3); }
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+  function lerp(a, b, t) { return a + (b - a) * t; }
+  function prog(e, s, d) { return clamp((e - s) / d, 0, 1); }
+  function tog(e, c, on) { if (e.classList.contains(c) !== on) e.classList.toggle(c, on); }
+
+  var rw = el('rw'), st = el('rw-stage'), hud = el('rw-hud'), steps = [].slice.call(el('rw-steps').children);
+  var wall = el('rw-wall'), abortB = el('rw-abort'), collect = el('rw-collect'), handoff = el('rw-handoff'),
+      resChip = el('rw-resolve'), result = el('rw-result'), carried = el('rw-carried'), cap = el('rw-cap');
+  var current = null;
+
+  // timeline (ms): chip windows are long enough to read; motion durations are short
+  var A = 3400, B = 4100, C = 6650, D = 7650, E = 10200, F = 12000, G = 13000, H = 13100, I = 14200, K = 14700, END = 14900;
+
+  function play() {
+    if (current) current();
+    [abortB, collect, handoff, resChip, result].forEach(function (e) { e.classList.remove('show'); });
+    carried.classList.remove('show'); wall.classList.remove('hit');
+    st.querySelectorAll('.rw-tok').forEach(function (e) { e.remove(); });
+
+    var N2 = 8, GAP2 = 30, SP1 = 30, SP_JAM = 22, TOK = 20, RH = 36, narrow = false;
+    var W, H_, y1, y2, x0 = 40, wallX, headMax, cx, cy, carriedW, newStart, x2max, sp2, n1 = 0, toks1 = [], toks2 = [];
+    var lastE = 0, phase = -1, hit = false, hudShown = '', raf = 0, ro = null;
+
+    function mk() { var d = document.createElement('div'); d.className = 'rw-tok'; st.appendChild(d); return d; }
+    function put(t, x, y, o, s) { t.style.transform = 'translate3d(' + x.toFixed(1) + 'px,' + (y - TOK / 2).toFixed(1) + 'px,0) scale(' + (s || 1) + ')'; t.style.opacity = o; }
+    function at(id, css) { el(id).style.cssText = css; }
+
+    function layout() {
+      var r = st.getBoundingClientRect();
+      W = Math.round(r.width) || 900; H_ = Math.round(r.height) || 470;
+      var nw = W <= 600;
+      if (nw !== narrow) { phase = -1; hudShown = ''; }
+      narrow = nw; rw.classList.toggle('narrow', narrow);
+      TOK = narrow ? 16 : 20; RH = narrow ? 28 : 36; SP1 = TOK * 1.5; SP_JAM = TOK * 1.1; GAP2 = TOK * 1.5;
+      var topH = hud.parentNode.offsetHeight || 44;
+      y1 = Math.max(Math.round(H_ * 0.33), topH + 90); y2 = Math.max(Math.round(H_ * 0.80), y1 + 190);
+      wallX = W - 96; headMax = wallX - 18; cx = Math.round(W / 2); cy = Math.round((y1 + y2) / 2);
+      carriedW = Math.round(Math.min(196, W * 0.22));
+      newStart = x0 + carriedW + 28;
+      sp2 = clamp((W - newStart - 70) / (N2 - 1), 12, GAP2);
+      x2max = Math.round(newStart + (N2 - 1) * sp2 + 40);
+      var need = Math.ceil((headMax - (x0 - TOK)) / SP_JAM) + 1;
+      if (need !== n1) {
+        toks1.forEach(function (t) { t.remove(); }); toks1 = [];
+        for (var i = 0; i < need; i++) toks1.push(mk());
+        n1 = need;
+      }
+      if (!toks2.length) for (var j = 0; j < N2; j++) toks2.push(mk());
+      toks1.concat(toks2).forEach(function (t) { t.style.width = t.style.height = TOK + 'px'; });
+      cap.style.height = TOK + 'px';
+      at('rw-rail1', 'left:' + (x0 - 12) + 'px;width:' + (wallX - x0 + 12) + 'px;top:' + (y1 - RH / 2) + 'px;height:' + RH + 'px;border-radius:' + RH / 2 + 'px');
+      at('rw-rail2', 'left:' + (x0 - 12) + 'px;width:' + Math.min(x2max + TOK + 28 - (x0 - 12), W - 8 - (x0 - 12)) + 'px;top:' + (y2 - RH / 2) + 'px;height:' + RH + 'px;border-radius:' + RH / 2 + 'px');
+      at('rw-l1', 'left:' + (x0 - 12) + 'px;top:' + (y1 - RH / 2 - 26) + 'px');
+      at('rw-l2', 'left:' + (x0 - 12) + 'px;top:' + (y2 - RH / 2 - 26) + 'px');
+      wall.style.cssText = 'left:' + wallX + 'px;top:' + (y1 - 40) + 'px;height:66px';
+      at('rw-walllabel', 'left:' + (wallX + 1) + 'px;top:' + (y1 - 70) + 'px');
+      at('rw-abort', 'right:' + (W - wallX - 3) + 'px;top:' + (y1 + 56) + 'px');
+      at('rw-collect', 'top:' + (cy - 66) + 'px');
+      at('rw-handoff', 'top:' + (cy - 66) + 'px');
+      at('rw-carried', 'left:' + (x0 - 12) + 'px;top:' + (y2 + RH / 2 + 4) + 'px');
+      var rwid = resChip.offsetWidth || 120, rl = Math.min(x2max + TOK / 2, W - 12 - rwid / 2);
+      at('rw-resolve', 'left:' + rl + 'px;top:' + (y2 - RH / 2 - 50) + 'px;transform:translateX(-50%)');
+      resChip.style.setProperty('--caret-x', (x2max + TOK / 2 - rl + rwid / 2) + 'px');
+      at('rw-result', 'right:20px;bottom:10px');
+    }
+
+    function x1(i, e) {
+      var head = x0 + (headMax - x0) * Math.min(e, A) / A;
+      var sp = e <= A ? SP1 : lerp(SP1, SP_JAM, eo(prog(e, A, B - A)));
+      return head - i * sp;
+    }
+    function blob(i) { return { x: cx - 45 + ((i * 29) % 70), y: cy + ((i * 17) % 7) - 3 }; }
+
+    function setPhase(p) {
+      if (p === phase) return; phase = p;
+      var on = p <= 1 ? 0 : p === 2 ? 1 : p === 3 ? 2 : p === 4 ? 3 : 4;
+      steps.forEach(function (s, k) { tog(s, 'on', k === on); tog(s, 'done', k < on); });
+    }
+
+    function render(e) {
+      lastE = e; var i, t, x, p;
+      var stag = 300 / n1;
+      for (i = 0; i < n1; i++) {
+        t = toks1[i];
+        if (e < C) {
+          x = x1(i, e);
+          put(t, x, y1, clamp((x - (x0 - TOK)) / TOK, 0, 1));
+          tog(t, 'kept', false);
+        } else {
+          var sx = x1(i, B), b = blob(i);
+          if (sx < x0 - TOK) { put(t, sx, y1, 0); continue; }
+          tog(t, 'kept', true);
+          p = eo(prog(e, C + i * stag, D - C - 300));
+          put(t, lerp(sx, b.x, p), lerp(y1, b.y, p), 1 - prog(p, .75, .25), lerp(1, .75, p));
+        }
+      }
+      var q = eo(prog(e, F, G - F)), cw = lerp(90, carriedW, q);
+      var ccx = lerp(cx, x0 + carriedW / 2, q), ccy = lerp(cy, y2, q * q);
+      cap.style.width = cw.toFixed(1) + 'px';
+      cap.style.transform = 'translate3d(' + (ccx - cw / 2).toFixed(1) + 'px,' + (ccy - TOK / 2).toFixed(1) + 'px,0)';
+      cap.style.opacity = prog(e, C + 450, 350);
+      el('rw-l2').style.opacity = (1 - .8 * Math.sin(Math.PI * prog(e, F, G - F))).toFixed(2);
+      p = eo(prog(e, H, I - H));
+      var head2 = lerp(newStart, x2max, p);
+      for (i = 0; i < N2; i++) {
+        t = toks2[i]; x = head2 - i * sp2;
+        if (e < H) { put(t, x, y2, 0); continue; }
+        put(t, x, y2, clamp((x - newStart) / sp2 + .4, 0, 1));
+        tog(t, 'fin', i === 0 && e >= K - 300);
+      }
+      if (e >= A && !hit) { hit = true; wall.classList.remove('hit'); void wall.offsetWidth; wall.classList.add('hit'); }
+      else if (e < A && hit) { hit = false; wall.classList.remove('hit'); }
+      tog(abortB, 'show', e >= A && e < C);
+      tog(collect, 'show', e >= C + 300 && e < E);
+      tog(handoff, 'show', e >= E && e < F + 200);
+      tog(carried, 'show', e >= F + 400);
+      tog(resChip, 'show', e >= I);
+      tog(result, 'show', e >= K);
+      var fmt = function (n) { return Math.round(n).toLocaleString('en-US'); };
+      var ph = e < A ? 1 : e < C ? 2 : e < E ? 3 : e < H ? 4 : e < I ? 5 : 6, txt;
+      if (ph === 1) txt = narrow ? 'Turn 1 · streaming · ' + fmt(30002 * e / A) + ' tok' : 'Turn 1 · streaming reasoning · ' + fmt(30002 * e / A) + ' tok';
+      else if (ph === 2) txt = narrow ? 'max_tokens hit → aborted' : 'max_tokens exceeded → stream aborted';
+      else if (ph === 3) txt = narrow ? 'Collecting the thinking' : 'Collecting the thinking · reasoning_details ≈ 30,002 tok';
+      else if (ph === 4) txt = narrow ? 'Handoff → new chunk' : 'Handoff → new chunk · “finish now, don’t restart”';
+      else if (ph === 5) txt = narrow ? 'Turn 2 · ~' + fmt(1632 * prog(e, H, I - H)) + ' tok' : 'Turn 2 · continues from the carried thinking · ~' + fmt(1632 * prog(e, H, I - H)) + ' tok';
+      else txt = narrow ? 'resolve → tool_calls · done' : 'resolve { answer } · finish_reason: “tool_calls” → done';
+      setPhase(ph);
+      if (txt !== hudShown) { hudShown = txt; hud.textContent = txt; }
+      if (ph === 6 && e >= K) { tog(steps[4], 'done', true); tog(steps[4], 'on', false); }
+    }
+
+    layout();
+    if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) { render(END); }
+    else {
+      var t0 = performance.now();
+      (function frame(now) { var e = now - t0; if (e >= END) { render(END); return; } render(e); raf = requestAnimationFrame(frame); })(t0);
+    }
+    if (window.ResizeObserver) { ro = new ResizeObserver(function () { layout(); render(lastE); }); ro.observe(st); }
+    current = function () { cancelAnimationFrame(raf); if (ro) ro.disconnect(); current = null; };
+  }
+
+  el('rw-replay').addEventListener('click', play);
+  if ('IntersectionObserver' in window) {
+    var once = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { once.disconnect(); play(); } });
+    }, { threshold: 0.4 });
+    once.observe(rw);
+  } else { play(); }
+})();
+</script>
+
+</body>
+</html>
